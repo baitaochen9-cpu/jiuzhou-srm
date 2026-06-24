@@ -1,0 +1,22 @@
+package nc.bs.qc.supplierqualityapply.ace.bp.rule;
+
+import nc.bs.qc.supplierqualitystatus.rule.SupplyVerionBeforeRule;
+import nc.vo.pub.ISuperVO;
+
+public class AceSupplierqualityapplyVerionBeforeRule extends SupplyVerionBeforeRule {
+
+	@Override
+	public String getOidField() {
+		return "pk_srcmaterial";
+	}
+
+	@Override
+	public String getVidField() {
+		return "pk_material";
+	}
+	
+	@Override
+	public Class<? extends ISuperVO>[] getBodyClass() {
+		return null;
+	}
+}

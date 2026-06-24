@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="general" class="nc.pubapp.pade.code.funnode.FunNodePara">
+        <property name="moduleName" value="qc" />
+	    <property name="bpfPath" value="test.bpf" />
+	    <property name="funcode" value="C01055"/>
+	    <property name="funNodeName" value="supplierqualitystatus"/>
+	    <property name="clientPackName" value="nc.ui.qc.supplierqualitystatus"/>
+			  		<property name="dbilldDate" value="Billdate" />
+			    <property name="metaData" value="qc\METADATA\supplierqualitystatus.bmf" />
+	    <property name="xmlPath" value="extends\src\client\nc\ui\qc\supplierqualitystatus\ace\view\Supplierqualitystatus_config.xml" />
+	    <property name="metaDataType" value="multiType" />
+	    <property name="funcregispath" value="extends/funcmodel/supplierqualitystatus/funcregis/C01055.func" />
+	    <property name="quetempath" value="extends/templet/supplierqualitystatus/querytemplet/C01055.qtf" />
+	    <property name="printtempath" value="extends/templet/supplierqualitystatus/outtemplet/C01055.otf" />
+	    <property name="systembasepath" value="extends/systemplatebase/supplierqualitystatus/C01055/C01055.stb" />
+	    <property name="extendSuffix" value=""/>
+	    <property name="uif2ModelFilePath" value="extends\ace\uif2model\C01055.umf"/>
+	    <property name="busiCompName" value="extends"/>
+	    <property name="metaDataId" value="14768841-2f0f-4121-9aaa-aedca2a45b81"/>
+	</bean>
+	
+	<bean id="templet" class="nc.pubapp.pade.code.funnode.Templet">
+	    <property name="tempStyle" value="2" />
+	    <property name="nodeKey" value="" />
+		<property name="templetPath" value="extends/templet/supplierqualitystatus/billtemplet/C01055.btf" />
+	</bean>
+
+	<bean id="BAEHpara" class="nc.pubapp.pade.code.funnode.BodyAfterEditHandlerPara">
+		<property name="itemList">
+			<list>
+									<bean  class="nc.pubapp.pade.code.funnode.EditHandleItemPara">
+						<property name="className" value="MaterialHandler" />
+						<property name="fullClassName"
+							value="nc.ui.qc.supplierqualitystatus.handler.MaterialHandler" />
+						<property name="key" value="pk_material" />
+						<property name="methodName" value="afterEdit" />
+					</bean>
+							</list>
+		</property>
+	</bean>
+
+	<bean id="BBEHpara" class="nc.pubapp.pade.code.funnode.BodyBeforeEditHandlerPara">
+		<property name="itemList">
+			<list>
+									<bean  class="nc.pubapp.pade.code.funnode.EditHandleItemPara">
+						<property name="className" value="MaterialHandler" />
+						<property name="fullClassName"
+							value="nc.ui.qc.supplierqualitystatus.handler.MaterialHandler" />
+						<property name="key" value="pk_material" />
+						<property name="methodName" value="beforeEdit" />
+					</bean>
+							</list>
+		</property>
+	</bean>
+	
+	<bean id="HTBEHpara" class="nc.pubapp.pade.code.funnode.HeadTailBeforeEditHandlerPara">
+	</bean>
+	
+	<bean id="HTAEHpara" class="nc.pubapp.pade.code.funnode.HeadTailAfterEditHandlerPara">
+	</bean>
+	
+	<bean id="SerPropara" class="nc.pubapp.pade.code.funnode.ServiceProxyPara">
+					<property name="queryByQueryScheme">
+			<bean class="nc.pubapp.pade.code.funnode.ServiceProxyItemPara">
+				<property name="fullClassName" value="nc.itf.qc.ISupplierqualitystatusMaintain" />
+				<property name="itmClassName" value=".ISupplierqualitystatusMaintain" />
+				<property name="methodName" value="query" />
+			</bean>
+		</property>
+				</bean>
+	
+	<bean id="FilePackNameBean" class="nc.pubapp.pade.code.engine.FilePackNamePara">
+    	<property name="filePackNameList">
+	    	<list>
+				     						       <value>nc.ui.qc.supplierqualitystatus.handler.OrgChangedHandler.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.ace.handler.AceAddHandler.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.ace.handler.AceBodyAfterEditHandler.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.ace.handler.AceBodyBeforeEditHandler.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.ace.handler.AceHeadTailAfterEditHandler.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.ace.handler.AceHeadTailBeforeEditHandler.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.ace.handler.AceOrgChangedHandler.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.ace.serviceproxy.AceSupplierqualitystatusMaintainProxy.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.action.SupplierqualitystatusAddAction.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.action.SupplierqualitystatusDeleteAction.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.action.SupplierqualitystatusEditAction.java</value>
+			       <value>nc.ui.qc.supplierqualitystatus.action.CopyActionProcessor.java</value>
+			     			       <value>nc.ui.qc.supplierqualitystatus.handler.MaterialHandler.java</value>
+			     			       <value>nc.ui.qc.supplierqualitystatus.query.SupplierqualitystatusQueryConditionInitializer.java</value>
+		     </list>
+	   </property>
+	</bean>
+
+</beans>

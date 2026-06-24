@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 事件监听 -->
+	<bean id="EXEventHandlerMediator"
+	    class="nc.ui.pubapp.uif2app.model.AppEventHandlerMediator">
+	  <property name="model" ref="model"/>
+	  <property name="handlerGroup">
+	    <list>
+	      <bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+	        <property name="event" value="nc.ui.pubapp.uif2app.event.list.ListHeadBeforeEditEvent"/>
+	        <property name="handler">
+	        <bean class="nc.ui.ic.m4460.event.extend.AdjustStatusSaveBeforeCheck"/>
+	        </property> 
+	      </bean>
+	    </list>
+	  </property>
+	</bean>
+	
+	<bean id="interceptor_mediator" class="nc.ui.uif2.uiextend.ActionInterceptorExtPreprocessor"
+	init-method="process">
+		<property name="interceptors">
+			<list>
+				<bean class="nc.ui.uif2.uiextend.ActionInterceptorExtInfo">
+ 					<property name="interceptor" ref="saveActionInterceptor"></property>
+ 					<property name="targetAction" ref="stateAdjustSaveAction"></property>
+ 				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="saveActionInterceptor" class="nc.ui.ic.m4460.event.extend.AdjustStatusSaveInterceptor">
+     	<property name="list" ref="list" />
+     	<property name="context" ref="context"/>
+  	</bean>
+
+	<!-- 查询 -->
+	<bean id="queryAction" class="nc.ui.ic.m4460.event.extend.StateAdjustOnhandQueryActionExt">
+		<property name="model" ref="model" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="qryCondDLGInitializer" ref="onhandQryDLGInitializer"></property>
+		<property name="list" ref="list" />
+		<property name="hasQueryArea" value="false" />
+		<property name="nodeKey" value="4008100901" />
+	</bean>
+	<!-- 刷新动作 -->
+	<bean id="refreshAction" class="nc.ui.ic.m4460.action.StateAdjustRefreshAction">
+		<property name="model" ref="model" />
+		<property name="queryAction" ref="queryAction" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="listView" ref="list" />
+	</bean>
+	<!-- 界面布局总装########################################################### -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<bean id="down" class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="list"></property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="stateAdjustAction" />
+				<ref bean="separatorAction" />
+				<!-- <ref bean="selectAllAction" /> <ref bean="unSelectAction" /> <ref 
+					bean="separatorAction" /> -->
+				<ref bean="hisQueryAction" />
+				<ref bean="separatorAction" />
+				<ref bean="printMngAction" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="tidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="tidaiping1"/> 
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="stateAdjustSaveAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="model" />
+	</bean>
+	
+	
+	<!-- 确认 保存 -->
+	<bean id="stateAdjustSaveAction" class="nc.ui.ic.m4460.action.StateAdjustSaveAction">
+		<property name="list" ref="list" />
+		<property name="queryAction" ref="queryAction" />
+		<property name="model" ref="model" />
+	</bean>
+
+	<!-- 取消动作 -->
+	<bean id="cancelAction" class="nc.ui.ic.m4460.action.StateAdjustCancelAction">
+		<property name="model" ref="model" />
+		<property name="queryAction" ref="queryAction" />
+	</bean>
+	
+	<!-- 自己的按钮 -->
+   	<bean id="tidaiping"  class="nc.ui.ic.m4460.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="model" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="tidaiping1"  class="nc.ui.ic.m4460.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="model" />
+		<property name="editor" ref=list />
+   	</bean>
+	
+</beans>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="billType" class="nc.pubapp.pade.platform.vo.Billtype"><property name="billtype2List">
+<list></list>
+</property>
+<property name="billtypename" value="供应商物料质量状态"/>
+<property name="canextendtransaction" value="true"/>
+<property name="component" value="supplierqualitystatus"/>
+<property name="fwdList">
+<list></list>
+</property>
+<property name="isPublished" value="false"/>
+<property name="isapprovebill" value="true"/>
+<property name="istransaction" value="false"/>
+<property name="nodecode" value="C01055"/>
+<property name="pk_billtypecode" value="C055"/>
+<property name="pk_billtypeid" value="0001ZZ1000000000G10M"/>
+<property name="pk_group" value="~"/>
+<property name="pk_org" value="GLOBLE00000000000000"/>
+<property name="systemcode" value="QC"/>
+<property name="ts" value="2020-12-17 22:27:41"/>
+</bean>
+
+</beans>

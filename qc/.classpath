@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="out/public" path="src/public"/>
+	<classpathentry kind="src" output="out/private" path="src/private"/>
+	<classpathentry kind="src" output="out/client" path="src/client"/>
+	<classpathentry kind="src" output="out/test" path="src/test"/>
+	<classpathentry kind="src" output="hyext/classes" path="hyext/src/public"/>
+	<classpathentry kind="src" output="hyext/classes" path="hyext/src/client"/>
+	<classpathentry kind="src" output="hyext/classes" path="hyext/src/private"/>
+	<classpathentry kind="src" output="hyext/classes" path="hyext/resources"/>
+	<classpathentry kind="src" output="hyext/classes" path="hyext/src/test"/>
+	<classpathentry kind="src" output="oa/classes" path="oa/src/public"/>
+	<classpathentry kind="src" output="oa/classes" path="oa/src/client"/>
+	<classpathentry kind="src" output="oa/classes" path="oa/src/private"/>
+	<classpathentry kind="src" output="oa/classes" path="oa/resources"/>
+	<classpathentry kind="src" output="oa/classes" path="oa/src/test"/>
+	<classpathentry kind="src" output="lims/classes" path="lims/src/public"/>
+	<classpathentry kind="src" output="lims/classes" path="lims/src/client"/>
+	<classpathentry kind="src" output="lims/classes" path="lims/src/private"/>
+	<classpathentry kind="src" output="lims/classes" path="lims/resources"/>
+	<classpathentry kind="src" output="lims/classes" path="lims/src/test"/>
+	<classpathentry kind="src" output="srm/classes" path="srm/src/public"/>
+	<classpathentry kind="src" output="srm/classes" path="srm/src/client"/>
+	<classpathentry kind="src" output="srm/classes" path="srm/src/private"/>
+	<classpathentry kind="src" output="srm/classes" path="srm/resources"/>
+	<classpathentry kind="src" output="srm/classes" path="srm/src/test"/>
+	<classpathentry kind="src" output="thlims/classes" path="thlims/src/public"/>
+	<classpathentry kind="src" output="thlims/classes" path="thlims/src/client"/>
+	<classpathentry kind="src" output="thlims/classes" path="thlims/src/private"/>
+	<classpathentry kind="src" output="thlims/classes" path="thlims/resources"/>
+	<classpathentry kind="src" output="thlims/classes" path="thlims/src/test"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/scmpub"/>
+	<classpathentry kind="src" output="out/resources" path="resources"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Ant_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Product_Common_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Middleware_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Framework_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Module_Public_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Module_Client_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Module_Private_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Module_Lang_Library"/>
+	<classpathentry kind="con" path="nc.uap.mde.library.container/Generated_EJB"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

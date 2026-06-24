@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<!-- 业务消息配置界面 -->
+
+<beans> 
+
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext"/>
+	 
+	 <!-- 对象转换器工厂 -->
+	 <bean id="boadatorfactory" class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+		<property name="mode" value="MD" />
+	</bean>
+	
+	<!-- ###############################配置页签的Action############################### -->
+	<bean id="toftpanelActionContributors" class="nc.ui.uif2.actions.ActionContributors">
+		<property name="contributors">
+			<list>
+				<ref bean="rcvconfContributor"/>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="rcvconfContributor" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg><ref bean="receiverConfTable" /></constructor-arg>
+		<property name="model" ref="receiverConfModel"></property>
+		<property name="actions">
+			<list>
+				<ref bean="addRcvAction"/>
+				<ref bean="editRcvAction"/>
+				<ref bean="deleteRcvAction"/>
+			</list> 
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="saveRcvAction"/>
+				<ref bean="cancelRcvAction"/>
+			</list>
+		</property> 
+	</bean>
+	
+	 <!-- ###############################界面元素############################### -->
+	<bean id="treeCellRender" class=" nc.buzimsg.view.BuziMsgTreeCellRenderer"/>
+	
+	<bean id="buzimsgTreePanel" class="nc.ui.uif2.components.TreePanel" init-method="init">
+		<property name="model" ref="treeModel"></property>
+		<!--  过滤搜索树 -->
+		<property name="filterByText"><ref bean="bdobjectFilter" /></property>
+		<property name="searchMode"><value>filter</value></property>
+		<property name="treeCellRenderer"><ref bean="treeCellRender" /></property>
+	</bean>
+	
+	<bean id="msgtempConfTable" class="nc.buzimsg.view.MsgtempconfBatchBillTable" init-method="initUI">
+		<property name="model" ref="msgtempConfModel" />
+		<property name="treeModel" ref="treeModel" />
+		<property name="nodekey" value="msgtemp"/>
+		<property name="addLineAction" ref="addMsgtempAction"></property>
+		<property name="delLineAction" ref="deleteMsgtempAction"></property>
+		<property name="isBodyAutoAddLine" value="true"/>
+		<property name="bodyMultiSelectEnable" value="true" />
+	</bean>
+	
+	<bean id="receiverConfTable" class="nc.ui.jzqc.labelcontrol.ace.view.RcvconfBatchBillTable1" init-method="initUI">
+		<property name="model" ref="receiverConfModel" />
+		<property name="nodekey" value="receiver"/>
+		<property name="addLineAction" ref="addRcvAction"></property>
+		<property name="delLineAction" ref="deleteRcvAction"></property>
+		<!-- 
+		<property name="isBodyAutoAddLine" value="true"/>
+		 -->
+		<property name="bodyMultiSelectEnable" value="true" />
+		<property name="treeModel" ref="treeModel" />
+	</bean>	
+	 
+	<bean id="bdobjectFilter" class="nc.ui.pub.beans.tree.BDObjectFilterByText" />  
+	 <!-- ###############################模型元素############################### -->
+	<bean id="treeModel" class="nc.buzimsg.model.BuzimsgTreeDataAppModel">
+		<property name="service" ref="treeService" />
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="context" ref="context" />
+	</bean>
+	
+	<bean id="msgtempConfModel" class="nc.ui.uif2.model.BatchBillTableModel">
+		<property name="context" ref ="context" />
+		<property name="service">
+			<bean class="nc.buzimsg.model.MsgtempConfBatchModelService" />
+		</property>
+		<property name="businessObjectAdapterFactory" ref ="boadatorfactory" />
+	</bean>
+	
+	<bean id="receiverConfModel" class="nc.ui.uif2.model.BatchBillTableModel">
+		<property name="context" ref ="context" />
+		<property name="service">
+			<bean class="nc.buzimsg.model.RcvConfBatchModelService" />
+		</property>
+		<property name="businessObjectAdapterFactory" ref ="boadatorfactory" />
+	</bean>	
+	
+	<!-- ################数据模型管理器，进行节点模型的数据装载 ################-->
+	<bean id="modelDataManager" class="nc.buzimsg.model.BuzimsgTreeModelDataManager">
+		<property name="treeModel" ref="treeModel"/>
+	</bean>
+	
+	<bean id="msgtempModelDataManager" class="nc.buzimsg.model.MsgtempConfModelDataManager">
+		<property name="msgtempConfModel" ref="msgtempConfModel"/>
+		<property name="treeModel" ref="treeModel"/>
+	</bean>
+	
+	<bean id="receiverModelDataManager" class="nc.ui.jzqc.labelcontrol.action.model.ReceiverConfModelDataManager1">
+		<property name="msgtempConfModel" ref="receiverConfModel"/>
+	</bean>
+	
+	<bean id="buzimsgMediator" class="nc.ui.jzqc.labelcontrol.action.model.BuzimsgMediator">
+		<property name="treeModel" ref="treeModel" />
+		<property name="msgtempModelDataManager" ref="msgtempModelDataManager"></property>
+		<property name="receiverModelDataManager" ref="receiverModelDataManager"></property>
+		<property name="rcvConfTable" ref="receiverConfTable"></property>
+	</bean>
+	
+	<!-- ###############################应用服务############################### -->
+	 <bean id="treeService" class="nc.buzimsg.model.BuzimsgAppModelService"></bean>
+	 
+	 <!-- 模板容器，负责对模板的统一装载 -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"  init-method="load">
+		<property name="context" ref="context"/>
+		<property name="nodeKeies">
+			<list>
+			    <value>msgtemp</value>
+			    <value>receiver</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 界面元素 ***********************************************************-->
+	<!--====== 视图元素：[组织面板控件实例对象] ==============-->
+	<bean id="viewa" class="nc.ui.pubapp.uif2app.view.OrgPanel" init-method="initUI">
+		<property name="model"><ref bean="receiverConfModel" /></property>
+		<property name="dataManager" ref="receiverModelDataManager" />
+	</bean>
+	<!-- 界面布局总装*********************************************************** -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer" init-method="initUI">
+		<property name="tangramLayoutRoot">
+			<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+				<property name="component" ref="receiverConfTable"></property>
+				<property name="name">
+					<bean class="nc.ui.uif2.I18nFB">
+						<property name="resDir" value="msgtemp"></property>
+						<property name="defaultValue" value="配置接收人"></property>
+						<property name="resId" value="buzimsg00000001"></property>
+					</bean>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- ###############################Action############################### -->
+	<bean id="refreshAction" class="nc.ui.uif2.actions.RefreshAction">
+		<property name="model" ref="treeModel" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	
+	<!-- 消息模板配置页签相关Action -->
+	<bean id="addMsgtempAction" class="nc.buzimsg.action.MsgtempConfBatchAddLineAction">
+		<property name="model" ref="msgtempConfModel"/>
+		<property name="treeModel" ref="treeModel"></property>
+		<property name="voClassName" value="nc.buzimsg.vo.MsgresTempConfVO"/>
+	</bean>
+	<bean id="editMsgtempAction" class=" nc.buzimsg.action.MsgtempConfBatchEditAction">
+		<property name="treeModel" ref="treeModel"></property>
+		<property name="model" ref="msgtempConfModel"/>
+	</bean>
+	<bean id="saveMsgtempAction" class="nc.buzimsg.action.MsgtempConfBatchSaveAction">
+		<property name="model" ref="msgtempConfModel"/>
+		<property name="editor" ref="msgtempConfTable"/>
+		<property name="treeModel" ref="treeModel"></property>
+		<property name="validationService" ref ="msgtempValidationService" />
+	</bean>
+	<bean id="cancelMsgtempAction" class=" nc.buzimsg.action.MsgtempConfBatchCancelAction">
+		<property name="model" ref="msgtempConfModel"/> 
+		<property name="editor" ref="msgtempConfTable"/>
+		<property name="treeModel" ref="treeModel"></property>
+	</bean>
+	<bean id="deleteMsgtempAction" class="nc.buzimsg.action.MsgtempConfBatchDelLineAction">
+		<property name="model" ref="msgtempConfModel"/>
+	</bean>
+	<bean id="enableMsgtempAction" class="nc.buzimsg.action.MsgtempConfEnableAction">
+		<property name="model" ref="msgtempConfModel"></property>
+		<property name="dataManager" ref="msgtempModelDataManager"></property>
+	</bean>
+	<bean id="disableMsgtempAction" class="nc.buzimsg.action.MsgtempConfDisableAction">
+		<property name="model" ref="msgtempConfModel"></property>
+		<property name="dataManager" ref="msgtempModelDataManager"></property>
+	</bean>
+	
+	<bean id="msgtempEnableActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="EnableActionGroup" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="org"></property>
+				<property name="resId" value="UC001-0000111"></property>
+				<property name="defaultValue" value="启用"></property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="enableMsgtempAction" />
+				<ref bean="disableMsgtempAction" />
+			</list>
+		</property>
+	</bean>	 
+	
+	<bean id="filteractiongroup" class="nc.funcnode.ui.action.MenuAction">
+		<property name="code"><value>filter</value> </property>
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+			  	<property name="resDir" value="org"></property>
+				<property name="resId" value="0org0003"></property>
+				<property name="defaultValue" value="过滤"></property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="ShowDisableDataAction" />	
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="ShowDisableDataAction" class=" nc.ui.uif2.actions.ShowDisableDataAction">
+		<property name="model"><ref bean="msgtempConfModel" /></property>
+		<property name="dataManager"><ref bean="msgtempModelDataManager"/></property>
+	</bean>
+	
+	<!-- 接收人配置页签相关Action -->
+	<bean id="addRcvAction" class="nc.ui.jzqc.labelcontrol.action.ReceiverConfBatchAddLineAction">
+		<property name="model" ref="receiverConfModel"/>
+		<property name="treeModel" ref="treeModel"></property>
+		<property name="voClassName" value="nc.buzimsg.vo.MsgresRcvConfVO"/>
+	</bean>
+	<bean id="editRcvAction" class="nc.ui.jzqc.labelcontrol.action.ReceiverConfBatchEditAction">
+		<property name="model" ref="receiverConfModel"/>
+		<property name="treeModel" ref="treeModel"></property>
+	</bean>
+	<bean id="saveRcvAction" class="nc.ui.jzqc.labelcontrol.action.ReceiverConfBatchSaveAction">
+		<property name="model" ref="receiverConfModel"/>
+		<property name="editor" ref="receiverConfTable"/>
+		<property name="treeModel" ref="treeModel"></property>
+		<property name="validationService" ref ="receiverValidationService" />
+	</bean>
+	<bean id="cancelRcvAction" class="nc.ui.jzqc.labelcontrol.action.ReceiverConfBatchCancelAction">
+		<property name="model" ref="receiverConfModel"/> 
+		<property name="editor" ref="receiverConfTable"/>
+		<property name="treeModel" ref="treeModel"></property>
+	</bean>
+	<bean id="deleteRcvAction" class="nc.ui.jzqc.labelcontrol.action.ReceiverConfBatchDelLineAction">
+		<property name="model" ref="receiverConfModel"/>
+	</bean>
+	
+	<bean id="sepatorAction" class="nc.funcnode.ui.action.SeparatorAction"/>
+	
+	<!-- 	<bean id="testSendAction" class=" nc.buzimsg.action.SendBuziMsgAction"/>-->	
+	<!-- ############## Validator ########################## -->
+	<!-- 消息模板配置检验服务 -->
+	<bean id="msgtempValidationService" class="nc.buzimsg.model.MsgtempConfValidationService" />
+	<!-- 消息模板配置检验服务 -->
+	<bean id="receiverValidationService" class="nc.buzimsg.model.ReceiverConfValidationService" />
+	<!-- 关闭节点监听 -->
+	<bean id="ClosingListener" class="nc.buzimsg.action.BuzimsgNodeClosingHandler">
+		<property name="msgtempConfTable" ref="msgtempConfTable"/>
+		<property name="rcvConfTable" ref="receiverConfTable"/>
+		<property name="msgtempConfSaveAction" ref="saveMsgtempAction"/>
+		<property name="msgtempConfCancelAction" ref="cancelMsgtempAction"/>
+		<property name="rcvConfSaveAction" ref="saveRcvAction"/>
+		<property name="rcvConfCancelAction" ref="cancelRcvAction"/>
+	</bean>
+	
+</beans>

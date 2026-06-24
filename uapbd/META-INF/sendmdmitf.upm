@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="materialmdm">
+	<public>
+		  <!--物料申请单同步主数据接口 -->
+		    <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+	      <interface>nc.itf.material.mdm.SendMdmItf</interface>
+	      <implementation>nc.itf.material.mdm.SendMdmImp</implementation>
+	    </component>
+	     <!--物料申请单同步主数据接口 -->
+		    <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+	      <interface>nc.itf.material.gw.SendGwItf</interface>
+	      <implementation>nc.itf.material.gw.SendGwImpl</implementation>
+	    </component>
+	</public>
+</module>

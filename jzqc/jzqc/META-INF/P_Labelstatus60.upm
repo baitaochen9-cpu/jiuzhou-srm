@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding='gb2312'?>
+<module name="jzqc">
+  <public>
+	<component remote="true" singleton="true"  tx="CMT">
+	  <interface>nc.itf.jzqc.ILabelstatusMaintain</interface>
+	  <implementation>nc.impl.jzqc.LabelstatusMaintainImpl</implementation>
+	</component>
+
+  </public> 
+</module> 

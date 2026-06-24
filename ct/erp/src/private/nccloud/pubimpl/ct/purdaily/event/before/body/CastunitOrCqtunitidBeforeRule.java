@@ -1,0 +1,57 @@
+package nccloud.pubimpl.ct.purdaily.event.before.body;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import nc.bs.framework.common.NCLocator;
+import nc.pubitf.ct.business.IBusinessTypeService;
+import nc.vo.ct.business.enumeration.Ninvctlstyle;
+import nc.vo.ct.entity.CtAbstractVO;
+import nc.vo.ct.uitl.ValueUtil;
+import nc.vo.pub.BusinessException;
+import nc.vo.pubapp.pattern.exception.ExceptionUtils;
+import nccloud.dto.scmpub.event.constance.WebEventConst;
+import nccloud.dto.scmpub.pub.event.rule.IBeforeRule;
+
+/**
+ * @description 单位编辑前
+ * @author xiahui
+ * @date 创建时间：2019-1-23 上午9:05:17
+ * @version ncc1.0
+ **/
+public class CastunitOrCqtunitidBeforeRule implements IBeforeRule {
+
+	@Override
+	public Map<String, Object> beforeEdit(Map<String, Object> userobject) throws BusinessException {
+		Map<String, Object> returnMap = new HashMap<String, Object>();
+		returnMap.put(WebEventConst.ISEDIT, true);
+
+		String ctrantypeid = (String) userobject.get(CtAbstractVO.CTRANTYPEID); // 交易类型
+		Integer ninvctlstyle = this.getNinvctlstyle(ctrantypeid); // 物料控制方式
+
+		if (!ValueUtil.equals(ninvctlstyle, Ninvctlstyle.MATERIAL.value())) {
+			returnMap.put(WebEventConst.ISEDIT, false);
+		}
+		return returnMap;
+	}
+
+	/**
+	 * 获取交易类型控制方式
+	 * 
+	 * @param ctrantypeid
+	 *          交易类型
+	 * @return
+	 */
+	private Integer getNinvctlstyle(String ctrantypeid) {
+		Integer intValue = null;
+		try {
+			IBusinessTypeService iBusiness = (IBusinessTypeService) NCLocator.getInstance().lookup(
+					IBusinessTypeService.class.getName());
+			intValue = iBusiness.queryMaterial(ctrantypeid);
+		} catch (Exception e) {
+			ExceptionUtils.wrappException(e);
+		}
+		return intValue;
+	}
+
+}

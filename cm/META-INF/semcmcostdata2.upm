@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="CM_EJB">
+	<public>
+	
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.itf.cm.inprocess.IInprocessBackFlushService2</interface>
+			<implementation>nc.impl.cm.inprocess.InprocessBackFlushServiceImpl2</implementation>
+		</component>
+	
+	</public>
+</module>

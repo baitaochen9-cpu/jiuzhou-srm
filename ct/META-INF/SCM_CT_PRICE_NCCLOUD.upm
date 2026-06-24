@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_CT_PRICE_NCCLOUD">
+  	<public>
+    	<!--获取合同价格信息表表体动态列-->
+	    <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+	      <interface>nccloud.pubitf.ct.price.service.ICtPriceDynamicColumnService</interface>
+	      <implementation>nccloud.pubimpl.ct.price.service.CtPriceDynamicColumnServiceImpl</implementation>
+	    </component>
+    	<!--根据oid查询最新版本合同-->
+	    <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+	      <interface>nccloud.pubitf.ct.price.service.ICtPriceQueryRecentlyService</interface>
+	      <implementation>nccloud.pubimpl.ct.price.service.CtPriceQueryRecentlyServiceImpl</implementation>
+	    </component>
+	</public>
+</module>
+

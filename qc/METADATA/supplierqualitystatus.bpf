@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><component conRouterType="曼哈顿直角" createIndustry="0" createTime="2021-01-04 10:16:49" creator="yonyouBQ" description="" displayName="supplierqualitystatus_business" fromSourceBmf="true" gencodestyle="NC传统样式" help="" id="39f4f92b-6daf-4898-851a-2ebf57232f35" industry="0" industryChanged="false" industryIncrease="false" industryName="" isSource="false" isbizmodel="true" mainEntity="" metaType=".bpf" modifier="yf" modifyIndustry="0" modifyTime="2021-06-18 14:08:23" name="supplierqualitystatus_business" namespace="qc" ownModule="qc" preLoad="false" programcode="0" resModuleName="supplierqualitystatus_business" resid="" version="17" versionType="0">
+    <celllist>
+        <busioperation componentID="39f4f92b-6daf-4898-851a-2ebf57232f35" createIndustry="0" createTime="2021-01-04 10:17:34" creator="yonyouBQ" dataType="14768841-2f0f-4121-9aaa-aedca2a45b81" dbtype="" description="" displayName="新增" fullClassName="nc.vo.qc.supplierqualitystatus.BusiOperation0" height="100" help="BUSILOG" id="8a4e2a0c-b0a9-4087-a997-3d3e0a30f3f7" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="ADD" modifier="yf" modifyIndustry="0" modifyTime="2021-06-18 14:08:23" name="add" needlog="true" resid="" typeDisplayName="供应商物料质量状态表头" typeName="supplierquality" version="" versionType="0" visibility="public" width="100" x="436" y="114">
+            <refoperationlist>
+                <refoperation id="668fae79-0915-4425-bac7-9938e37f6d31" industry="0" isAuthorization="true" isSource="false" opItfID="68054f92-1a52-4401-a0ea-984dc3f96462" ownerElementID="8a4e2a0c-b0a9-4087-a997-3d3e0a30f3f7" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <busioperation componentID="39f4f92b-6daf-4898-851a-2ebf57232f35" createIndustry="0" createTime="2021-01-04 10:17:38" creator="yonyouBQ" dataType="14768841-2f0f-4121-9aaa-aedca2a45b81" dbtype="" description="" displayName="修改" fullClassName="nc.vo.qc.supplierqualitystatus.BusiOperation1" height="100" help="BUSILOG" id="3854e5a0-602e-4db1-9c94-f693d9bebced" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="MODIFY" modifier="yf" modifyIndustry="0" modifyTime="2021-06-18 14:08:23" name="edit" needlog="true" resid="" typeDisplayName="供应商物料质量状态表头" typeName="supplierquality" version="" versionType="0" visibility="public" width="100" x="676" y="118">
+            <refoperationlist>
+                <refoperation id="80f5b806-7626-4f7d-9a7c-438383847a7a" industry="0" isAuthorization="true" isSource="false" opItfID="68054f92-1a52-4401-a0ea-984dc3f96462" ownerElementID="3854e5a0-602e-4db1-9c94-f693d9bebced" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <busioperation componentID="39f4f92b-6daf-4898-851a-2ebf57232f35" createIndustry="0" createTime="2021-01-04 10:18:07" creator="yonyouBQ" dataType="14768841-2f0f-4121-9aaa-aedca2a45b81" dbtype="" description="" displayName="刪除" fullClassName="nc.vo.qc.supplierqualitystatus.BusiOperation2" height="100" help="BUSILOG" id="b2247213-5f02-4a7e-a0b1-09077eb9e1b2" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="DELETE" modifier="yf" modifyIndustry="0" modifyTime="2021-06-18 14:08:23" name="delete" needlog="true" resid="" typeDisplayName="供应商物料质量状态表头" typeName="supplierquality" version="" versionType="0" visibility="public" width="100" x="176" y="156">
+            <refoperationlist>
+                <refoperation id="d3b56876-4e5a-4a9e-8309-04529b3222c1" industry="0" isAuthorization="true" isSource="false" opItfID="68054f92-1a52-4401-a0ea-984dc3f96462" ownerElementID="b2247213-5f02-4a7e-a0b1-09077eb9e1b2" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <opinterface componentID="39f4f92b-6daf-4898-851a-2ebf57232f35" createIndustry="0" createTime="2021-01-04 12:38:17" creator="yonyouBQ" dataType="14768841-2f0f-4121-9aaa-aedca2a45b81" dbtype="" description="" displayName="供应商物料质量状态表头" fullClassName="nc.itf.qc.ISupplierqualitystatusMaintain" height="100" help="BUSILOG" id="68054f92-1a52-4401-a0ea-984dc3f96462" implClsName="nc.impl.qc.SupplierqualitystatusMaintainImpl" industryChanged="false" isAuthorization="true" isBusiActivity="false" isBusiOperation="false" isSource="true" modifier="yf" modifyIndustry="0" modifyTime="2021-06-18 14:09:23" name="SupplierqualitystatusMaintain" remote="true" resid="" singleton="true" transprop="CMT" typeDisplayName="供应商物料质量状态表头" typeName="supplierquality" version="" versionType="0" visibility="public" width="100" x="378" y="262">
+            <operationlist>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="新增" forBusinessEntity="N" help="" id="668fae79-0915-4425-bac7-9938e37f6d31" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="insert" opItfID="68054f92-1a52-4401-a0ea-984dc3f96462" ownerElementID="68054f92-1a52-4401-a0ea-984dc3f96462" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="668fae79-0915-4425-bac7-9938e37f6d31" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="修改" forBusinessEntity="N" help="" id="80f5b806-7626-4f7d-9a7c-438383847a7a" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="update" opItfID="68054f92-1a52-4401-a0ea-984dc3f96462" ownerElementID="68054f92-1a52-4401-a0ea-984dc3f96462" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="80f5b806-7626-4f7d-9a7c-438383847a7a" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="删除" forBusinessEntity="N" help="" id="d3b56876-4e5a-4a9e-8309-04529b3222c1" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="delete" opItfID="68054f92-1a52-4401-a0ea-984dc3f96462" ownerElementID="68054f92-1a52-4401-a0ea-984dc3f96462" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="d3b56876-4e5a-4a9e-8309-04529b3222c1" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+            </operationlist>
+            <opImpllist/>
+        </opinterface>
+    </celllist>
+    <connectlist/>
+    <refdepends/>
+    <refdependLoseIDs/>
+    <cellRemoveLog/>
+    <rulers>
+        <ruler isHorizontal="true" unit="0">
+            <guideList/>
+        </ruler>
+        <ruler isHorizontal="false" unit="0">
+            <guideList/>
+        </ruler>
+    </rulers>
+</component>

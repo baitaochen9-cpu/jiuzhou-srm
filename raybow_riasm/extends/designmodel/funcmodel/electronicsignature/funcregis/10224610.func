@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="funcregister" class="nc.pubapp.pade.funcmodel.vo.FuncRegister"><property name="bmf_path" value="raybow_riasm\METADATA\electronicsignature.bmf"/>
+<property name="busiActiveList">
+<list></list>
+</property>
+<property name="cfunid" value="0001ZZ1000000000IHW9"/>
+<property name="class_name" value="nc.ui.pubapp.uif2app.ToftPanelAdaptorEx"/>
+<property name="dr" value="0"/>
+<property name="fun_name" value="电子签名配置"/>
+<property name="fun_property" value="0"/>
+<property name="funcRegisterButtonList">
+<list></list>
+</property>
+<property name="funcRegisterParamList">
+<list><bean class="nc.pubapp.pade.funcmodel.vo.FuncRegisterParam"><property name="dr" value="0"/>
+<property name="paramname" value="BeanConfigFilePath"/>
+<property name="paramvalue" value="nc/ui/riasm/electronicsignature/ace/view/Electronicsignature_config.xml"/>
+<property name="parentid" value="0001ZZ1000000000IHW9"/>
+<property name="pk_param" value="0001ZZ1000000000IHWA"/>
+<property name="ts" value="2021-01-11 23:12:58"/>
+</bean>
+</list>
+</property>
+<property name="funcode" value="10224610"/>
+<property name="funnode_path" value="extends\designmodel\ace\client\10224610.fnf"/>
+<property name="funtype" value="0"/>
+<property name="isbuttonpower" value="false"/>
+<property name="isenable" value="true"/>
+<property name="isfunctype" value="false"/>
+<property name="menuModelFilePath" value="extends/designmodel/funcmodel/electronicsignature/menuitemregis/10204610.menu"/>
+<property name="metaDataID" value="6914672e-d91a-43a7-abbe-2eddd19eae25"/>
+<property name="moduleName" value="riasm"/>
+<property name="orgtypecode" value="GLOBLE00000000000000"/>
+<property name="own_module" value="0022"/>
+<property name="pageList">
+<list></list>
+</property>
+<property name="pk_group" value="~"/>
+<property name="ts" value="2021-01-11 23:12:58"/>
+<property name="uif2model_path" value="extends\designmodel\ace\uif2model\10224610.umf"/>
+</bean>
+
+</beans>

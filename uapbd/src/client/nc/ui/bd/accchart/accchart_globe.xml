@@ -1,0 +1,1155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- 引用其他xml -->
+	<import resource="accchart_qry_globe.xml" />
+	<!-- 上下文环境 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext"></bean>
+	<bean id="accChartEnv" class="nc.ui.bd.account.model.CurrentAccChartEnv"></bean>
+
+	<!-- servicer -->
+	<bean id="service" class="nc.ui.bd.accchart.model.AccChartModelServicer">
+	</bean>
+
+	<bean id="accountappmodelServicer" class="nc.ui.bd.account.model.AccountModelServicer">
+	</bean>
+	<!-- mediator 调停者 -->
+	<bean id="distactionsmediator" class="nc.ui.bd.account.actions.AccDistActionsManager">
+		<property name="context" ref="context" />
+		<property name="model" ref="accountappmodel" />
+		<property name="downAction" ref="BDDistResourceDownAction" />
+		<property name="reclaimAction" ref="BDDistTokenReclaimAction" />
+		<property name="uploadAction" ref="BDDistResourceUploadAction" />
+		<property name="statusAction" ref="distResourceStatusAction" />
+		<property name="distMenuAction" ref="distactionmenu" />
+		<property name="actionContainer" ref="listactions" />
+	</bean>
+	<!-- model配置附件 -->
+	<bean id="oadaptorfactory" class="nc.vo.bd.meta.BDObjectAdpaterFactory">
+	</bean>
+
+	<bean id="treeCreateStrategy" class="nc.ui.bd.accchart.model.AccChartCreatTreeStrategy">
+		<property name="factory" ref="oadaptorfactory" />
+		<property name="rootName">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="科目表"></property>
+				<property name="resId" value="010140accb0026"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<!--validator servicer -->
+	<bean id="validator" class="nc.ui.bd.account.model.AccBodyDataRepeatValidator">
+	</bean>
+
+	<!-- models -->
+	<bean id="charthappmodel" class="nc.ui.bd.accchart.model.AccChartAppModel">
+		<property name="businessObjectAdapterFactory" ref="oadaptorfactory"></property>
+		<property name="treeCreateStrategy" ref="treeCreateStrategy"></property>
+		<property name="context" ref="context"></property>
+		<property name="service" ref="service"></property>
+	</bean>
+
+	<bean id="accountappmodel" class="nc.ui.bd.account.model.AccountAppModel">
+		<property name="businessObjectAdapterFactory" ref="oadaptorfactory">
+		</property>
+		<property name="context" ref="context"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+		<property name="service" ref="accountappmodelServicer"></property>
+	</bean>
+
+	<!-- 左边树程序数据入口 -->
+	<bean id="modelDataManager" class="nc.ui.bd.accchart.model.AccChartDataManager">
+		<property name="model" ref="charthappmodel"></property>
+	</bean>
+
+	<bean id="accDataManager" class="nc.ui.bd.account.model.AccountModelDataManager">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="accQueryModel" ref="accquerymodel"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+	</bean>
+
+	<!-- ClosingListener -->
+	<bean id="ClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="accountappmodel" />
+		<property name="saveaction" ref="accsaveaction" />
+		<property name="cancelaction" ref="acccancelaction" />
+	</bean>
+
+	<!-- 单据模板容器 -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer">
+		<property name="context" ref="context"></property>
+		<property name="nodeKeies">
+			<list>
+				<value>account</value>
+				<value>accass</value>
+				<value>accctrlmdl</value>
+				<value>auditinfo</value>
+				<value>accchart</value>
+				<value>notnullattr</value>
+				<value>insertmidacc</value>
+				<value>qaccass</value>
+				<value>qassacc</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 查询模板容器 -->
+	<bean id="queryTemplateContianer" class="nc.ui.uif2.editor.QueryTemplateContainer">
+		<property name="context" ref="context"></property>
+	</bean>
+
+	<bean id="remoteCallCombinatorCaller" class="nc.ui.uif2.editor.UIF2RemoteCallCombinatorCaller">
+		<property name="remoteCallers">
+			<list>
+				<ref bean="templateContainer" />
+				<ref bean="queryTemplateContianer" />
+				<ref bean="userdefitemContainer" />
+			</list>
+		</property>
+	</bean>
+	<!-- 用户定义属性加载器，同一家在所有页签的用户定义属性 -->
+	<bean id="userdefitemContainer" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.accasoa" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.accasoa" />
+				</bean>
+			</list>
+
+		</property>
+	</bean>
+	<!-- 界面元素布局 -->
+	<bean id="cardInfoPnl" class="nc.ui.uif2.tangramlayout.CardLayoutToolbarPanel">
+		<property name="actions">
+			<list>
+				<!-- 浏览按钮 卡片界面共享信息按钮 -->
+				<bean id="firstLineAction" class="nc.ui.bd.account.actions.AccFirstLineAction">
+					<property name="appModel" ref="accountappmodel" />
+				</bean>
+				<bean id="preLineAction" class="nc.ui.bd.account.actions.AccPreLineAction">
+					<property name="appModel" ref="accountappmodel" />
+				</bean>
+				<bean id="nextLineAction" class="nc.ui.bd.account.actions.AccNextLineAction">
+					<property name="appModel" ref="accountappmodel" />
+				</bean>
+				<bean id="lastLineAction" class="nc.ui.bd.account.actions.AccLastLineAction">
+					<property name="appModel" ref="accountappmodel" />
+				</bean>
+			</list>
+		</property>
+		<property name="titleAction">
+			<bean class="nc.ui.uif2.actions.ShowMeUpAction">
+				<property name="goComponent" ref="acclistview" />
+			</bean>
+		</property>
+		<property name="model" ref="accountappmodel"></property>
+	</bean>
+
+	<bean id="toppane" class="nc.ui.bd.accchart.view.AccChartTopPane"
+		init-method="initUI">
+		<property name="chartAppModel" ref="charthappmodel"></property>
+		<property name="accountAppModel" ref="accountappmodel"></property>
+		<property name="accDataManager" ref="accDataManager"></property>
+		<property name="refreshAction" ref="chartrefreshaction"></property>
+		<property name="accChartDataManager" ref="modelDataManager"></property>
+	</bean>
+
+	<bean id="acclistview" class="nc.ui.bd.account.view.AccountListViewer"
+		init-method="initUI">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodekey" value="account"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="userdefitemListPreparator">
+			<bean id="userdefitemListPreparator" class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean id="listUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.accasoa" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="acceditor" class="nc.ui.bd.account.view.AccountEditor"
+		init-method="initUI">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+		<property name="nodekey" value="account"></property>
+		<property name="assListViewer" ref="accasspanel"></property>
+		<property name="ctrlMdlListViewer" ref="accctrlmdlpanel"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="closingListener" ref="ClosingListener"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean name="accountCardUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.accasoa" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+						<bean name="accsubCardUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.accasoa" />
+							<property name="pos" value="1" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="accasspanel" class="nc.ui.bd.account.view.AccAssListViewer"
+		init-method="initUI">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodekey" value="accass"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="actions">
+			<list>
+				<ref bean="assaddlineaction" />
+				<ref bean="assdellineaction" />
+				<ref bean="assupaction" />
+				<ref bean="assdownaction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="accctrlmdlpanel" class="nc.ui.bd.account.view.AccCtrlMdlListViewer"
+		init-method="initUI">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodekey" value="accctrlmdl"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="actions">
+			<list>
+				<ref bean="ctrlmdleaddaction" />
+				<ref bean="ctrlmdledelaction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="auditinfopanel" class="nc.ui.uif2.editor.BillForm"
+		init-method="initUI">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodekey" value="auditinfo"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+	</bean>
+
+	<bean id="insertmidacceditor" class="nc.ui.bd.account.view.InsertMidAccEditor"
+		init-method="initUI">
+		<property name="nodekey" value="insertmidacc"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="model" ref="charthappmodel"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+	</bean>
+
+	<bean id="qassnortheditor" class="nc.ui.bd.account.view.QuickSetAccAssHeadEditor"
+		init-method="initUI">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="nodekey" value="qaccass"></property>
+	</bean>
+
+	<bean id="qasscentereditor" class="nc.ui.bd.account.view.QuickSetAccAssBodyEditor"
+		init-method="initUI">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="nodekey" value="qassacc"></property>
+		<property name="bodyActionMap">
+			<map>
+				<entry key="account">
+					<list>
+						<ref bean="accallselect" />
+						<ref bean="accallnotselect" />
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="qaccasseditor" class="nc.ui.bd.account.view.QuickSetAssEditor"
+		init-method="initUI">
+		<property name="northEditor" ref="qassnortheditor"></property>
+		<property name="centerEditor" ref="qasscentereditor"></property>
+	</bean>
+
+	<bean id="newversioneditor" class="nc.ui.bd.accchart.view.AccchartNewVersionEditor"
+		init-method="initUI">
+		<property name="model" ref="charthappmodel"></property>
+	</bean>
+
+	<!-- acc actions -->
+
+	<bean id="accaddaction" class="nc.ui.bd.account.actions.AccountAddAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+		<property name="interceptor" ref="selectAccchartInteceptor"></property>
+	</bean>
+
+	<bean id="acceditaction" class="nc.ui.bd.account.actions.AccEditAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+		<!-- <property name="mdOperateCode" value="edit"></property> -->
+		<!-- <property name="resourceCode" value="account"></property> -->
+	</bean>
+
+	<bean id="accdelaction" class="nc.ui.bd.account.actions.AccDelAction">
+		<property name="model" ref="accountappmodel"></property>
+		<!-- <property name="mdOperateCode" value="delete"></property> -->
+		<!-- <property name="resourceCode" value="account"></property> -->
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+	<bean id="accrefreshaction" class="nc.ui.uif2.actions.RefreshAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="dataManager" ref="accDataManager"></property>
+	</bean>
+	<bean id="accsinglerefresh" class="nc.ui.bd.account.actions.AccRefreshSingleAction">
+		<property name="model" ref="accountappmodel"></property>
+	</bean>
+	<bean id="insertmidaction" class="nc.ui.bd.account.actions.InsertMidClassAction">
+		<property name="manageModel" ref="accountappmodel"></property>
+		<property name="editor" ref="insertmidacceditor"></property>
+		<property name="dlgTitle">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="插入中间级科目"></property>
+				<property name="resId" value="010140accb0312"></property>
+			</bean>
+		</property>
+		<property name="model" ref="charthappmodel"></property>
+		<property name="saveAction" ref="insertmidlevaction"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+	<bean id="accctrlruleaction" class="nc.ui.bd.account.actions.AccCtrlRuleAction">
+		<property name="model" ref="charthappmodel"></property>
+		<property name="manageModel" ref="accountappmodel"></property>
+	</bean>
+	<bean id="accsaveaction" class="nc.ui.bd.account.actions.AccountSaveAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="editor" ref="acceditor"></property>
+		<property name="validationService" ref="validator"></property>
+	</bean>
+	<bean id="acccancelaction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="editor" ref="acceditor"></property>
+	</bean>
+	<bean id="accsavenewaddaction" class="nc.ui.bd.account.actions.AccountSaveAddAction">
+		<property name="addAction" ref="accaddaction"></property>
+		<property name="model" ref="accountappmodel"></property>
+		<property name="editor" ref="acceditor"></property>
+	</bean>
+	<bean id="nullAction" class="nc.funcnode.ui.action.SeparatorAction" />
+	<bean id="acccopyaction" class="nc.ui.bd.account.actions.AccCopyAddAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="editor" ref="acceditor"></property>
+		<property name="accAssList" ref="accasspanel"></property>
+		<property name="ctrlMdlList" ref="accctrlmdlpanel"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+	<bean id="acceditactiongroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="acceditaction" />
+				<ref bean="batchUpdateWizardAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="accmapaction" class="nc.ui.bd.account.actions.AccountMapAction">
+		<property name="model" ref="accountappmodel" />
+		<property name="chartmodel" ref="charthappmodel" />
+		<property name="funnode" value="10140ACCMAP"></property>
+		<property name="refreshAction" ref="chartrefreshaction"></property>
+	</bean>
+
+	<!-- 向导批改 -->
+	<bean id="batchUpdateWizardAction" class="nc.ui.bd.accbatchupdate.action.AccountBatchUpdateAction">
+		<property name="dataManager" ref="accDataManager" />
+		<property name="refreshaction" ref="accrefreshaction" />
+		<property name="model" ref="accountappmodel" />
+		<property name="topPane" ref="toppane"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+		<property name="mdId" value="23a89307-5992-460e-95dd-c628c85f7f95" />
+		<property name="qryTempNodeKey" value="" />
+		<property name="billTempNodekey" value="batchupdateacc" />
+		<property name="billTemplatePkField" value="pk_accasoa" />
+		<property name="qryService">
+			<bean class="nc.ui.bd.accbatchupdate.model.AcountBatchQueryService" />
+		</property>
+	</bean>
+
+	<bean id="accenablegroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="accenablection" />
+				<ref bean="accstopaction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="accenablection" class="nc.ui.bd.account.actions.AccountEnableAction">
+		<property name="model" ref="accountappmodel"></property>
+		<!-- <property name="mdOperateCode" value="enable"></property> -->
+		<!-- <property name="resourceCode" value="account"></property> -->
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+	<bean id="accstopaction" class="nc.ui.bd.account.actions.AccountDisableAction">
+		<property name="model" ref="accountappmodel"></property>
+		<!-- <property name="mdOperateCode" value="disable"></property> -->
+		<!-- <property name="resourceCode" value="account"></property> -->
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+
+	<bean id="printgroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="print"></property>
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="打印"></property>
+				<property name="resId" value="010140accb0320"></property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="templateprint" />
+				<ref bean="templatepreview" />
+				<ref bean="outputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="listprintgroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="print"></property>
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="打印"></property>
+				<property name="resId" value="010140accb0320"></property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<!-- <ref bean="listpreviewaction" /> <ref bean="listprintaction" /> -->
+				<ref bean="listtemplateprint" />
+				<ref bean="listtemplatepreview" />
+				<ref bean="listoutputAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="distactionmenu" class="nc.funcnode.ui.action.MenuAction">
+		<property name="code" value="dist"></property>
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="common"></property>
+				<property name="defaultValue" value="分布式"></property>
+				<property name="resId" value="UC001-0000119"></property>
+			</bean>
+		</property>
+	</bean>
+	<!-- 回收 -->
+	<bean id="BDDistTokenReclaimAction" class="nc.ui.bd.account.actions.AccDistTokenReclaimAction">
+		<property name="tokencode" value="accttoken" />
+		<property name="model" ref="accountappmodel" />
+		<property name="chartModel" ref="charthappmodel" />
+	</bean>
+	<!-- 上传 -->
+	<bean id="BDDistResourceUploadAction" class="nc.ui.bd.account.actions.AccDistResourceUploadAction">
+		<property name="tokencode" value="accttoken" />
+		<property name="model" ref="accountappmodel" />
+		<property name="chartModel" ref="charthappmodel" />
+	</bean>
+	<!-- 上传 -->
+	<bean id="distResourceStatusAction" class="nc.ui.bd.account.actions.AccDistResourceStatusAction">
+		<property name="tokencode" value="accttoken" />
+		<property name="model" ref="accountappmodel" />
+		<property name="chartModel" ref="charthappmodel" />
+	</bean>
+	<!-- 下发 -->
+	<bean id="BDDistResourceDownAction" class="nc.ui.bd.account.actions.AccDistResourceDownAction">
+		<property name="tokencode" value="accttoken" />
+		<property name="model" ref="accountappmodel" />
+		<property name="chartModel" ref="charthappmodel" />
+	</bean>
+
+
+	<bean id="outputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="model" ref="accountappmodel" />
+		<property name="datasource" ref="cardDataSource" />
+		<property name="nodeKey" value="cardtemp"></property>
+		<property name="printDlgParentConatiner" ref="acceditor"></property>
+	</bean>
+
+	<bean id="listoutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="model" ref="accountappmodel" />
+		<property name="datasource" ref="listDataSource" />
+		<property name="nodeKey" value="listtemp"></property>
+		<property name="printDlgParentConatiner" ref="acclistview"></property>
+	</bean>
+
+	<bean id="printaction"
+		class="nc.ui.bd.pub.actions.print.BDMultiPanelDirectPrintAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="headEditors">
+			<list>
+				<ref bean="acceditor" />
+			</list>
+		</property>
+		<property name="bodyEditors">
+			<list>
+				<ref bean="accasspanel" />
+				<ref bean="accctrlmdlpanel" />
+			</list>
+		</property>
+		<property name="tailEditor" ref="auditinfopanel" />
+		<property name="title">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="会计科目"></property>
+				<property name="resId" value="010140accb0321"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="previewaction"
+		class="nc.ui.bd.pub.actions.print.BDMultiPanelDirectPrintAction">
+		<property name="directPrint" value="false"></property>
+		<property name="model" ref="accountappmodel"></property>
+		<property name="headEditors">
+			<list>
+				<ref bean="acceditor" />
+			</list>
+		</property>
+		<property name="bodyEditors">
+			<list>
+				<ref bean="accasspanel" />
+				<ref bean="accctrlmdlpanel" />
+			</list>
+		</property>
+		<property name="tailEditor" ref="auditinfopanel" />
+		<property name="title">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="会计科目"></property>
+				<property name="resId" value="010140accb0321"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="templatepreview" class="nc.ui.bd.pub.actions.print.BDTemplatePreviewAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodeKey" value="cardtemp"></property>
+		<property name="printDlgParentConatiner" ref="acceditor"></property>
+		<property name="datasource" ref="cardDataSource"></property>
+	</bean>
+
+	<bean id="templateprint" class="nc.ui.bd.pub.actions.print.BDTemplatePrintAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodeKey" value="cardtemp"></property>
+		<property name="printDlgParentConatiner" ref="acceditor"></property>
+		<property name="datasource" ref="cardDataSource"></property>
+	</bean>
+
+	<bean id="listprintaction" class="nc.ui.bd.pub.actions.print.BDListPanelDirectPrintAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="listView" ref="acclistview"></property>
+		<property name="title">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="会计科目"></property>
+				<property name="resId" value="010140accb0321"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="listpreviewaction" class="nc.ui.bd.pub.actions.print.BDListPanelDirectPrintAction">
+		<property name="directPrint" value="false"></property>
+		<property name="model" ref="accountappmodel"></property>
+		<property name="listView" ref="acclistview"></property>
+		<property name="title">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="会计科目"></property>
+				<property name="resId" value="010140accb0321"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="listtemplatepreview" class="nc.ui.bd.pub.actions.print.BDTemplatePreviewAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodeKey" value="listtemp"></property>
+		<property name="datasource" ref="listDataSource"></property>
+		<property name="printDlgParentConatiner" ref="acclistview"></property>
+	</bean>
+
+	<bean id="listtemplateprint" class="nc.ui.bd.pub.actions.print.BDTemplatePrintAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="nodeKey" value="listtemp"></property>
+		<property name="datasource" ref="listDataSource"></property>
+		<property name="printDlgParentConatiner" ref="acclistview"></property>
+	</bean>
+
+	<bean id="listDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="accountappmodel"></property>
+		<!-- <property name="listView" ref="acclistview"></property> -->
+	</bean>
+
+	<bean id="cardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="accountappmodel"></property>
+	</bean>
+
+	<bean id="selectAccchartInteceptor" class="nc.ui.bd.account.actions.SelectAccchartInterceptor">
+		<property name="appModel" ref="charthappmodel"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+	</bean>
+
+	<bean id="accchartVersionInteceptor" class="nc.ui.bd.account.actions.AccchartVersionInterceptor">
+		<property name="context" ref="context"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+	</bean>
+
+	<!-- <bean id="shareAccountInteceptor" class="nc.ui.bd.account.actions.ShareAccountInterceptor"> 
+		<property name="accountAppmodel" ref="accountappmodel"></property> <property 
+		name="editor" ref="acceditor"></property> </bean> -->
+
+	<bean id="quicksetassaction" class="nc.ui.bd.account.actions.QuickSetAssAction">
+		<property name="manageModel" ref="accountappmodel"></property>
+		<property name="editor" ref="qaccasseditor"></property>
+		<property name="dlgTitle">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="快速设置辅助核算"></property>
+				<property name="resId" value="010140accb0082"></property>
+			</bean>
+		</property>
+		<property name="model" ref="charthappmodel"></property>
+		<property name="saveAction" ref="quicksetasssaveaction"></property>
+		<property name="cancelAction" ref="quicksetasscancelaction"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+
+	<bean id="insurorientaction" class="nc.ui.bd.account.actions.IncurflagSetAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+
+	<bean id="balanorientaction" class="nc.ui.bd.account.actions.BalanFlagAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+
+	<bean id="outflagaction" class="nc.ui.bd.account.actions.OutflagSetAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+
+	<bean id="accaddactiongroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="accaddaction" />
+				<ref bean="insertmidaction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="busiactiongroup" class="nc.funcnode.ui.action.MenuAction">
+		<property name="code" value="busiaction"></property>
+		<property name="name">
+			<bean id="businessbtnMultilanguage" class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="辅助功能"></property>
+				<property name="resId" value="010140accb0313"></property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="quicksetassaction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="chartactiongroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="chartmaintenanceaction" />
+				<ref bean="chartaddaction" />
+				<ref bean="charteditaction" />
+				<ref bean="accchartdelaction" />
+				<ref bean="chartnewversionaction" />
+				<ref bean="accmapaction" />
+				<ref bean="chartdelversionaction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="accmanagesetgroup" class="nc.funcnode.ui.action.MenuAction">
+		<property name="code" value="accmanageaction"></property>
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="科目管控设置"></property>
+				<property name="resId" value="010140accb0314"></property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="accctrlruleaction" />
+				<ref bean="chartobligateaction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="accqryaction" class="nc.ui.bd.account.actions.AccQueryAction">
+		<property name="model" ref="charthappmodel"></property>
+		<property name="accQueryListViewer" ref="accquerylistviewer"></property>
+		<property name="dataManager" ref="accQueryDataManager"></property>
+		<property name="queryDelegator">
+			<bean class="nc.ui.bd.account.actions.AccountQueryDelegator">
+				<property name="context" ref="context"></property>
+			</bean>
+		</property>
+		<property name="templateContainer" ref="queryTemplateContianer"></property>
+	</bean>
+
+	<bean id="allowcloseaccaction" class="nc.ui.bd.account.actions.AllowCloseAccountAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="accChartEnv" ref="accChartEnv"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+
+	<bean id="accfilteraction" class="nc.funcnode.ui.action.MenuAction">
+		<property name="code" value="accfilter"></property>
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="过滤"></property>
+				<property name="resId" value="010140accb0315"></property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="filteraction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="filteraction" class="nc.ui.uif2.actions.ShowDisableDataAction">
+		<property name="dataManager" ref="accDataManager"></property>
+		<property name="model" ref="accountappmodel"></property>
+	</bean>
+
+	<!--accchart actions -->
+	<bean id="chartmaintenanceaction" class="nc.ui.bd.accchart.actions.AccChartMaitenanceAction">
+		<property name="chartAppModel" ref="charthappmodel"></property>
+		<property name="topPane" ref="toppane"></property>
+	</bean>
+
+	<bean id="chartaddaction" class="nc.ui.bd.accchart.actions.AccChartAddAction">
+		<property name="chartAppModel" ref="charthappmodel"></property>
+	</bean>
+	<bean id="charteditaction" class="nc.ui.bd.accchart.actions.AccChartEditAction">
+		<property name="chartAppModel" ref="charthappmodel"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+	<bean id="chartdelversionaction" class="nc.ui.bd.accchart.actions.AccChartDelVersionAction">
+		<property name="model" ref="charthappmodel"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+	</bean>
+
+	<bean id="chartnewversionaction" class="nc.ui.bd.accchart.actions.AccChartNewVersionAction">
+		<property name="dimen">
+			<bean class="java.awt.Dimension">
+				<constructor-arg>
+					<value>400</value>
+				</constructor-arg>
+				<constructor-arg>
+					<value>150</value>
+				</constructor-arg>
+			</bean>
+		</property>
+		<property name="editor" ref="newversioneditor"></property>
+		<property name="dlgTitle">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140accb"></property>
+				<property name="defaultValue" value="科目表创建新版本"></property>
+				<property name="resId" value="010140accb0316"></property>
+			</bean>
+		</property>
+		<property name="model" ref="charthappmodel"></property>
+		<property name="saveAction" ref="versionsaveaction"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+	</bean>
+
+	<bean id="chartobligateaction" class="nc.ui.bd.accchart.actions.AccChartObligateAction">
+		<property name="chartAppModel" ref="charthappmodel"></property>
+		<property name="accModel" ref="accountappmodel"></property>
+	</bean>
+
+	<bean id="chartrefreshaction" class="nc.ui.bd.accchart.actions.AccChartRefreshAction">
+		<property name="manager" ref="modelDataManager"></property>
+		<property name="model" ref="charthappmodel"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+	</bean>
+
+	<bean id="accchartdelaction" class="nc.ui.bd.accchart.actions.AccChartDelAction">
+		<property name="model" ref="charthappmodel"></property>
+		<property name="refreshAction" ref="chartrefreshaction"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+		<property name="interceptor" ref="accchartVersionInteceptor"></property>
+	</bean>
+
+	<bean id="exhandler" class="nc.ui.uif2.DefaultExceptionHanler">
+		<property name="context" ref="context"></property>
+	</bean>
+
+
+	<bean id="versionsaveaction" class="nc.ui.bd.accchart.actions.ChartNewVersionSaveAction">
+		<property name="editor" ref="newversioneditor"></property>
+		<property name="model" ref="charthappmodel"></property>
+	</bean>
+
+	<!-- acc suntable actions -->
+	<bean id="assaddlineaction" class="nc.ui.bd.account.actions.AccAssAddLineAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="cardpanel" ref="accasspanel"></property>
+	</bean>
+	<bean id="assdellineaction" class="nc.ui.bd.account.actions.AccAssDelLineAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="cardpanel" ref="accasspanel"></property>
+	</bean>
+	<bean id="assupaction" class="nc.ui.bd.account.actions.AssUpAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="billCard" ref="accasspanel"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+	</bean>
+	<bean id="assdownaction" class="nc.ui.bd.account.actions.AssDownAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="billCard" ref="accasspanel"></property>
+		<property name="exceptionHandler" ref="exhandler"></property>
+	</bean>
+	<bean id="ctrlmdleaddaction" class="nc.ui.bd.account.actions.AccCtrlMdleAddAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="cardpanel" ref="accctrlmdlpanel"></property>
+	</bean>
+	<bean id="ctrlmdledelaction" class="nc.ui.bd.account.actions.AccCtrlMdleDelAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="cardpanel" ref="accctrlmdlpanel"></property>
+	</bean>
+
+	<!-- quick set ass actions -->
+	<bean id="accallselect" class="nc.ui.bd.account.actions.QuickAssSetAllSelectAction">
+		<property name="editor" ref="qasscentereditor"></property>
+	</bean>
+
+	<bean id="accallnotselect" class="nc.ui.bd.account.actions.QuickAssSetAllNotSelAction">
+		<property name="editor" ref="qasscentereditor"></property>
+	</bean>
+
+	<bean id="quicksetasssaveaction" class="nc.ui.bd.account.actions.QuickSetAssSaveAction">
+		<property name="northEditor" ref="qassnortheditor"></property>
+		<property name="centerEditor" ref="qasscentereditor"></property>
+		<property name="model" ref="accountappmodel"></property>
+	</bean>
+
+	<bean id="quicksetasscancelaction" class="nc.ui.bd.account.actions.QuickSetAssCancelAction">
+		<property name="northEditor" ref="qassnortheditor"></property>
+		<property name="centerEditor" ref="qasscentereditor"></property>
+	</bean>
+
+	<!-- insert mid level actions -->
+	<bean id="insertmidlevaction" class="nc.ui.bd.account.actions.InsertMidLevSaveAction">
+		<property name="model" ref="accountappmodel"></property>
+		<property name="insertEditor" ref="insertmidacceditor"></property>
+	</bean>
+
+
+	<!-- list and card actions -->
+	<bean id="listactions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="acclistview" />
+		</constructor-arg>
+		<property name="actions">
+			<list>
+				<ref bean="chartactiongroup" />
+				<ref bean="accmanagesetgroup" />
+				<ref bean="nullAction" />
+
+				<ref bean="accaddactiongroup" />
+				<ref bean="acceditactiongroup" />
+				<ref bean="accdelaction" />
+				<ref bean="acccopyaction" />
+				<ref bean="nullAction" />
+
+				<ref bean="accqryaction" />
+				<ref bean="accrefreshaction" />
+				<ref bean="accfilteraction" />
+				<ref bean="nullAction" />
+
+				<ref bean="busiactiongroup" />
+				<ref bean="accenablegroup" />
+				<ref bean="nullAction" />
+
+				<ref bean="listprintgroup" />
+			</list>
+		</property>
+		<property name="model" ref="accountappmodel"></property>
+	</bean>
+
+	<bean id="cardactions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="acceditor" />
+		</constructor-arg>
+		<property name="editActions">
+			<list>
+				<ref bean="accsaveaction" />
+				<ref bean="accsavenewaddaction" />
+				<ref bean="nullAction" />
+
+				<ref bean="acccancelaction" />
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="accaddactiongroup" />
+				<ref bean="acceditactiongroup" />
+				<ref bean="accdelaction" />
+				<ref bean="acccopyaction" />
+				<ref bean="nullAction" />
+
+				<ref bean="accqryaction" />
+				<ref bean="accsinglerefresh" />
+				<ref bean="accfilteraction" />
+				<ref bean="nullAction" />
+
+				<ref bean="busiactiongroup" />
+				<ref bean="accenablegroup" />
+				<ref bean="nullAction" />
+
+				<ref bean="printgroup" />
+			</list>
+		</property>
+		<property name="model" ref="accountappmodel"></property>
+	</bean>
+
+	<bean id="toftpanelActionContributors" class="nc.ui.uif2.actions.ActionContributors">
+		<property name="contributors">
+			<list>
+				<ref bean="listactions" />
+				<ref bean="cardactions" />
+				<ref bean="querycardactions" />
+				<ref bean="accqueryactions" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 界面元素装配 -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="tangramLayoutRoot">
+			<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+				<property name="name" value="querytb"></property>
+				<property name="showMode" value="CardLayout"></property>
+				<property name="tabs">
+					<list>
+						<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+							<property name="tabs">
+								<list>
+									<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+										<property name="up">
+											<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+												<property name="component" ref="toppane"></property>
+											</bean>
+										</property>
+										<property name="down">
+											<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+												<property name="component" ref="acclistview"></property>
+											</bean>
+										</property>
+										<property name="dividerLocation" value="60"></property>
+									</bean>
+									<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+										<property name="up">
+											<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+												<property name="component" ref="cardInfoPnl" />
+											</bean>
+										</property>
+										<property name="down">
+											<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+												<property name="up">
+													<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+														<property name="up">
+															<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+																<property name="component" ref="acceditor"></property>
+															</bean>
+														</property>
+														<property name="down">
+															<bean class="nc.ui.uif2.tangramlayout.node.HSNode">
+																<property name="left">
+																	<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+																		<property name="tabs">
+																			<list>
+																				<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+																					<property name="name">
+																						<bean class="nc.ui.uif2.I18nFB">
+																							<property name="resDir" value="10140accb"></property>
+																							<property name="defaultValue" value="辅助核算"></property>
+																							<property name="resId" value="010140accb0318"></property>
+																						</bean>
+																					</property>
+																					<property name="component" ref="accasspanel">
+																					</property>
+																				</bean>
+																			</list>
+																		</property>
+																	</bean>
+																</property>
+																<property name="right">
+																	<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+																		<property name="tabs">
+																			<list>
+																				<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+																					<property name="name">
+																						<bean class="nc.ui.uif2.I18nFB">
+																							<property name="resDir" value="10140accb"></property>
+																							<property name="defaultValue" value="受控模块"></property>
+																							<property name="resId" value="010140accb0319"></property>
+																						</bean>
+																					</property>
+																					<property name="component" ref="accctrlmdlpanel">
+																					</property>
+																				</bean>
+																			</list>
+																		</property>
+																	</bean>
+																</property>
+																<property name="dividerLocation" value="0.75"></property>
+															</bean>
+														</property>
+														<property name="dividerLocation" value="0.5"></property>
+													</bean>
+												</property>
+												<property name="down">
+													<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+														<property name="component" ref="auditinfopanel"></property>
+													</bean>
+												</property>
+												<property name="dividerLocation" value="0.9"></property>
+											</bean>
+										</property>
+										<property name="dividerLocation" value="30f"></property>
+									</bean>
+								</list>
+							</property>
+							<property name="showMode" value="CardLayout" />
+						</bean>
+						<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+							<property name="showMode" value="CardLayout" />
+							<property name="tabs">
+								<list>
+									<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+										<property name="up">
+											<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+												<property name="component" ref="qryinfopnl"></property>
+											</bean>
+										</property>
+										<property name="down">
+											<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+												<property name="component" ref="accquerylistviewer"></property>
+											</bean>
+										</property>
+										<property name="dividerLocation" value="30f"></property>
+									</bean>
+									<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+										<property name="up">
+											<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+												<property name="component" ref="queryCardInfoPnl" />
+											</bean>
+										</property>
+										<property name="down">
+											<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+												<property name="up">
+													<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+														<property name="up">
+															<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+																<property name="component" ref="query_acceditor"></property>
+															</bean>
+														</property>
+														<property name="down">
+															<bean class="nc.ui.uif2.tangramlayout.node.HSNode">
+																<property name="left">
+																	<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+																		<property name="tabs">
+																			<list>
+																				<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+																					<property name="name">
+																						<bean class="nc.ui.uif2.I18nFB">
+																							<property name="resDir" value="10140accb"></property>
+																							<property name="defaultValue" value="辅助核算"></property>
+																							<property name="resId" value="010140accb0318"></property>
+																						</bean>
+																					</property>
+																					<property name="component" ref="query_accasspanel">
+																					</property>
+																				</bean>
+																			</list>
+																		</property>
+																	</bean>
+																</property>
+																<property name="right">
+																	<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+																		<property name="tabs">
+																			<list>
+																				<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+																					<property name="name">
+																						<bean class="nc.ui.uif2.I18nFB">
+																							<property name="resDir" value="10140accb"></property>
+																							<property name="defaultValue" value="受控模块"></property>
+																							<property name="resId" value="010140accb0319"></property>
+																						</bean>
+																					</property>
+																					<property name="component" ref="query_accctrlmdlpanel">
+																					</property>
+																				</bean>
+																			</list>
+																		</property>
+																	</bean>
+																</property>
+																<property name="dividerLocation" value="0.75"></property>
+															</bean>
+														</property>
+														<property name="dividerLocation" value="0.5"></property>
+													</bean>
+												</property>
+												<property name="down">
+													<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+														<property name="component" ref="query_auditinfopanel"></property>
+													</bean>
+												</property>
+												<property name="dividerLocation" value="0.9"></property>
+											</bean>
+										</property>
+										<property name="dividerLocation" value="30f"></property>
+									</bean>
+								</list>
+							</property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+</beans>

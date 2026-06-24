@@ -1,0 +1,92 @@
+
+/****************************采购付款计划增加 OA标识列 ********************************/
+alter table po_order_payplan add  oa_requestid varchar(20);
+
+
+/****************************表头信息***************************************/
+create or replace view v_nc2oa_payplan_h as
+select
+       --pay.pk_financeorg,
+       pay.pk_order_payplan,
+       org.code             org_code,
+       --org.name             orgname,
+       h.pk_order,
+       h.vbillcode||'-'||pay.crowno vbillcode,
+       --DECODE(pay.bpreflag,'Y','预付款','应付款') bpreflag,
+      -- '货款' pay_type,
+       to_char(to_date(h.dbilldate,'yyyy-mm-dd hh24:mi:ss'),'yyyy-mm-dd') dbilldate,
+       --h.ctrantypeid, 业务类型
+       --btype.pk_billtypecode,
+       --btype.billtypename,
+       --h.pk_payterm,--付款协议
+       --payment.code,
+       --payment.name,
+       --h.pk_supplier,--供应商
+       --sup.code sup_code,
+       sup.name sup_name,
+       --h.cemployeeid,--业务员
+       psn.code sqr,
+       --psn.name psn_name,
+       --h.pk_dept,--部门
+       dept.code szbm,
+       --dept.name deptname,
+       --h.pk_balatype,--结算方式
+       --baltype.code balcode,
+       baltype.name bala_type,
+       --h.corigcurrencyid,--币种
+       --curr.code currcode,
+       curr.name curr_type,
+       --h.vdef1, --厂区
+       --def.code  defcode,
+       def.name  def1,
+       pay.nmny,
+       pay.nrate,
+       NVL(h.vmemo,''）bz
+  from po_order_payplan pay,
+       org_financeorg   org,
+       bd_payment       payment,
+       po_order         h,
+       bd_billtype      btype,
+       bd_supplier      sup,
+       bd_psndoc        psn,
+       org_dept         dept,
+       bd_balatype      baltype,
+       bd_currtype      curr,
+       bd_defdoc        def
+ where  pay.dr = 0
+   --and pay.pk_order = '1001AA100000000BR0EC'
+   and pay.pk_financeorg = org.pk_financeorg
+   and pay.pk_order = h.pk_order
+   and h.ctrantypeid = btype.pk_billtypeid
+   and h.pk_payterm = payment.pk_payment
+   and h.pk_supplier = sup.pk_supplier
+   and h.cemployeeid = psn.pk_psndoc(+)
+   and h.pk_dept = dept.pk_dept(+)
+   and h.pk_balatype = baltype.pk_balatype
+   and h.corigcurrencyid = curr.pk_currtype
+   and h.vdef1 = def.pk_defdoc(+)
+;
+/****************************表体信息***************************************/
+create or replace view v_nc2oa_payplan_b as
+select pb.pk_order,
+       --pb.pk_order_b,select  * from  v_nc2oa_payplan_b
+       pb.crowno,
+       --pb.pk_material,
+       mat.code,
+       mat.name,
+       --pb.cprojectid,
+       --pro.project_code,
+       pro.project_name,
+       pb.nqtorigtaxprice,
+       pb.nnum,
+       pb.norigtaxmny,
+       pb.ntaxmny,
+       pb.vbmemo
+  from po_order_b pb, bd_material mat, bd_project pro
+ where pb.dr = 0
+   --and pb.pk_order = '1001AA100000000BR0EC'
+   and pb.pk_material = mat.pk_material
+   and pb.cprojectid = pro.pk_project(+)
+;
+
+

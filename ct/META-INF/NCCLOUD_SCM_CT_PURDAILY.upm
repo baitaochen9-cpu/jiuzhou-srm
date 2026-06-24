@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_CT_EJB">
+  <public>
+  	<!-- 采购合同维护 合同控制范围-->
+	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+		<interface>nccloud.pubitf.ct.purdaily.service.IControlScope</interface>
+		<implementation>nccloud.pubimpl.ct.purdaily.service.ControlScopeImpl</implementation>
+	</component>
+	<!-- 采购合同维护 联查价格明细-->
+	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+		<interface>nccloud.pubitf.ct.purdaily.service.ILinkCtPriceInfo</interface>
+		<implementation>nccloud.pubimpl.ct.purdaily.service.LinkCtPriceInfoImpl</implementation>
+	</component>
+	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+		<interface>nccloud.pubitf.ct.purdaily.service.IPurdailyService</interface>
+		<implementation>nccloud.pubimpl.ct.purdaily.service.PurdailyServiceImpl</implementation>
+	</component>
+	
+	<!-- 付款计划 生成付款申请-->
+	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+		<interface>nccloud.pubitf.ct.payplan.service.IPayPlanToPayReq</interface>
+		<implementation>nccloud.pubimpl.ct.payplan.service.PayPlanToPayReqImpl</implementation>
+	</component>
+	<!-- 付款计划 付款-->
+	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+		<interface>nccloud.pubitf.ct.payplan.service.IPayPlanToPay</interface>
+		<implementation>nccloud.pubimpl.ct.payplan.service.PayPlanToPayImpl</implementation>
+	</component>
+  </public>
+</module>
+
+
+

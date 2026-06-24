@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<import resource="defdoc_beans.xml" />
+	
+	<bean id="InitDataListener"
+		class="nc.ui.bd.defdoc.DefdocFuncNodeInitDataListener">
+		<property name="datamanager" ref="modelDataManager" />
+	</bean>
+
+	<!-- 数据模型管理器，主要负责各种方式的模型初始化 -->
+	<bean id="modelDataManager" class="nc.ui.bd.defdoc.DefdocSingleNodeDataManager">
+		<property name="model" ref="batchBillTableModel" />
+		<property name="context" ref="context" />
+		<property name="service" ref="appModelService" />
+		<property name="paginationModel" ref="paginationModel" />
+		<property name="delegator" ref="paginationDelegator" />
+	</bean>
+
+	<bean id="paginationDelegator" class="nc.ui.bd.pub.BillBatchPaginationDelegator">
+		<property name="paginationModel">
+			<ref bean="paginationModel" />
+		</property>
+		<property name="billModel">
+			<ref bean="batchBillTableModel" />
+		</property>
+		<property name="editor">
+			<ref bean="list" />
+		</property>
+	</bean>
+
+	<!-- 分页model -->
+	<bean id="paginationModel" class="nc.ui.uif2.components.pagination.PaginationModel"
+		init-method="init">
+		<property name="paginationQueryService">
+			<ref bean="appModelService" />
+		</property>
+		<property name="pageSize" value="50" />
+	</bean>
+
+	<bean id="paginationBar" class="nc.ui.uif2.components.pagination.PaginationBar"
+		init-method="registeCallbak">
+		<property name="paginationModel" ref="paginationModel" />
+		<property name="context" ref="context" />
+	</bean>
+
+	<!-- Views -->
+	<bean id="orgPanel" class="nc.ui.bd.pub.BDAutoHideOrgPanel"
+		init-method="initUI">
+		<property name="labelName">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="common" />
+				<property name="defaultValue" value="业务单元" />
+				<property name="resId" value="2UC000-000011" />
+			</bean>
+		</property>
+		<property name="model" ref="batchBillTableModel" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="pk_orgtype" value="CORPORGTYPE000000000" />
+	</bean>
+
+	<!-- Actions -->
+	<bean id="listQueryAction" class="nc.ui.bd.defdoc.action.DefdocBatchQueryAction">
+		<property name="model">
+			<ref bean="batchBillTableModel"/>
+		</property>
+		<property name = "dataManager" >
+			<ref bean= "modelDataManager"/>
+		</property>
+	</bean>
+	<!-- 查询模板组织权限过滤器 -->
+	<bean id="bdqueryActionMediator" class="nc.ui.bd.pub.tools.BDQueryActionMediator"
+		init-method="process">
+		<property name="queryAction" ref="listQueryAction" />
+		<property name="orgFieldCode">
+			<list>
+				<value>pk_org</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="listRefreshAction" class="nc.ui.uif2.actions.RefreshAction">
+		<property name="model" ref="batchBillTableModel" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	<bean id="listShowSealAction" class="nc.ui.uif2.actions.ShowDisableDataAction">
+		<property name="model" ref="HAppModel" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	<bean id="listFilterMenuAction" class="nc.funcnode.ui.action.MenuAction">
+		<property name="code" value="filter" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="common" />
+				<property name="defaultValue" value="过滤" />
+				<property name="resId" value="UCH069" />
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="listShowSealAction" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="listPrintPreviewAction" class="nc.ui.bd.defdoc.action.DefdocBatchPaginationPreviewAction">
+		<property name="printAction" ref="listPrintAction" />
+	</bean>
+	<bean id="listPrintAction" class="nc.ui.bd.defdoc.action.DefdocBatchPaginationPrintAction">
+		<property name="model" ref="batchBillTableModel" />
+		<property name="printDlgParentConatiner" ref="list" />
+		<property name="nodeKey" value="defdoc_list"/>
+		<property name="paginationModel" ref="paginationModel" />
+		<property name="printFactory" ref="printFactory" />
+		<property name="datamanager" ref="modelDataManager" />
+	</bean>
+	
+	<bean id="listOutputAction"
+		class="nc.ui.bd.pub.actions.print.BDPaginationOutputAction">
+		<property name="model" ref="batchBillTableModel" />
+		<property name="printDlgParentConatiner" ref="list" />
+		<property name="nodeKey" value="defdoc_list" />
+		<property name="paginationModel" ref="paginationModel" />
+		<property name="printFactory" ref="printFactory" />
+	</bean>
+	
+	<bean id="printFactory"
+		class="nc.ui.bd.defdoc.DefdocPagePrintFactory">
+		<property name="context" ref="context" />
+	</bean>
+	
+	<bean id="listPrintMenuAction" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="listprint" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="common" />
+				<property name="defaultValue" value="打印" />
+				<property name="resId" value="UC001-0000007" />
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="listPrintAction" />
+				<ref bean="listPrintPreviewAction" />
+				<ref bean="listOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean name="listContainerWithPaginationBar"
+		class="nc.ui.bd.defdoc.editor.DefdocSplitPanel">
+		<property name="component1" ref="list" />
+		<property name="component2" ref="paginationBar" />
+		<property name="divideLocation" value="30" />
+		<property name="model" ref="batchBillTableModel" />
+	</bean>
+
+	<!--
+		界面布局总装###########################################################
+	-->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="tangramLayoutRoot">
+			<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+				<property name="up">
+					<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+						<property name="component" ref="orgPanel"></property>
+					</bean>
+				</property>
+				<property name="down">
+					<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+						<property name="component" ref="listContainerWithPaginationBar" />
+					</bean>
+				</property>
+				<property name="dividerLocation" value="30" />
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="listAddAction" />
+				<ref bean="listEditAction" />
+				<ref bean="listDelAction" />
+				<ref bean="seperatorAction" />
+
+				<ref bean="listFilterMenuAction" />
+				<ref bean="listQueryAction" />
+				<ref bean="listRefreshAction" />
+				<ref bean="seperatorAction" />
+
+				<ref bean="listEnableGroupAction" />
+				<ref bean="seperatorAction" />
+
+				<ref bean="listPrintMenuAction" />
+				<ref bean="seperatorAction" />
+				
+				<ref bean="mdmAction"/>
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="listAddAction" />
+				<ref bean="listDelAction" />
+				<ref bean="seperatorAction" />
+
+				<ref bean="listSaveAction" />
+				<ref bean="seperatorAction" />
+
+				<ref bean="listCancelAction" />
+				<ref bean="seperatorAction" />
+			</list>
+		</property>
+		<property name="model" ref="batchBillTableModel" />
+	</bean>
+
+	<bean id="mdmAction" class="nc.ui.archives.action.ProducterMdmAction">
+	 	<property name="model"><ref bean="batchBillTableModel"/></property>
+	</bean>
+
+</beans>

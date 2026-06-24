@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="general" class="nc.pubapp.pade.code.funnode.FunNodePara">
+        <property name="moduleName" value="riasm" />
+	    <property name="bpfPath" value="test.bpf" />
+	    <property name="funcode" value="10220SIGN"/>
+	    <property name="funNodeName" value="electronicsignature"/>
+	    <property name="clientPackName" value="nc.ui.riasm.electronicsignature"/>
+			  		<property name="dbilldDate" value="Billdate" />
+			    <property name="metaData" value="raybow_riasm\METADATA\electronicsignature.bmf" />
+	    <property name="xmlPath" value="extends\src\client\nc\ui\riasm\electronicsignature\ace\view\Electronicsignature_config.xml" />
+	    <property name="metaDataType" value="multiType" />
+	    <property name="funcregispath" value="extends/designmodel/funcmodel/electronicsignature/funcregis/10220SIGN.func" />
+	    <property name="quetempath" value="extends/designmodel/templet/electronicsignature/querytemplet/10220SIGN.qtf" />
+	    <property name="printtempath" value="extends/designmodel/templet/electronicsignature/outtemplet/10220SIGN.otf" />
+	    <property name="systembasepath" value="extends/designmodel/systemplatebase/electronicsignature/10220SIGN/10220SIGN.stb" />
+	    <property name="extendSuffix" value=""/>
+	    <property name="uif2ModelFilePath" value="extends\designmodel\ace\uif2model\10220SIGN.umf"/>
+	    <property name="busiCompName" value="extends"/>
+	    <property name="metaDataId" value="cd4112ed-adae-4ce2-9201-de97cad5e028"/>
+	</bean>
+	
+	<bean id="templet" class="nc.pubapp.pade.code.funnode.Templet">
+	    <property name="tempStyle" value="2" />
+	    <property name="nodeKey" value="" />
+		<property name="templetPath" value="extends/designmodel/templet/electronicsignature/billtemplet/10220SIGN.btf" />
+	</bean>
+
+	<bean id="BAEHpara" class="nc.pubapp.pade.code.funnode.BodyAfterEditHandlerPara">
+		<property name="itemList">
+			<list>
+							</list>
+		</property>
+	</bean>
+
+	<bean id="BBEHpara" class="nc.pubapp.pade.code.funnode.BodyBeforeEditHandlerPara">
+		<property name="itemList">
+			<list>
+							</list>
+		</property>
+	</bean>
+	
+	<bean id="HTBEHpara" class="nc.pubapp.pade.code.funnode.HeadTailBeforeEditHandlerPara">
+	</bean>
+	
+	<bean id="HTAEHpara" class="nc.pubapp.pade.code.funnode.HeadTailAfterEditHandlerPara">
+	</bean>
+	
+	<bean id="SerPropara" class="nc.pubapp.pade.code.funnode.ServiceProxyPara">
+					<property name="queryByQueryScheme">
+			<bean class="nc.pubapp.pade.code.funnode.ServiceProxyItemPara">
+				<property name="fullClassName" value="nc.itf.riasm.IElectronicsignatureMaintain" />
+				<property name="itmClassName" value=".IElectronicsignatureMaintain" />
+				<property name="methodName" value="query" />
+			</bean>
+		</property>
+				</bean>
+	
+	<bean id="FilePackNameBean" class="nc.pubapp.pade.code.engine.FilePackNamePara">
+    	<property name="filePackNameList">
+	    	<list>
+				     						       <value>nc.ui.riasm.electronicsignature.handler.OrgChangedHandler.java</value>
+			       <value>nc.ui.riasm.electronicsignature.ace.handler.AceAddHandler.java</value>
+			       <value>nc.ui.riasm.electronicsignature.ace.handler.AceBodyAfterEditHandler.java</value>
+			       <value>nc.ui.riasm.electronicsignature.ace.handler.AceBodyBeforeEditHandler.java</value>
+			       <value>nc.ui.riasm.electronicsignature.ace.handler.AceHeadTailAfterEditHandler.java</value>
+			       <value>nc.ui.riasm.electronicsignature.ace.handler.AceHeadTailBeforeEditHandler.java</value>
+			       <value>nc.ui.riasm.electronicsignature.ace.handler.AceOrgChangedHandler.java</value>
+			       <value>nc.ui.riasm.electronicsignature.ace.serviceproxy.AceElectronicsignatureMaintainProxy.java</value>
+			       <value>nc.ui.riasm.electronicsignature.action.ElectronicsignatureAddAction.java</value>
+			       <value>nc.ui.riasm.electronicsignature.action.ElectronicsignatureDeleteAction.java</value>
+			       <value>nc.ui.riasm.electronicsignature.action.ElectronicsignatureEditAction.java</value>
+			       <value>nc.ui.riasm.electronicsignature.action.CopyActionProcessor.java</value>
+			     			       <value>nc.ui.riasm.electronicsignature.query.ElectronicsignatureQueryConditionInitializer.java</value>
+		     </list>
+	   </property>
+	</bean>
+
+</beans>

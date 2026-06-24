@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<import resource="classpath:nc/ui/am/config/action_config.xml" />
+
+	<!--保存必须有editor和model属性，取数，放数用 -->
+	<bean id="saveAction" class="nc.ui.ewm.workorder.action.SaveAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.am.validator.DataNotNullValidator">
+					<property name="billForm" ref="billForm" />
+				</bean>
+				<bean class="nc.ui.ewm.workorder.validator.SaveValidator">
+					<property name="billForm" ref="billForm"></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!--页签公共按钮 Actions ########################################################### -->
+	<bean id="lineAddAction" class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<bean id="lineDeleteAction" class="nc.ui.ewm.workorder.tabaction.LineDeleteAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<bean id="lineInsertAction" class="nc.ui.ewm.workorder.tabaction.LineInsertAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<!-- 行编辑按钮 -->
+	 <bean id="tableEditLineAction" class="nc.ui.ewm.workorder.tabaction.LineTableEditAction"
+	     lazy-init="true">
+	    <property name="model" ref="model" />
+	    <property name="billForm" ref="billForm" />
+	 </bean>
+	<!-- 表体实际物料页签行操作 -->
+	<bean id="copyPlanInvAction" class="nc.ui.ewm.workorder.tabaction.CopyPlanInvAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+
+	<!-- 表体实际人员页签行操作 -->
+	<bean id="copyPlanPsnAction" class="nc.ui.ewm.workorder.tabaction.CopyPlanPsnAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<!-- 表体实际工具页签行操作 -->
+	<bean id="copyPlanToolAction" class="nc.ui.ewm.workorder.tabaction.CopyPlanToolAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<!-- 表体实际其他费用页签行操作 -->
+	<bean id="copyPlanOtherExesAction" class="nc.ui.ewm.workorder.tabaction.CopyPlanOtherExesAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<!-- 表体选择备件操作 -->
+	<bean id="choosePartAction" class="nc.ui.ewm.workorder.tabaction.ChoosePartAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<!-- 作业方案批量变动 -->
+	<bean id="batchAlterActionTask" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="taskFilter" />
+	</bean>
+	<bean id="taskFilter" class="nc.ui.ewm.workorder.tabaction.TaskFilter" />
+
+	<!-- 计划物料批量变动 -->
+	<bean id="batchAlterPlanInv" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="planInvFilter" />
+	</bean>
+	<bean id="planInvFilter" class="nc.ui.ewm.workorder.tabaction.PlanInvFilter" />
+
+	<!-- 计划人员批量变动 -->
+	<bean id="batchAlterPlanPsn" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="planPsnFilter" />
+	</bean>
+	<bean id="planPsnFilter" class="nc.ui.ewm.workorder.tabaction.PlanPsnFilter" />
+
+	<!-- 计划工具 -->
+	<bean id="batchAlterPlanTool" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="planToolFilter" />
+	</bean>
+	<bean id="planToolFilter" class="nc.ui.ewm.workorder.tabaction.PlanToolFilter" />
+	<!-- 实际物料 -->
+	<bean id="batchAlterActualInv" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="actualInvFilter" />
+	</bean>
+	<bean id="actualInvFilter" class="nc.ui.ewm.workorder.tabaction.ActualInvFilter" />
+
+	<!-- 实际人员批量变动 -->
+	<bean id="batchAlterActualPsn" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="actualPsnFilter" />
+	</bean>
+	<bean id="actualPsnFilter" class="nc.ui.ewm.workorder.tabaction.ActualPsnFilter" />
+
+	<!-- 实际工具 -->
+	<bean id="batchAlterActualTool" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="actualToolFilter" />
+	</bean>
+	<bean id="actualToolFilter" class="nc.ui.ewm.workorder.tabaction.ActualToolFilter" />
+	<!-- 备件 -->
+	<bean id="batchAlterPart" class="nc.ui.ewm.workorder.tabaction.BatchAlterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="filter" ref="partFilter" />
+	</bean>
+	<bean id="partFilter" class="nc.ui.ewm.workorder.tabaction.PartFilter" />
+
+	<!--单据头按钮 -->
+
+	<!--启动工作流 -->
+	<bean id="wfstartAction" class="nc.ui.ewm.workorder.action.WFStartAction">
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.CommitValidator" />
+				<bean class="nc.ui.ewm.workorder.validator.IsExistWorkflowValidator" />
+			</list>
+		</property>
+	</bean>
+	<!-- 收回工作流 -->
+	<bean id="wfRecallAction" class="nc.ui.ewm.workorder.action.WFReCallAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--驱动工作流 -->
+	<bean id="wfdriveAction" class="nc.ui.ewm.workorder.action.WFDriveAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--回退工作流 -->
+	<bean id="wfrollbackAction" class="nc.ui.ewm.workorder.action.WFRollBackAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--复制 -->
+	<bean id="copyAction" class="nc.ui.ewm.workorder.action.CopyAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="validators">
+			<list>
+				<ref bean="orgPermissionValidator" />
+			</list>
+		</property>
+	</bean>
+	<!--资本化 -->
+	<bean id="capitalaction" class="nc.ui.ewm.workorder.action.CapitalAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--取消资本化 -->
+	<bean id="capitalCancelAction" class="nc.ui.ewm.workorder.action.CapitalCancelAction">
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.CapitalCancelValidator" />
+			</list>
+		</property>
+	</bean>
+	<!--更改状态 -->
+	<bean id="alterstatusaction" class="nc.ui.ewm.workorder.action.AlterStatusAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.am.validator.UIPermissionValidator">
+					<property name="context" ref="context" />
+					<property name="meta_code" value="AlterStatus"></property>
+				</bean>
+				<bean class="nc.ui.ewm.workorder.validator.AlterStatusValidator">
+					<property name="context">
+						<ref bean="context" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!--更改日期 -->
+	<bean id="alterdateaction" class="nc.ui.ewm.workorder.action.AlterDateAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.am.validator.UIPermissionValidator">
+					<property name="context" ref="context" />
+					<property name="meta_code" value="AlterStatus"></property>
+				</bean>
+				<bean class="nc.ui.ewm.workorder.validator.AlterDateValidator">
+					<property name="context">
+						<ref bean="context" />
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!--物料请购 -->
+	<bean id="genPrayBill" class="nc.ui.ewm.workorder.action.GenPrayBillAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.GenPrayBillValidator" />
+			</list>
+		</property>
+	</bean>
+	<!--物料退库 -->
+	<bean id="stockreturnaction" class="nc.ui.ewm.workorder.action.GenStockReturnAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.GenICMaterialReturnValidator" />
+			</list>
+		</property>
+	</bean>
+	<!--物料出库 -->
+	<bean id="stockoutaction" class="nc.ui.ewm.workorder.action.GenStockOutAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.GenICMaterialOutValidator" />
+			</list>
+		</property>
+	</bean>
+	<!-- 联查设备 -->
+	<bean id="queryAboutEquipAction" class="nc.ui.am.action.support.AMQueryAboutEquipAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+		<property name="queryAboutHead" value="true" />
+	</bean>
+	<!--联查位置 -->
+	<bean id="queryAboutLocationAction" class="nc.ui.am.common.action.QueryAboutLocationAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+		<property name="queryAboutHead" value="true" />
+	</bean>
+
+	<!--联查标准工作包 -->
+	<bean id="linkQryStdJobAction" class="nc.ui.am.common.action.QueryAboutStdJobAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+		<property name="queryAboutHead" value="true" />
+	</bean>
+	<!--联查工单状态历史 -->
+	<bean id="linkQryStatusHisAction" class="nc.ui.ewm.workorder.action.QryAboutStatusHisAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--联查父工单 -->
+	<bean id="linkQryParentAction" class="nc.ui.ewm.workorder.action.QryAboutParentAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--联查子工单 -->
+	<bean id="linkQryChildAction" class="nc.ui.ewm.workorder.action.QryAboutChildAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="billList" ref="billListView" />
+	</bean>
+	<!--联查原始工单 -->
+	<bean id="linkQryOriginAction" class="nc.ui.ewm.workorder.action.QryAboutOriginAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--联查后续工单 -->
+	<bean id="linkQryLatterAction" class="nc.ui.ewm.workorder.action.QryAboutLatterAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--联查来源单据 -->
+	<bean id="linkQryBillAction" class="nc.ui.am.action.support.AMQueryAboutBillAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!-- 预留查询 -->
+	<bean id="linkQryResAction" class="nc.ui.ewm.workorder.action.InvReserveQueryAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="billList" ref="billListView" />
+	</bean>
+	<!-- 现存量显示/隐藏 -->
+	<bean id="linkQryInvAtion" class="nc.ui.ewm.workorder.action.WorkOrderQueryAboutStocksAction"
+		init-method="init">
+		<property name="billForm" ref="billForm"></property>
+		<property name="model" ref="model"></property>
+		<property name="materialField" value="pk_material"></property>
+		<property name="materialVField" value="pk_material_v_ID"></property>
+		<property name="stockOrgField" value="pk_stockorg_ID"></property>
+		<property name="stockOrgVField" value="pk_stockorg_v_ID"></property>
+		<property name="pkUnitField" value="castunitid_ID"></property>
+		<property name="storDocField" value="pk_stordoc_ID"></property>
+		<property name="changeRateField" value="vchangerate"></property>
+		<property name="tabCode" value="wo_plan_inv"></property>
+	</bean>
+	
+	<!--联查工作流 -->
+	<bean id="linkQryWorkFlowAction" class="nc.ui.ewm.workorder.action.QryAboutWorkFlowAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--生成标准工作包 -->
+	<bean id="genStdJobAction" class="nc.ui.ewm.workorder.action.GenStdJobAction">
+		<property name="model" ref="model" />
+	</bean>
+	<!--生成后续工单 -->
+	<bean id="genLatterAction" class="nc.ui.ewm.workorder.action.GenLatterAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.GenLatterValidator">
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean id="genFailureDocAction" class="nc.ui.ewm.workorder.action.GenFailureDocAction">
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.GenFailureBillValidator">
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean id="genIsolationAction" class="nc.ui.ewm.workorder.action.GenIsolationAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+	<bean id="genPermitAction" class="nc.ui.ewm.workorder.action.GenPermitAction">
+		<property name="model" ref="model" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	<bean id="genOutAPayAction" class="nc.ui.ewm.workorder.action.GenOutAPayAction">
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.GenOutAPayValidator">
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean id="genARAPAction" class="nc.ui.ewm.workorder.action.GenARAPAction">
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.GenARAPValidator">
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 修改按钮 -->
+	<bean id="editAction" class="nc.ui.ewm.workorder.action.EditAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.am.validator.UIPermissionValidator">
+					<property name="context" ref="context" />
+					<property name="meta_code" value="Edit"></property>
+				</bean>
+				<bean class="nc.ui.ewm.workorder.validator.EditValidator" />
+			</list>
+		</property>
+	</bean>
+
+	<!--删除 -->
+	<bean id="deleteAction" class="nc.ui.ewm.workorder.action.DeleteAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.am.validator.UIPermissionValidator">
+					<property name="context" ref="context" />
+					<property name="meta_code" value="Delete"></property>
+				</bean>
+				<bean class="nc.ui.ewm.workorder.validator.DeleteValidator">
+				</bean>
+				<ref bean="orgPermissionValidator" />
+			</list>
+		</property>
+	</bean>
+	<!-- 查询-->
+	<bean id="queryAction" class="nc.ui.ewm.workorder.action.WorkOrderQueryAction">
+		<property name="model" ref="model" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="templateContainer" ref="queryTemplateContainer"/>
+		<property name="queryDelegator">
+			<bean class="nc.ui.am.action.query.AMDefaultQueryDelegator">
+				<property name="context" ref="context" />
+				<property name="baseQueryManager" ref="queryDialogManager" />
+				<property name="autoShowUpComponent" ref="billListView" />
+			</bean>
+		</property>
+		<property name="orgType" ref="mainorgType" />
+	</bean>
+	<bean id="addAction" class="nc.ui.ewm.workorder.action.AddAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+	</bean>
+	<bean id="invLockAction" class="nc.ui.ewm.workorder.action.InvLockAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="billList" ref="billListView" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.InvLockValidator" />
+			</list>
+		</property>
+	</bean>
+	<bean id="invUnLockAction" class="nc.ui.ewm.workorder.action.InvUnLockAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+		<property name="billList" ref="billListView" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.ewm.workorder.validator.InvUnLockValidator" />
+			</list>
+		</property>
+	</bean>
+	<bean id="qryAboutVoucherAction" class="nc.ui.ewm.workorder.action.QryAboutVoucherAction">
+		<property name="model" ref="model" />
+	</bean>
+
+	<!-- 选择出库单 -->
+	<bean id="linkStockOutBillAction" class="nc.ui.ewm.workorder.action.LinkStockOutBillAction">
+		<property name="model" ref="model" />
+		<property name="billForm" ref="billForm" />
+	</bean>
+
+	<bean id="commitGroupAction" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="wfstartAction" />
+				<ref bean="wfRecallAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="workflowMenuAction" class="nc.ui.am.action.support.AMBizProcessMenuAction">
+		<property name="processActionCode" value="SignalWorkFlow"></property>
+		<property name="actions">
+			<list>
+				<ref bean="wfdriveAction" />
+				<ref bean="wfrollbackAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="assMenuAction" class="nc.ui.am.action.container.AssMenuAction">
+		<property name="actions">
+			<list>
+				<ref bean="genPrayBill" />
+				<ref bean="stockoutaction" />
+				<ref bean="stockreturnaction" />
+				<ref bean="invLockAction" />
+				<ref bean="invUnLockAction" />
+				<ref bean="separatorAction" />
+				<ref bean="linkStockOutBillAction" />
+				<ref bean="separatorAction" />
+				<ref bean="capitalaction" />
+				<ref bean="capitalCancelAction" />
+				<ref bean="separatorAction" />
+
+				<ref bean="attachmentAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="attachmentAction" class="nc.ui.ewm.workorder.action.FileAction">
+		<property name="model" ref="model" />
+		<property name="billList" ref="billListView" />
+		<property name="billForm" ref="billForm" />
+		<property name="attchAction" ref="attachmentActionCard"/>
+	</bean>
+	<bean id="queryAboutMenuActionEdit" class="nc.ui.am.action.container.QueryAboutMenuAction">
+		<property name="actions">
+			<list>
+				<ref bean="queryAboutEquipAction" />
+				<ref bean="queryAboutLocationAction" />
+				<ref bean="linkQryStdJobAction" />
+				<ref bean="separatorAction" />
+				<ref bean="linkQryInvAtion" />
+			</list>
+		</property>
+	</bean>
+	<!-- 联查按钮组 -->
+	<bean id="queryAboutMenuAction" class="nc.ui.am.action.container.QueryAboutMenuAction">
+		<property name="actions">
+			<list>
+				<ref bean="queryAboutEquipAction" />
+				<ref bean="queryAboutLocationAction" />
+				<ref bean="linkQryStdJobAction" />
+				<ref bean="separatorAction" />
+
+				<ref bean="linkQryWorkFlowAction" />
+				<!-- <ref bean="queryApproveflowAction" /> -->
+				<ref bean="linkQryStatusHisAction" />
+				<ref bean="separatorAction" />
+
+				<ref bean="linkQryResAction" />
+				<ref bean="linkQryInvAtion" />
+				<ref bean="separatorAction" />
+
+				<ref bean="linkQryParentAction" />
+				<ref bean="linkQryChildAction" />
+				<ref bean="linkQryOriginAction" />
+				<ref bean="linkQryLatterAction" />
+				<ref bean="linkQryBillAction" />
+				<ref bean="separatorAction" />
+
+				<ref bean="qryAboutVoucherAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="relaFuncAction" class="nc.ui.ewm.workorder.action.RelativeFuncMenuAction">
+		<!-- <property name="code"> -->
+		<!-- <value>relafunc</value> -->
+		<!-- </property> -->
+		<!-- <property name="name"> -->
+		<!-- <bean class="nc.ui.am.config.factorybean.MulitLangBean"> -->
+		<!-- <constructor-arg> -->
+		<!-- <value>workorder_0,04560003-0356</value> -->
+		<!-- </constructor-arg> -->
+		<!-- </bean> -->
+		<!-- <value>关联功能</value> -->
+		<!-- </property> -->
+		<property name="actions">
+			<list>
+				<ref bean="genPermitAction" />
+				<ref bean="genStdJobAction" />
+				<ref bean="genLatterAction" />
+				<ref bean="genFailureDocAction" />
+				<ref bean="genIsolationAction" />
+				<ref bean="genOutAPayAction" />
+				<ref bean="genARAPAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="printMenuAction" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code">
+			<value>print</value>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="printTemplateAction" />
+				<ref bean="tempPrinviewAction" />
+				<ref bean="outputAction" />
+				<ref bean="separatorAction" />
+				<ref bean="printWoPlanInvAction" />
+				<ref bean="printWoTaskAction" />
+				<ref bean="printWoReportAction" />
+				<ref bean="printWoCostItemAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 输出包括： 输出Excel、输出PDF、输出HTML -->
+	<bean id="outputAction" class="nc.ui.ewm.workorder.action.AMOutputAction1">
+		<property name="model" ref="model"></property>
+		<property name="scaleProcessor" ref="billVODigitProcessor" />
+		<property name="nodeKey" value="wo_main"></property>
+	</bean>
+
+	<!-- 模板预览 -->
+	<bean id="tempPrinviewAction" class="nc.ui.ewm.workorder.action.AMPrintTempPrinviewAction1">
+		<property name="model" ref="model" />
+		<property name="nodeKey" value="wo_main"></property>
+		<property name="scaleProcessor" ref="billVODigitProcessor" />
+	</bean>
+	<!-- 模板打印 -->
+	<bean id="printTemplateAction" class="nc.ui.ewm.workorder.action.AMPrintTemplateAction1">
+		<property name="model" ref="model" />
+		<property name="nodeKey" value="wo_main"></property>
+		<property name="scaleProcessor" ref="billVODigitProcessor" />
+	</bean>
+
+	<!-- 工单计划物料清单 -->
+	<bean id="printWoPlanInvAction" class="nc.ui.ewm.workorder.action.PrintWoPlanInvAction1">
+		<property name="model" ref="model"></property>
+		<property name="scaleProcessor" ref="billVODigitProcessor" />
+	</bean>
+
+	<!-- 工单作业方案 -->
+	<bean id="printWoTaskAction" class="nc.ui.ewm.workorder.action.PrintWoTaskAction1">
+		<property name="model" ref="model"></property>
+		<property name="scaleProcessor" ref="billVODigitProcessor" />
+	</bean>
+
+	<!-- 工单报告 -->
+	<bean id="printWoReportAction" class="nc.ui.ewm.workorder.action.PrintWoReportAction1">
+		<property name="model" ref="model"></property>
+		<property name="scaleProcessor" ref="billVODigitProcessor" />
+	</bean>
+
+	<!-- 工单费用明细 -->
+	<bean id="printWoCostItemAction" class="nc.ui.ewm.workorder.action.PrintWoCostItemAction1">
+		<property name="model" ref="model"></property>
+		<property name="scaleProcessor" ref="billVODigitProcessor" />
+	</bean>
+	
+	<bean id="orgPermissionValidator" class="nc.pub.am.common.validator.OrgPermissionValidator">
+		<property name="context" ref="context" />
+	</bean>
+	
+	<!-- 附件管理按钮 -->
+    <bean id="attachmentActionCard" class="nc.ui.bd.attach.AttachAction"
+    lazy-init="true">
+    	<property name="model" ref="model"/>
+    	<property name="prefix" value="ewm/wo"/>
+    </bean>
+</beans>

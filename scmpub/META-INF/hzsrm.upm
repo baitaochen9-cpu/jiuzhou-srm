@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="srm">
+	<public>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.api.srm.ISysDispatcher</interface>
+			<implementation>nc.bs.srm.sys.SysDispatcherImpl</implementation>
+		</component>
+		
+	</public>
+</module>

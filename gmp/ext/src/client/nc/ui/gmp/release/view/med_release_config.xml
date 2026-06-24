@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<import resource="classpath:/nc/ui/mmgp/uif2/config/billmanage_pf2.xml" />
+	<import resource="classpath:/nc/ui/mmgp/uif2/config/billmanage_print.xml" />
+	<bean id="billType" class="java.lang.String">
+		<constructor-arg type="java.lang.String" value="HFS1" />
+	</bean>
+	<!-- 保存，走脚本805193 -->
+	<bean id="saveActionBase" class="nc.ui.pubapp.uif2app.actions.pflow.SaveScriptAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="editor" ref="billFormEditor" />
+		<property name="actionName" value="WRITE" />
+		<property name="billType" ref="billType" />
+		<property name="validationService" ref="saveValidation" />
+		<property name="exceptionHandler" ref="saveExceptionHandler" />
+	</bean>	
+
+	<!-- 列表界面加载 -->
+	<bean id="listViewBase" class="nc.ui.mmgp.uif2.view.MMGPShowUpableBillListView"
+		init-method="initUI">
+		<!-- <property name="north" ref="listInfoPnl" /> -->
+		<property name="model" ref="manageAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<!-- <property name="templateContainer" ref="templateContainer" /> -->
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="gmp.med_release_h_148" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="vdef" />
+						</bean>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="gmp.med_release_b_148" />
+							<property name="pos" value="1" />
+							<property name="tabcode" value="pk_release_b"/>
+							<property name="prefix" value="vbdef" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>	
+	<!-- 卡片视图 去掉右侧审批栏 -->
+	<bean id="cardView" class="nc.ui.uif2.tangramlayout.node.VSNode">
+		<property name="up">
+			<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+				<property name="component" ref="cardInfoPnl" />
+			</bean>
+		</property>
+		<property name="down">
+			<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+				<property name="name" value="卡片" />
+				<property name="component" ref="billFormEditor" />
+			</bean>
+		</property>
+		<property name="dividerLocation" value="30f" />
+	</bean>
+	<!-- 卡片界面加载 -->
+	<bean id="billFormEditorBase" class="nc.ui.gmp.release.Bill.view.ReleaseShowUpableBillForm"
+		init-method="initUI">
+		<property name="model" ref="manageAppModel" />
+		<property name="showTotalLine" value="false" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="autoAddLine" value="true" />
+		<property name="blankChildrenFilter">
+			<bean class="nc.ui.mmgp.uif2.view.value.MMGPDefaultBlankChilrenFilter"></bean>
+		</property>
+		<property name="defaultValue" ref="defaultValue" />
+		<property name="bodyLineActions">
+			<list>
+				<bean class="nc.ui.mmgp.uif2.actions.MMGPBodyAddLineAction" />
+				<bean class="nc.ui.mmgp.uif2.actions.MMGPBodyInsertLineAction" />
+				<bean class="nc.ui.mmgp.uif2.actions.MMGPBodyCopyLineAction" />
+				<bean class="nc.ui.mmgp.uif2.actions.MMGPBodyPasteLineAction" />
+				<bean class="nc.ui.mmgp.uif2.actions.MMGPBodyDelLineAction" />
+				<bean class="nc.ui.mmgp.uif2.actions.MMGPBodyPasteToTailAction" />
+			</list>
+		</property>
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<!-- <property name="templateContainer" ref="templateContainer" /> -->
+				<property name="container" ref="userdefitemContainer"/>
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="gmp.med_release_h_148" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="vdef" />
+						</bean>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="gmp.med_release_b_148" />
+							<property name="pos" value="1" />
+							<property name="tabcode" value="pk_release_b"/>
+							<property name="prefix" value="vbdef" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	<bean id="userdefitemContainer" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="gmp.med_release_h_148" />
+			  	</bean>
+			  	<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="gmp.med_release_b_148" />
+			  	</bean>	
+			  	<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="rulecode" value="pk_release_b" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 新增菜单 -->
+    <bean id ="addMenu" class="nc.ui.pubapp.uif2app.actions.AddMenuAction">
+		<property name="billType" ref="billType" />
+		<property name="model" ref="manageAppModel" />
+    	<property name="tooltip" value="新增(Ctrl+N)"/>
+    	<property name="actions">
+    		<list>
+    			<!--<ref bean="addAction"/>-->
+    			<ref bean="addFromC003Action"/>    			
+    		</list>
+    	</property>
+    </bean>	
+	<!-- 参照到货单新增 -->
+	<bean id="addFromC003Action" class="nc.ui.gmp.release.action.AddFromC003Action">
+		<property name="sourceBillType" value="C003" />
+		<property name="sourceBillName" value="新增" />
+		<property name="destBillType" value="HFS1" />
+		<property name="model" ref="manageAppModel" />
+		<property name="billFormEditor" ref="billFormEditor"/>
+		<property name="flowBillType" value="false" />
+		<property name="transferViewProcessor" ref="transferViewProcessor"/>
+		<property name="context" ref="context"/>
+	</bean>
+	<!-- 转单后公共代码处理 -->
+	<bean id="transferViewProcessor" class="nc.ui.pubapp.billref.dest.TransferViewProcessor">
+		<property name="list" ref="listView" />
+		<property name="billForm" ref="billFormEditor" />
+		<property name="transferLogic" ref="transferLogic" />
+		<!-- 列表按钮容器 -->
+		<property name="actionContainer" ref="listActionsContainer" />
+		<!-- 卡片按钮容器 -->
+		<property name="cardActionContainer" ref="cardActionsContainer" />
+		<!-- 单据保存按钮 -->
+		<property name="saveAction" ref="saveAction" />
+		<!-- 单据取消按钮 -->
+		<property name="cancelAction" ref="cancelAction" />
+		<!-- 查询信息工具栏 -->
+		<property name="queryInfoToolbarPanel" ref="listInfoPnl" />
+		<!--<property name="listProcessor" ref="transferListProcessor" />-->
+	</bean>
+	<bean name="transferLogic" class="nc.ui.pubapp.billref.dest.DefaultBillDataLogic">
+		<property name="billForm" ref="billFormEditor" />
+	</bean>
+	<!-- 联查单据 -->
+	<bean id="linkQueryAction" class="nc.ui.pubapp.uif2app.actions.LinkQueryAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="openMode" value="1"/>
+		<property name="billType" value="HFS1" />
+		<property name="btnName" value="联查单据" />
+	</bean>
+	<!-- 联查按钮组 -->
+	<bean id="linkQryMenuAction" class="nc.ui.gmp.release.action.LinkQryMenuAction">
+		<property name="actions">
+			<list>
+				<ref bean="linkQueryAction" />
+			</list>
+		</property>
+	</bean>
+	<!-- 审批按钮组 -->
+	<bean id="approveActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="approveAction" />
+				<ref bean="unApproveAction" />
+				<ref bean="nullaction" />
+				<ref bean="approveInfoAction" />
+			</list>
+		</property>
+	</bean>
+	<!-- 审批 -->
+	<bean id="approveActionBase" class="nc.ui.gmp.release.action.ReleaseApproveAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="editor" ref="billFormEditor" />
+		<property name="filledUpInFlow" value="true" />
+		<property name="billType" ref="billType" />
+	</bean>
+	<bean id="approveAction" parent="approveActionBase" />		
+	<!--取消审批 -->
+	<bean id="unApproveActionBase" class="nc.ui.gmp.release.action.ReleaseUnApproveAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="editor" ref="billFormEditor" />
+		<property name="filledUpInFlow" value="true" />
+		<property name="billType" ref="billType" />
+	</bean>	
+	<bean id="unApproveAction" parent="unApproveActionBase" />
+	<!-- 查询按钮 -->
+	<bean name="queryActionBase" class="nc.ui.mmgp.uif2.actions.MMGPQueryAction2">
+		<property name="model" ref="manageAppModel" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="templateContainer" ref="queryTemplateContainer" />
+		<property name="qryCondDLGInitializer" ref="qryCondInitializer"></property>
+		<property name="showUpComponent" ref="listView" />
+	</bean>
+	<bean id="queryAction" parent="queryActionBase" />
+	<bean id="qryCondInitializer"
+		class="nc.ui.gmp.release.query.ReleaseQueryConditionInitializer">
+	</bean>
+	<!-- 重写 去除重复的 提交审批按钮 -->
+	<bean id="initAddAction" parent="initAddActionBase"></bean>
+	<!-- 重写 去除重复的新增修改删除查询刷新按钮 -->
+	<bean id="actions" class="nc.ui.mmgp.uif2.container.MMGPActionList"/>	
+	<!-- 列表浏览态界面Actions -->
+	<bean id="listActions" class="nc.ui.mmgp.uif2.container.MMGPActionList">
+		<constructor-arg>
+			<list>
+			    <!--<ref bean="addMenu" />-->
+			    <ref bean="addFromC003Action" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="nullaction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				 <!-- 审批相关按钮 -->
+				<ref bean="nullaction" />
+				<ref bean="sendActionGroup" />
+				<ref bean="approveActionGroup" />
+				<!-- 联查相关按钮 -->
+				<ref bean="nullaction" />
+				<ref bean="linkQryMenuAction" />
+				<ref bean="nullaction" />
+				<ref bean="listPrintActionGroup"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	<!-- 卡片浏览态按钮 -->
+   <bean id="cardActions" class="nc.ui.mmgp.uif2.container.MMGPActionList">
+		<constructor-arg>
+			<list>
+			    <!--<ref bean="addMenu" />-->
+			    <ref bean="addFromC003Action" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="nullaction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				 <!-- 审批相关按钮 -->
+				<ref bean="nullaction" />
+				<ref bean="sendActionGroup" />
+				<ref bean="approveActionGroup" />
+				<!-- 联查相关按钮 -->
+				<ref bean="nullaction" />
+				<ref bean="linkQryMenuAction" />
+				<ref bean="nullaction" />
+				<ref bean="printActionGroup"/>
+			</list>
+		</constructor-arg>
+	</bean>
+	<!-- 配置监听器 -->		
+	<bean id="EXEventHandlerMediator" class="nc.ui.mmgp.uif2.mediator.MMGPAppEventHandlerMediator">
+		<property name="model" ref="manageAppModel" />
+		<property name="handlerGroup">
+			<list>
+				<!-- 表头表尾字段编辑前事件 -->
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event"
+						value="nc.ui.pubapp.uif2app.event.card.CardHeadTailBeforeEditEvent" />
+					<property name="handler">
+						<bean class="nc.ui.gmp.release.handler.AceHeadTailBeforeEditHandler" />
+					</property>
+				</bean>
+				<!-- 表头表尾字段编辑后事件 -->
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event" value="nc.ui.pubapp.uif2app.event.card.CardHeadTailAfterEditEvent" />
+					<property name="handler">
+						<bean class="nc.ui.gmp.release.handler.AceHeadTailAfterEditHandler" />
+					</property>
+				</bean>
+				<!-- 表体字段编辑前事件 -->
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event"
+						value="nc.ui.pubapp.uif2app.event.card.CardBodyBeforeEditEvent" />
+					<!-- <property name="picky" ref="childrenPicky" /> -->
+					<property name="handler">
+						<bean class="nc.ui.gmp.release.handler.AceBodyBeforeEditHandler"/>
+					</property>
+				</bean>
+				<!-- 表体字段编辑后事件 -->
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event"
+						value="nc.ui.pubapp.uif2app.event.card.CardBodyAfterEditEvent" />
+					<property name="handler">
+						<bean class="nc.ui.gmp.release.handler.AceBodyAfterEditHandler" />
+					</property>
+				</bean>
+				<!-- 新增事件 -->
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event" value="nc.ui.pubapp.uif2app.event.billform.AddEvent" />
+					<property name="handler">
+						<bean class="nc.ui.gmp.release.handler.ReleaseAddEventHandler" />
+					</property>
+				</bean>	
+				<!-- 组织改变事件 --> 
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup"> 
+					<property name="event" value="nc.ui.pubapp.uif2app.event.OrgChangedEvent"/> 
+					<property name="handler"> 
+					<bean class="nc.ui.gmp.release.handler.AceOrgChangedHandler"> 
+						<constructor-arg ref="billFormEditor" /> 
+					</bean> 
+					</property>
+				</bean> 
+ 			</list>
+		</property>
+	</bean>	
+	
+		
+     <bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="cardActionsContainer" />
+		<property name="actionType" value="notedit" />
+	    <property name="target" ref="approveActionGroup" />
+		<property name="pos" value="after" />
+		<property name="action" ref="TurnCardAction" />
+	</bean>
+	<bean id="TurnCardAction" class="nc.ui.gmp.release.action.TurnCardActionAdapter">
+		<property name="model" ref="manageAppModel" />
+		<property name="billForm" ref="billFormEditor" />
+	</bean>
+	
+	<bean id="CancelTurnCardAction" class="nc.ui.gmp.release.action.CancelTurnCardActionAdapter">
+		<property name="model" ref="manageAppModel" />
+		<property name="billForm" ref="billFormEditor" />
+		<property name="btnName" value="取消翻牌"/>
+	</bean>
+	
+     <bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="cardActionsContainer" />
+		<property name="actionType" value="notedit" />
+	    <property name="target" ref="TurnCardAction" />
+		<property name="pos" value="after" />
+		<property name="action" ref="CancelTurnCardAction" />
+	</bean>
+	<bean id="editActions" class="nc.ui.mmgp.uif2.container.MMGPActionList">
+		<constructor-arg>
+			<list>
+				<ref bean="saveAction" />
+				<ref bean="nullaction" />
+				<ref bean="cancelAction" />
+			</list>
+		</constructor-arg>
+	</bean>
+	
+</beans>

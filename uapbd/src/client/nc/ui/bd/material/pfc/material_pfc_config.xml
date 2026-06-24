@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<bean id="material_pfc" class="nc.ui.bd.uitabextend.DefaultUIExtComponent">
+		<property name="actions">
+			<list>
+				<ref bean="materialPfcEditAction" />
+				<ref bean="materialPfcDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPfcRefreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPfcListPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialPfctidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialPfctidaiping1"/> 
+			</list>
+		</property>
+		<property name="exComponent" ref="materialPfcListView" />
+		<property name="closingListener" ref="materialPfcClosingListener" />
+	</bean>
+		
+	<!-- ############## model & service ################### -->
+	<bean id="materialPfcAppModelsService"
+		class="nc.ui.bd.material.pfc.model.MaterialPfcAppModelService"></bean>
+		
+		<!-- 组织启用页签的应用模型，应使用OrgInfoBillManageModel -->
+	<bean id="materialPfcAppModel" class="nc.ui.bd.pub.orginfo.model.OrgInfoBillManageModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="materialPfcAppModelsService" />
+		<property name="businessObjectAdapterFactory">
+			<bean class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+				<property name="mode" value="VO" />
+			</bean>
+		</property>
+	</bean>
+	
+		<!-- 数据模型管理器，应根据基本信息查询全部分配到利润中心的数据 -->
+	<bean id="materialPfcModelDataManager"
+		class="nc.ui.bd.material.pfc.model.MaterialPfcAppModelDataManager">
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+
+    <!-- Mediator 负责基本信息与组织信息之间的交互（处理数据加载等） -->
+	<bean id="materialPfcMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="modelDataManager" ref="materialPfcModelDataManager" />
+		<property name="orgInfoModel" ref="materialPfcAppModel" />
+		<property name="orgInfoPanel" ref="materialPfcListView" />
+	</bean>
+	
+	<!-- Mediator 负责组织信息页签5个固定辅助属性和10个自由辅助属性的加载-->
+	<bean id="materialPfcMarAsstMediator" class="nc.ui.bd.material.assistant.MarAsstPubShowUtil" init-method="init">
+	    <property name="container" ref="userdefitemContainer"/>
+	    <property name="listEditor" ref="materialPfcListView"/>
+	    <property name="cardEditor" ref="materialPfcEditor"/>
+	    <property name="asstPrecode" value="marasst"/>
+	    <property name="pos" value="body"/>
+	    <property name="model" ref="baseinfoModel"/>
+	</bean>
+	
+		<!-- 界面元素 ########################################################### -->
+	<!-- 列表视图 组织页签入口，须实现ITabbedPaneAwareComponent -->
+	<bean id="materialPfcListView" class="nc.ui.bd.material.pfc.view.MaterialPfcListView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="nodekey" value="materialpfc" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="利润中心信息" />
+				<property name="resId" value="010140mag0350" />
+			</bean>
+		</property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uapbd.materialpfc" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+						<bean id="listBodyUserdefItemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uapbd.materialpfcsub" />
+							<property name="pos" value="1" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	
+		<!-- editor -->
+	<bean id="materialPfcEditor" class="nc.ui.bd.material.pfc.view.MaterialPfcEditor"
+		init-method="initUI">
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="materialpfc" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uapbd.materialpfc" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+						<bean id="cardBodyUserdefItemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uapbd.materialpfcsub" />
+							<property name="pos" value="1" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="bodyActionMap">
+			<map>
+				<entry key="materialpfcsub">
+					<list>
+						<ref bean="materialPfcsubAddLineAction" />
+						<ref bean="materialPfcsubDelLineAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialPfcFirstLineAction" />
+				<ref bean="materialPfcPreLineAction" />
+				<ref bean="materialPfcNextLineAction" />
+				<ref bean="materialPfcLastLineAction" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="materialPfcsubAddLineAction" class="nc.ui.uif2.actions.AddLineAction">
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="cardpanel" ref="materialPfcEditor" />
+	</bean>
+	
+	<bean id="materialPfcsubDelLineAction" class="nc.ui.uif2.actions.DelLineAction">
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="cardpanel" ref="materialPfcEditor" />
+	</bean>
+
+		<!-- 对话框工具（处理对话框的显示操作） -->
+	<bean id="materialPfcDialogMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoCardDialogMediator">
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="dialogContainer" ref="materialPfcDialogContainer" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="利润中心信息" />
+				<property name="resId" value="010140mag0350" />
+			</bean>
+		</property>
+		<property name="closingListener" ref="materialPfcClosingListener" />
+	</bean>
+		
+	<!-- 对话框显示界面dialogContainer -->
+	<bean id="materialPfcDialogContainer" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<bean class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="materialPfcEditor" />
+					<property name="newComponentName">
+						<bean class="nc.ui.uif2.I18nFB ">
+							<property name="resDir" value="10140mag" />
+							<property name="defaultValue" value="利润中心信息" />
+							<property name="resId" value="010140mag0350" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialPfcEditAction" />
+				<ref bean="materialPfcDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPfcRefreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPfcPrintActionGroup" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="materialPfcSaveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPfcCancelAction" />
+			</list>
+		</property>
+		<property name="model">
+			<ref bean="materialPfcAppModel" />
+		</property>
+	</bean>
+	
+		<!-- action list -->
+	<!-- 编辑按钮 -->
+	<bean id="materialPfcEditAction" class="nc.ui.uif2.actions.EditAction">
+		<property name="code" value="PfcEdit" />
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	
+	<bean id="materialPfcDeleteAction" class="nc.ui.uif2.actions.DeleteAction">
+		<property name="code" value="PfcDelete" />
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+		<!-- 编辑态按钮 -->
+	<bean id="materialPfcSaveAction" class="nc.ui.bd.material.pfc.action.MaterialPfcSaveAction">
+		<property name="code" value="PfcSave" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="editor" ref="materialPfcEditor" />
+		<property name="pfcEditor" ref="materialPfcEditor"/>
+	</bean>
+	
+	
+	<bean id="materialPfcCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="code" value="PfcCancel" />
+		<property name="model">
+			<ref bean="materialPfcAppModel" />
+		</property>
+	</bean>
+	
+	
+	<!-- closingListener -->
+	<bean id="materialPfcClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="saveaction" ref="materialPfcSaveAction" />
+		<property name="cancelaction" ref="materialPfcCancelAction" />
+	</bean>
+	
+	<!-- 单条记录刷新按钮 -->
+	<bean id="materialPfcRefreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="code" value="PfcRefresh" />
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	
+	<!-- 刷新全部按钮 -->
+	<bean id="materialPfcRefreshAction" class="nc.ui.uif2.actions.RefreshAllAction">
+		<property name="code" value="PfcRefresh" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="manager" ref="materialPfcModelDataManager" />
+	</bean>
+	
+		<!-- 输入输出按钮 -->
+	<bean id="materialPfcListPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PfcPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialPfcListTempletPrintAction" />
+				<ref bean="materialPfcListTempletPreviewAction" />
+				<ref bean="materialPfcListOutputAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="materialPfcListTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PfcTempPreview" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="nodeKey" value="pfclist" />
+		<property name="printDlgParentConatiner" ref="materialPfcListView" />
+		<property name="datasource" ref="materialPfcListardDataSource" />
+	</bean>
+	<bean id="materialPfcListTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PfcTempPrint" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="nodeKey" value="pfclist" />
+		<property name="printDlgParentConatiner" ref="materialPfcListView" />
+		<property name="datasource" ref="materialPfcListardDataSource" />
+	</bean>
+	
+	<bean id="materialPfcListOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PfcOutput" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="nodeKey" value="pfclist" />
+		<property name="printDlgParentConatiner" ref="materialPfcListView" />
+		<property name="datasource" ref="materialPfcListardDataSource" />
+	</bean>
+    <bean id="materialPfcListardDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	<bean id="materialPfcPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PfcPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialPfcTempletPrintAction" />
+				<ref bean="materialPfcTempletPreviewAction" />
+				<ref bean="materialPfcOutputAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="materialPfcTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PfcTempPreview" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="nodeKey" value="pfccard" />
+		<property name="printDlgParentConatiner" ref="materialPfcEditor" />
+		<property name="datasource" ref="materialPfcCardDataSource" />
+	</bean>
+	<bean id="materialPfcTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PfcTempPrint" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="nodeKey" value="pfccard" />
+		<property name="printDlgParentConatiner" ref="materialPfcEditor" />
+		<property name="datasource" ref="materialPfcCardDataSource" />
+	</bean>
+	<bean id="materialPfcOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PfcOutput" />
+		<property name="model" ref="materialPfcAppModel" />
+		<property name="nodeKey" value="pfccard" />
+		<property name="printDlgParentConatiner" ref="materialPfcEditor" />
+		<property name="datasource" ref="materialPfcCardDataSource" />
+	</bean>
+	<bean id="materialPfcCardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	
+		<!-- 浏览按钮 卡片界面按钮 -->
+	<bean id="materialPfcFirstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	<bean id="materialPfcNextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	<bean id="materialPfcPreLineAction" class="nc.ui.uif2.actions.PreLineAction">
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	<bean id="materialPfcLastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+		<property name="model" ref="materialPfcAppModel" />
+	</bean>
+	
+		<!-- 自己的按钮 -->
+   	<bean id="materialPfctidaiping"  class="nc.ui.bd.material.config.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialPfcAppModel" />
+		<property name="editor" ref="materialPfcEditor" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="materialPfctidaiping1"  class="nc.ui.bd.material.config.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialPfcAppModel" />
+		<property name="editor" ref="materialPfcEditor"/>
+   	</bean>
+</beans>

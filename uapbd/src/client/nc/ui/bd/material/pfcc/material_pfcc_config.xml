@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="material_profitcost" class="nc.ui.bd.uitabextend.DefaultUIExtComponent">
+		<property name="actions">
+			<list>
+				<ref bean="materialProfitCostEditAction" />
+				<ref bean="materialProfitCostDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProfitCostRefreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProfitCostListPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialProfittidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialProfittidaiping1"/> 
+			</list>
+		</property>
+		<property name="exComponent" ref="materialProfitCostListView" />
+		<property name="closingListener" ref="materialProfitCostClosingListener" />
+	</bean>
+ 
+
+	<!--  ############## model & service ################### -->
+
+	<bean id="materialProfitCostAppModelService" class="nc.ui.bd.material.pfcc.model.MaterialProfitCostAppModelService"></bean>
+
+	<!-- 组织启用页签的应用模型，应使用OrgInfoBillManageModel -->
+	<bean id="materialProfitCostAppModel" class="nc.ui.bd.pub.orginfo.model.OrgInfoBillManageModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="materialProfitCostAppModelService" />
+		<property name="businessObjectAdapterFactory">
+			<bean class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+				<property name="mode" value="VO" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 数据模型管理器，应根据基本信息查询全部分配到财务组织的数据 -->
+	<bean id="materialProfitCostModelDataManager"
+		class="nc.ui.bd.material.pfcc.model.MaterialProfitCostAppModelDataManager">
+		<property name="model">
+			<ref bean="materialProfitCostAppModel" />
+		</property>
+	</bean>
+
+	<!-- Mediator 负责基本信息与组织信息之间的交互（处理数据加载等） -->
+	<bean id="materialProfitCostMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="modelDataManager" ref="materialProfitCostModelDataManager" />
+		<property name="orgInfoModel" ref="materialProfitCostAppModel" />
+		<property name="orgInfoPanel" ref="materialProfitCostListView" />
+	</bean>
+	
+	<!-- Mediator 负责组织信息页签5个固定辅助属性和10个自由辅助属性的加载-->
+	<bean id="materialPfccMarAsstMediator" class="nc.ui.bd.material.assistant.MarAsstPubShowUtil" init-method="init">
+	    <property name="container" ref="userdefitemContainer"/>
+	    <property name="listEditor" ref="materialProfitCostListView"/>
+	    <property name="cardEditor" ref="materialProfitCostEditor"/>
+	    <property name="asstPrecode" value="marasst"/>
+	    <property name="pos" value="body"/>
+	    <property name="ShowAcc" value="true"/>
+	    <property name="model" ref="baseinfoModel"/>
+	</bean>
+	<!-- 界面元素 ###########################################################-->
+	<!-- 列表视图 组织页签入口，须实现ITabbedPaneAwareComponent -->
+	<bean id="materialProfitCostListView" class="nc.ui.bd.material.pfcc.view.MaterialProfitCostListView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="nodekey" value="profitcost" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="利润中心成本" />
+				<property name="resId" value="010140mag0359" />
+			</bean>
+		</property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uapbd.materialpfcc" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- editor -->
+	<bean id="materialProfitCostEditor" class="nc.ui.bd.material.pfcc.view.MaterialProfitCostEditor"
+		init-method="initUI">
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="profitcost" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uapbd.materialpfcc" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="bodyActionMap">
+			<map>
+				<entry key="profitcostlist">
+					<list>
+						<ref bean="materialPfccsubAddLineAction" />
+						<ref bean="materialPfccsubDelLineAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialProfitCostFirstLineAction" />
+				<ref bean="materialProfitCostPreLineAction" />
+				<ref bean="materialProfitCostNextLineAction" />
+				<ref bean="materialProfitCostLastLineAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialPfccsubAddLineAction" class="nc.ui.bd.material.pfcc.action.MaterialPFCCAddLineAction">
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="cardpanel" ref="materialProfitCostEditor" />
+	</bean>
+	
+	<bean id="materialPfccsubDelLineAction" class="nc.ui.uif2.actions.DelLineAction">
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="cardpanel" ref="materialProfitCostEditor" />
+	</bean>
+	
+	<!-- 对话框工具（处理对话框的显示操作） -->
+	<bean id="materialProfitCostDialogMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoCardDialogMediator">
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="dialogContainer" ref="materialProfitCostDialogContainer" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="利润中心成本" />
+				<property name="resId" value="010140mag0359" />
+			</bean>
+		</property>
+		<property name="closingListener" ref="materialProfitCostClosingListener" />
+	</bean>
+
+	<!-- 对话框显示界面dialogContainer -->
+	<bean id="materialProfitCostDialogContainer" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<!-- 组织面板 -->
+				<bean class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="materialProfitCostEditor" />
+					<property name="newComponentName">
+						<bean class="nc.ui.uif2.I18nFB ">
+							<property name="resDir" value="10140mag" />
+							<property name="defaultValue" value="利润中心成本" />
+							<property name="resId" value="010140mag0359" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialProfitCostEditAction" />
+				<ref bean="materialProfitCostDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProfitCostRefreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProfitCostPrintActionGroup" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="materialProfitCostSaveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProfitCostCancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<!-- action list -->
+	<!-- 编辑按钮 -->
+	<bean id="materialProfitCostEditAction" class="nc.ui.uif2.actions.EditAction">
+		<property name="code" value="pfccEdit" />
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<bean id="materialProfitCostDeleteAction" class="nc.ui.uif2.actions.DeleteAction">
+		<property name="code" value="pfccDelete" />
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<!-- 编辑态按钮 -->
+	<bean id="materialProfitCostSaveAction" class="nc.ui.uif2.actions.SaveAction">
+		<property name="code" value="pfccSave" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="editor" ref="materialProfitCostEditor" />
+	</bean>
+
+	<bean id="materialProfitCostCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="code" value="pfccCancel" />
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="materialProfitCostRefreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="code" value="pfccRefresh" />
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<bean id="materialProfitCostRefreshAction" class="nc.ui.uif2.actions.RefreshAllAction">
+		<property name="code" value="pfccRefresh" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="manager" ref="materialProfitCostModelDataManager" />
+	</bean>
+
+	<!-- 输入输出按钮 -->
+	<bean id="materialProfitCostListPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="ProfitCostPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialProfitCostListTempletPrintAction" />
+				<ref bean="materialProfitCostListTempletPreviewAction" />
+				<ref bean="materialProfitCostListOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialProfitCostListTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="pfccTempPreview" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="nodeKey" value="pfcclist" />
+		<property name="printDlgParentConatiner" ref="materialProfitCostListView" />
+		<property name="datasource" ref="materialProfitCostListardDataSource" />
+	</bean>
+
+	<bean id="materialProfitCostListTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="pfccTempPrint" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="nodeKey" value="pfcclist" />
+		<property name="printDlgParentConatiner" ref="materialProfitCostListView" />
+		<property name="datasource" ref="materialProfitCostListardDataSource" />
+	</bean>
+
+	<bean id="materialProfitCostListOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="pfccOutput" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="nodeKey" value="pfcclist" />
+		<property name="printDlgParentConatiner" ref="materialProfitCostListView" />
+		<property name="datasource" ref="materialProfitCostListardDataSource" />
+	</bean>
+
+	<bean id="materialProfitCostListardDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<bean id="materialProfitCostPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="pfccPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialProfitCostTempletPrintAction" />
+				<ref bean="materialProfitCostTempletPreviewAction" />
+				<ref bean="materialProfitCostOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialProfitCostTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="pfccTempPreview" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="nodeKey" value="pfcccard" />
+		<property name="printDlgParentConatiner" ref="materialProfitCostEditor" />
+		<property name="datasource" ref="materialProfitCostCardDataSource" />
+	</bean>
+
+	<bean id="materialProfitCostTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="pfccTempPrint" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="nodeKey" value="pfcccard" />
+		<property name="printDlgParentConatiner" ref="materialProfitCostEditor" />
+		<property name="datasource" ref="materialProfitCostCardDataSource" />
+	</bean>
+
+	<bean id="materialProfitCostOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="pfccOutput" />
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="nodeKey" value="pfcccard" />
+		<property name="printDlgParentConatiner" ref="materialProfitCostEditor" />
+		<property name="datasource" ref="materialProfitCostCardDataSource" />
+	</bean>
+
+	<bean id="materialProfitCostCardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<!-- 浏览按钮 卡片界面按钮-->
+	<bean id="materialProfitCostFirstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+	<bean id="materialProfitCostNextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+	<bean id="materialProfitCostPreLineAction" class="nc.ui.uif2.actions.PreLineAction">
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+	<bean id="materialProfitCostLastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+		<property name="model" ref="materialProfitCostAppModel" />
+	</bean>
+
+	<!-- closingHandler -->
+	<bean id="materialProfitCostClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="saveaction" ref="materialProfitCostSaveAction" />
+		<property name="cancelaction" ref="materialProfitCostCancelAction" />
+	</bean>
+	
+		<!-- 自己的按钮 -->
+   	<bean id="materialProfittidaiping"  class="nc.ui.bd.material.config.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="editor" ref="materialProfitCostEditor" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="materialProfittidaiping1"  class="nc.ui.bd.material.config.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialProfitCostAppModel" />
+		<property name="editor" ref="materialProfitCostEditor"/>
+   	</bean>
+
+</beans>

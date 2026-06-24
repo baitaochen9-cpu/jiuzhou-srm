@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="ewm">
+	<public>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.bd.ewm.print.PrintAdd</interface>
+			<implementation>nc.ewm.print.add.PrintAddImpl</implementation>
+		</component>
+		<component remote="true" tx="CMT" priority="0" singleton="true" supportAlias="true">
+			<interface>nc.bd.ewm.print.IProcessService</interface>
+			<implementation>nc.ewm.print.add.ProcessServiceImpl</implementation>
+		</component>
+	</public>
+</module>

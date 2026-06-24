@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 扩展点管理：扩展页签必需 -->
+	<bean id="exinfoloader" class="nc.ui.bd.uitabextend.ExinfoLoader">
+		<property name="current_md_ID" value="10140MPF" />
+	</bean>
+
+	<bean id="uiTabExtMnger" class="nc.ui.bd.uitabextend.UITabExtManager">
+		<property name="targetComponent" ref="dataEditor" />
+	</bean>
+
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext" />
+
+	<!-- 远程调用加载器 -->
+	<bean id="remoteCallCombinatorCaller" class="nc.ui.uif2.editor.UIF2RemoteCallCombinatorCaller">
+		<property name="remoteCallers">
+			<list>
+				<ref bean="templateContainer" />
+				<ref bean="userdefitemContainer" />
+				<ref bean="queryTemplateContainer" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 模板容器，负责对模板的统一装载 -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+		<property name="nodeKeies">
+			<list>
+				<value>approve</value>
+				<value>data</value>
+				<value>asstframe</value>
+				<value>assistant</value>
+				<value>asstdefine</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 用户定义属性加载器，同一家在所有页签的用户定义属性 -->
+	<bean id="userdefitemContainer" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.material" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="rulecode" value="materialassistant" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.material_pf" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 查询模板加载器 -->
+	<bean id="queryTemplateContainer" class="nc.ui.uif2.editor.QueryTemplateContainer">
+		<property name="context" ref="context"></property>
+		<property name="nodeKey" value="" />
+	</bean>
+
+	<!-- 模型部分配置########################################################### -->
+
+	<!-- 应用服务类，负责进行模型操作的处理 -->
+	<bean id="ManageModelService" class="nc.ui.bd.material.pf.model.MaterialPfModelService">
+		<property name="context" ref="context" />
+	</bean>
+
+	<!-- 对象转换器工厂，由此获取操作对象的特征信息 -->
+	<bean id="boadatorfactory" class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+		<property name="mode" value="MD" />
+	</bean>
+
+	<!-- 物料申请单模型 -->
+	<bean id="approveModel" class="nc.ui.uif2.model.BillManageModel">
+		<property name="service" ref="ManageModelService" />
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="context" ref="context" />
+	</bean>
+
+	<!-- 为了适配原来代码，引入物料基本信息模型 -->
+	<bean id="baseinfoModel" class="nc.ui.bd.material.baseinfo.model.MaterialBaseInfoModel">
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="service" ref="ManageModelService" />
+		<property name="context" ref="context" />
+	</bean>
+
+	<!-- 模型调停者 -->
+	<bean id="modelMediator" class="nc.ui.bd.material.pf.model.MaterialPFModelMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="pfModel" ref="approveModel" />
+	</bean>
+
+	<!-- 数据模型管理器，主要负责各种方式的模型初始化 -->
+	<bean id="modelDataManager" class="nc.ui.bd.material.pf.model.MaterialPfModelDataManager">
+		<property name="model" ref="approveModel" />
+	</bean>
+
+	<!-- 数据初始化监听器 -->
+	<bean id="InitDataListener"
+		class="nc.ui.bd.material.pf.model.MaterialPfFuncNodeInitDataListener">
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="model" ref="approveModel" />
+		<property name="modelMediator" ref="modelMediator" />
+		<property name="editor" ref="approveEditor" />
+		<property name="queryAction" ref="queryAction" />
+	</bean>
+
+	<!-- toftpanelActionContributors ###################################### -->
+	<bean id="toftpanelActionContributors" class="nc.ui.uif2.actions.ActionContributors">
+		<property name="contributors">
+			<list>
+				<ref bean="listViewActions" />
+				<ref bean="cardPanelActions" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 界面元素 ########################################################### -->
+	<bean id="listView" class="nc.ui.bd.material.pf.view.MaterialPfListView"
+		init-method="initUI">
+		<property name="model" ref="approveModel" />
+		<property name="multiSelectionEnable" value="true" />
+		<property name="nodekey" value="approve" />
+		<property name="pos" value="head" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="north" ref="listInfoPnl" />
+		<!-- 列表自定义项处理 -->
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.pubapp.uif2app.view.CompositeBillListDataPrepare">
+				<property name="billListDataPrepares">
+					<list>
+						<ref bean="userdefitemlistPreparator" /> <!--引用列表自定义项处理Bean -->
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 列表自定义项处理 -->
+	<bean name="userdefitemlistPreparator" class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+		<property name="container" ref="userdefitemContainer" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+					<property name="mdfullname" value="uap.material_pf" />
+					<property name="pos" value="0" />
+					<property name="prefix" value="def" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="listInfoPnl" class="nc.ui.uif2.tangramlayout.CardLayoutToolbarPanel">
+		<property name="model" ref="approveModel" />
+	</bean>
+	
+	<bean id="accessoryShowAction" class="nc.ui.bd.attach.AttachCtrlAction">
+					<property name="model" ref="approveModel" />
+					<property name="prefix" value="uapbd/6b2c8309-930b-4989-8b0e-f2a80f35c62c" />
+					<property name="billtype" value="10WL" />
+					<property name="resourceCode" value="materialpf" />
+					<property name="mdOperateCode" value="edit" />
+					<property name="checkPermission" value="true" />
+	</bean>
+
+	<bean id="cardInfoPnl" class="nc.ui.uif2.tangramlayout.CardLayoutToolbarPanel">
+		<property name="actions">
+			<list>
+				<!-- 浏览按钮 卡片界面共享信息按钮 -->
+				<ref bean="accessoryShowAction" />				
+				<bean id="firstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+					<property name="model" ref="approveModel" />
+				</bean>
+				<bean id="preLineAction" class="nc.ui.uif2.actions.PreLineAction">
+					<property name="model" ref="approveModel" />
+				</bean>
+				<bean id="nextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+					<property name="model" ref="approveModel" />
+				</bean>
+				<bean id="lastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+					<property name="model" ref="approveModel" />
+				</bean>
+			</list>
+		</property>
+		<property name="titleAction">
+			<bean id="returnaction" class="nc.ui.uif2.actions.ShowMeUpAction">
+				<property name="goComponent" ref="listView" />
+			</bean>
+		</property>
+		<property name="model" ref="approveModel" />
+	</bean>
+
+	<bean id="approveEditor" class="nc.ui.bd.material.pf.view.MaterialPfApproveEditor"
+		init-method="initUI">
+		<property name="model" ref="approveModel" />
+		<property name="nodekey" value="approve" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="closingListener" ref="ClosingListener" />
+		<property name="dataEditor" ref="dataEditor" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.pubapp.uif2app.view.CompositeBillDataPrepare">
+				<property name="billDataPrepares">
+					<list>
+						<ref bean="userdefitemPreparator" /><!--引用卡片自定义项处理Bean -->
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean name="userdefitemPreparator" class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+		<property name="container" ref="userdefitemContainer" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+					<property name="mdfullname" value="uap.material_pf" />
+					<property name="pos" value="0" /> <!--表头 -->
+					<property name="prefix" value="def" /> <!--自定义项前缀 -->
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 物料基本信息Editor -->
+	<bean id="dataEditor" class="nc.ui.bd.material.pf.view.MaterialPfDataEditor"
+		init-method="initUI">
+		<property name="model" ref="baseinfoModel" />
+		<property name="approveModel" ref="approveModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="data" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean name="cardUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.material" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="bodyActionMap">
+			<map>
+				<entry key="materialconvert">
+					<list>
+						<bean class="nc.ui.uif2.actions.AddLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.InsertLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.DelLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.CopyLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.PasteLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+					</list>
+				</entry>
+				<entry key="materialtaxtype">
+					<list>
+						<bean class="nc.ui.uif2.actions.AddLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.InsertLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.DelLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.CopyLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.PasteLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="dataEditor" />
+						</bean>
+					</list>
+				</entry>
+				<entry key="materialassistant">
+					<list>
+						<bean class="nc.ui.bd.material.assistant.action.MarAsstDefineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="dialogMediator" ref="asstDlgMediator" />
+						</bean>
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- 辅助属性对话框调停者 -->
+	<bean id="asstDlgMediator" class="nc.ui.bd.pub.view.BDEditorOkCancelDialogMediator">
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="辅助属性定义" />
+				<property name="resId" value="010140mag0191" />
+			</bean>
+		</property>
+		<property name="model" ref="marAsstModel" />
+		<property name="editor" ref="marAsstEditor" />
+		<property name="saveAction">
+			<bean class="nc.ui.bd.material.assistant.action.MarAsstDefineSaveAction">
+				<property name="model" ref="marAsstModel" />
+				<property name="baseInfoEditor" ref="dataEditor" />
+				<property name="marAsstPanel" ref="marAsstPanel" />
+				<property name="editor" ref="marAsstEditor" />
+				<property name="frameEditor">
+					<bean class="nc.ui.uif2.editor.BillForm" init-method="initUI">
+						<property name="model">
+							<bean class="nc.ui.uif2.model.BillManageModel">
+								<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+								<property name="context" ref="context" />
+							</bean>
+						</property>
+						<property name="templateContainer" ref="templateContainer" />
+						<property name="nodekey" value="asstframe" />
+					</bean>
+				</property>
+			</bean>
+		</property>
+		<property name="cancelAction">
+			<bean class="nc.ui.uif2.actions.CancelAction">
+				<property name="model" ref="marAsstModel" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 辅助属性editor -->
+	<bean id="marAsstEditor"
+		class="nc.ui.bd.material.assistant.view.MarAsstQuickDefineEditor"
+		init-method="initUI">
+		<property name="model" ref="marAsstModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="asstdefine" />
+		<property name="userDefItemContainer" ref="userdefitemContainer" />
+		<property name="marAsstPanel" ref="marAsstPanel" />
+	</bean>
+
+	<!-- 辅助属性model -->
+	<bean id="marAsstModel" class="nc.ui.bd.material.baseinfo.model.MaterialBaseInfoModel">
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="context" ref="context" />
+	</bean>
+
+	<!-- 辅助属性信息面板 -->
+	<bean id="marAsstPanel" class="nc.ui.bd.material.assistant.view.MarAsstPanel"
+		init-method="initUI">
+		<property name="model" ref="baseinfoModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="assistant" />
+		<property name="userDefItemContainer" ref="userdefitemContainer" />
+		<property name="requestFocus" value="false" />
+	</bean>
+
+	<!-- 页签按钮注册 -->
+	<bean id="listViewActions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="listView" />
+		</constructor-arg>
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="separatorAction" />
+				<ref bean="commitGroupAction" />
+				<ref bean="approveGroupAciton" />
+				<ref bean="separatorAction" />
+				<ref bean="printActionGroup" />
+				<ref bean="linkMdmAction"/> 
+			</list>
+		</property>
+	</bean>
+
+	<bean id="cardPanelActions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="dataEditor" />
+		</constructor-arg>
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="separatorAction" />
+				<ref bean="commitGroupAction" />
+				<ref bean="approveGroupAciton" />
+				<ref bean="separatorAction" />
+				<ref bean="cardPrintActionGroup" />
+				<ref bean="accessoryAction" />
+				<ref bean="linkMdmAction"/> 
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="saveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="approveModel" />
+	</bean>
+
+	<!-- Actions ########################################################### -->
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+	<!-- 联动主数据按钮，model,refreshAction -->
+	<bean id="linkMdmAction" class="nc.ui.bd.material.pf.action.LinkMdmAction">
+		<property name="model" ref="approveModel" />
+		<!--  <property name="dataManager" ref="modelDataManager" />-->
+		<property name="refreshAction" ref ='refreshAction'/>
+	</bean>
+	<!-- 卡片列表切换 -->
+	<bean id="switchMediator" class="nc.ui.uif2.actions.SwitchAction"
+		init-method="init">
+		<property name="context" ref="context" />
+		<property name="component1" ref="listView" />
+		<property name="component2" ref="approveEditor" />
+	</bean>
+
+	<!-- 编辑按钮 -->
+	<bean id="addAction" class="nc.ui.bd.material.pf.action.MaterialPfAddAction">
+		<property name="model" ref="approveModel" />
+	</bean>
+
+	<bean id="editAction" class="nc.ui.bd.pub.pfactions.PfEditAction">
+		<property name="model" ref="approveModel" />
+		<property name="billtype" value="10WL" />
+		<property name="resourceCode" value="materialpf" />
+		<property name="mdOperateCode" value="edit" />
+	</bean>
+
+	<bean id="deleteAction" class="nc.ui.bd.pub.pfactions.PfDeleteAction">
+		<property name="model" ref="approveModel" />
+		<property name="resourceCode" value="materialpf" />
+		<property name="mdOperateCode" value="delete" />
+	</bean>
+
+	<!-- 编辑态按钮 -->
+	<bean id="saveAction" class="nc.ui.bd.material.pf.action.MaterialPfSaveAction">
+		<property name="model" ref="approveModel" />
+		<property name="editor" ref="approveEditor" />
+	</bean>
+
+	<bean id="cancelAction" class="nc.ui.bd.material.pf.action.MaterialPfCancelAction">
+		<property name="model" ref="approveModel" />
+		<property name="editor" ref="approveEditor" />
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="queryActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="Query" />
+		<property name="actions">
+			<bean class="nc.ui.uif2.actions.QueryActionList">
+				<property name="queryAction" ref="queryAction"></property>
+			</bean>
+		</property>
+	</bean>
+	<bean name="queryAction" class="nc.ui.uif2.actions.QueryAction">
+		<property name="model" ref="approveModel" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="templateContainer" ref="queryTemplateContainer" />
+		<property name="queryDelegator">
+			<bean class="nc.ui.bd.pub.query.BUIncluedGlobleAndGroupQueryDelegator">
+				<property name="context" ref="context" />
+				<property name="incluedGlobleAndGroupBUFields">
+					<list>
+						<value>pk_targetorg</value>
+					</list>
+				</property>
+				<property name="templateContainer" ref="queryTemplateContainer" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="refreshAction" class="nc.ui.uif2.actions.RefreshAction">
+		<property name="model" ref="approveModel" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+
+	<bean id="refreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="model" ref="approveModel" />
+	</bean>
+
+	<!-- 流程按钮 -->
+	<bean id="commitGroupAction" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="Commit" />
+		<property name="actions">
+			<list>
+				<ref bean="commitAction" />
+				<ref bean="recallAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="commitAction" class="nc.ui.bd.material.pf.action.MaterialPfCommitAction">
+		<property name="model" ref="approveModel" />
+		<property name="billtype" value="10WL" />
+		<property name="resourceCode" value="materialpf" />
+		<property name="mdOperateCode" value="commit" />
+	</bean>
+
+	<bean id="recallAction" class="nc.ui.bd.material.pf.action.MaterialPfRecallAction">
+		<property name="model" ref="approveModel" />
+		<property name="billType" value="10WL" />
+		<property name="resourceCode" value="materialpf" />
+		<property name="mdOperateCode" value="recall" />
+	</bean>
+
+	<bean id="approveGroupAciton" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="approve" />
+		<property name="actions">
+			<list>
+				<ref bean="approveAction" />
+				<ref bean="abstainAction" />
+				<ref bean="approveInfoAction"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="approveAction" class="nc.ui.bd.material.pf.action.MaterialPfApproveAction">
+		<property name="model" ref="approveModel" />
+		<property name="billtype" value="10WL" />
+		<property name="resourceCode" value="materialpf" />
+		<property name="mdOperateCode" value="approve" />
+	</bean>
+
+	<bean id="approveInfoAction" class="nc.ui.bd.pub.pfactions.ApproveInfoAction">
+		<property name="model" ref="approveModel" />
+		<property name="billtype" value="10WL" />
+	</bean>
+
+	<bean id="abstainAction" class="nc.ui.bd.material.pf.action.MaterialPfUnApproveAction">
+		<property name="model" ref="approveModel" />
+		<property name="billtype" value="10WL" />
+		<property name="resourceCode" value="materialpf" />
+		<property name="mdOperateCode" value="unapprove" />
+	</bean>
+
+	<!-- 输入输出按钮 -->
+	<bean id="printActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="templetprintaction" />
+				<ref bean="templetprintpreviewaction" />
+				<ref bean="outputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!--附件管理 -->
+	<bean id="accessoryAction" class="nc.ui.bd.pub.actions.AccessoryAction">
+	    <property name="windowListener" ref="accessoryShowAction" />
+		<property name="model" ref="approveModel" />
+		<property name="metaDataID" value="6b2c8309-930b-4989-8b0e-f2a80f35c62c" />
+	</bean>
+
+	<bean id="templetprintpreviewaction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="nodeKey" value="materialpflist" />
+		<property name="model" ref="approveModel" />
+		<property name="printDlgParentConatiner" ref="approveEditor" />
+		<property name="datasource" ref="datasource" />
+	</bean>
+
+	<bean id="templetprintaction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="nodeKey" value="materialpflist" />
+		<property name="model" ref="approveModel" />
+		<property name="printDlgParentConatiner" ref="approveEditor" />
+		<property name="datasource" ref="datasource" />
+	</bean>
+
+	<bean id="outputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="nodeKey" value="materialpflist" />
+		<property name="model" ref="approveModel" />
+		<property name="printDlgParentConatiner" ref="approveEditor" />
+		<property name="datasource" ref="datasource" />
+	</bean>
+
+	<bean id="datasource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="approveModel" />
+	</bean>
+
+	<bean id="cardPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="cardTempletprintaction" />
+				<ref bean="cardTempletprintpreviewaction" />
+				<ref bean="cardOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="cardTempletprintpreviewaction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="nodeKey" value="materialpfcard" />
+		<property name="model" ref="approveModel" />
+		<property name="printDlgParentConatiner" ref="approveEditor" />
+		<property name="datasource" ref="cardDatasource" />
+	</bean>
+
+	<bean id="cardTempletprintaction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="nodeKey" value="materialpfcard" />
+		<property name="model" ref="approveModel" />
+		<property name="printDlgParentConatiner" ref="approveEditor" />
+		<property name="datasource" ref="cardDatasource" />
+	</bean>
+
+	<bean id="cardOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="nodeKey" value="materialpfcard" />
+		<property name="model" ref="approveModel" />
+		<property name="printDlgParentConatiner" ref="approveEditor" />
+		<property name="datasource" ref="cardDatasource" />
+	</bean>
+
+	<bean id="cardDatasource" class="nc.ui.bd.material.pf.model.MaterialPFDataSource">
+		<property name="model" ref="approveModel" />
+	</bean>
+
+	<!-- 界面布局总装########################################################### -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="tangramLayoutRoot">
+			<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+				<property name="tabs">
+					<list>
+
+						<bean class="nc.ui.uif2.tangramlayout.node.HSNode">
+							<property name="left">
+								<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+									<property name="component" ref="queryAreaShell" />
+								</bean>
+							</property>
+							<property name="right">
+								<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+									<property name="component" ref="listView" />
+								</bean>
+							</property>
+							<property name="dividerLocation" value="0.2f" />
+						</bean>
+						<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+							<property name="up">
+								<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+									<property name="component" ref="cardInfoPnl" />
+								</bean>
+							</property>
+							<property name="down">
+								<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+									<property name="up">
+										<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+											<property name="component" ref="approveEditor" />
+										</bean>
+									</property>
+									<property name="down">
+										<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+											<property name="tabs">
+												<list>
+													<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+														<property name="name">
+															<bean class="nc.ui.uif2.I18nFB ">
+																<property name="resDir" value="10140mpf" />
+																<property name="defaultValue" value="物料信息" />
+																<property name="resId" value="010140mpf0002" />
+															</bean>
+														</property>
+														<property name="component" ref="dataEditor" />
+													</bean>
+												</list>
+											</property>
+											<property name="tabbedPaneFetcher" ref="tabbedPaneFetcher" />
+										</bean>
+									</property>
+									<property name="dividerLocation" value="0.2f" />
+								</bean>
+							</property>
+							<property name="dividerLocation" value="30f" />
+						</bean>
+					</list>
+				</property>
+				<property name="showMode" value="CardLayout" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="tabbedPaneFetcher" class="nc.ui.bd.pub.DefaultTabbedPaneEditableControl">
+		<property name="model" ref="baseinfoModel" />
+		<property name="targetComponent" ref="dataEditor" />
+	</bean>
+
+	<!-- 查询面板 -->
+	<bean id="queryAreaShell" class="nc.ui.uif2.actions.QueryAreaShell"
+		init-method="initUI">
+		<property name="queryArea">
+			<bean factory-bean="bdqueryActionMediator" factory-method="createQueryArea" />
+		</property>
+	</bean>
+
+	<!-- ClosingListener -->
+	<bean id="ClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="approveModel" />
+		<property name="saveaction" ref="saveAction" />
+		<property name="cancelaction" ref="cancelAction" />
+	</bean>
+	<!-- 查询模板组织权限过滤器 -->
+	<bean id="bdqueryActionMediator" class="nc.ui.bd.pub.tools.BDPubQueryActionMediator"
+		init-method="process">
+		<property name="queryAction" ref="queryAction" />
+		<property name="orgFieldCode">
+			<list>
+				<value>pk_org</value>
+				<value>pk_targetorg</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

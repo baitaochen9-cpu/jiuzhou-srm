@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="funcregister" class="nc.pubapp.pade.funcmodel.vo.FuncRegister"><property name="bmf_path" value="qc\METADATA\supplierqualitystatus.bmf"/>
+<property name="busiActiveList">
+<list></list>
+</property>
+<property name="cfunid" value="0001ZZ1000000000G0E1"/>
+<property name="class_name" value="nc.ui.pubapp.uif2app.ToftPanelAdaptorEx"/>
+<property name="dr" value="0"/>
+<property name="fun_name" value="供应商物料质量状态"/>
+<property name="fun_property" value="0"/>
+<property name="funcRegisterButtonList">
+<list></list>
+</property>
+<property name="funcRegisterParamList">
+<list><bean class="nc.pubapp.pade.funcmodel.vo.FuncRegisterParam"><property name="dr" value="0"/>
+<property name="paramname" value="BeanConfigFilePath"/>
+<property name="paramvalue" value="nc/ui/qc/supplierqualitystatus/ace/view/Supplierqualitystatus_config.xml"/>
+<property name="parentid" value="0001ZZ1000000000G0E1"/>
+<property name="pk_param" value="0001ZZ1000000000G0E2"/>
+<property name="ts" value="2020-12-17 22:27:18"/>
+</bean>
+</list>
+</property>
+<property name="funcode" value="C01055"/>
+<property name="funnode_path" value="extends\ace\client\C01055.fnf"/>
+<property name="funtype" value="0"/>
+<property name="isbuttonpower" value="false"/>
+<property name="isenable" value="true"/>
+<property name="isfunctype" value="false"/>
+<property name="menuModelFilePath" value="extends/funcmodel/supplierqualitystatus/menuitemregis/C01055.menu"/>
+<property name="metaDataID" value="14768841-2f0f-4121-9aaa-aedca2a45b81"/>
+<property name="moduleName" value="qc"/>
+<property name="orgtypecode" value="PURCHASEORGTYPE00000"/>
+<property name="own_module" value="HF04"/>
+<property name="pageList">
+<list></list>
+</property>
+<property name="parent_id" value="1002Z81000000000ORZ5"/>
+<property name="pk_group" value="~"/>
+<property name="ts" value="2020-12-17 22:27:18"/>
+<property name="uif2model_path" value="extends\ace\uif2model\C01055.umf"/>
+</bean>
+
+</beans>

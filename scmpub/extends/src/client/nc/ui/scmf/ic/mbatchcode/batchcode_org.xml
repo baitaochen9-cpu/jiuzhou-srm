@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+
+  <import resource="batchcode_base.xml"/>
+ 
+	
+	
+	<!-- 界面布局总装########################################################### -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer" init-method="initUI">
+		<property name="tangramLayoutRoot">
+		 <bean class="nc.ui.uif2.tangramlayout.node.CNode">
+				<property name="component" ref="list"></property>
+		 </bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="addAction"/>
+				<ref bean="editAction"/>
+				<ref bean="deleteAction"/>
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="queryAction"/>
+				<ref bean="refreshAction"/>
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="enableactiongroup"/>
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+			  <ref bean="printActions"/>  
+			  <bean class="nc.funcnode.ui.action.SeparatorAction" />
+			  <ref bean="tidaiping"/> 
+			  <bean class="nc.funcnode.ui.action.SeparatorAction" />
+			  <ref bean="tidaiping1"/> 
+			  <!-- 增加 是否审批，是否偏差，批处理意见 2022-04-24 -->
+			  <bean class="nc.funcnode.ui.action.SeparatorAction" />
+			  <ref bean="IsApprove"/> 
+			  <bean class="nc.funcnode.ui.action.SeparatorAction" />
+			  <ref bean="IsDeviaction"/> 
+			  <bean class="nc.funcnode.ui.action.SeparatorAction" />
+			  <ref bean="DoIdea"/> 
+			  <bean class="nc.funcnode.ui.action.SeparatorAction" />
+			  <ref bean="LableReprint"/> 
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="deleteAction" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="saveAction" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>	
+		<property name="model" ref="batchBillTableModel"/>	
+	</bean>
+	
+	<!-- 自己的按钮 -->
+   	<bean id="tidaiping"  class="nc.ui.scmf.ic.mbatchcode.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="tidaiping1"  class="nc.ui.scmf.ic.mbatchcode.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+   		<!-- 自己的按钮 是否审批-->
+   	<bean id="IsApprove"  class="nc.ui.scmf.ic.mbatchcode.action.IsApprove">
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 是否偏差-->
+   	<bean id="IsDeviaction"  class="nc.ui.scmf.ic.mbatchcode.action.IsDeviaction">
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 批处理意见-->
+   	<bean id="DoIdea"  class="nc.ui.scmf.ic.mbatchcode.action.DoIdea">
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 标签重打 huotf 20260323-->
+
+   	<bean id="LableReprint"  class="nc.ui.scmf.ic.mbatchcode.action.LableReprintAction">
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+</beans>

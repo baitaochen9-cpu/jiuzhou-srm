@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module priority="1025">
+    <aops>
+       <!--供应商物料质量状态 -->
+       <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.qc.ISupplierqualitystatusMaintain"/> 
+    </aops>
+</module>
+
+

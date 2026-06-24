@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_IA_EJB">
+  <public>
+    <!-- 存货核算入库调整单自身维护接口-->
+    <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+      <interface>nc.vo.ia.util.CustomCarriedForwardOrder</interface>
+      <implementation>nc.bs.ia.util.CustomCarriedForwardOrderImp</implementation>
+    </component>  
+    
+ 
+  </public>
+</module>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-lazy-init="true">
+  <!-- 环境变量 -->
+  <bean id="context" class="nc.vo.uif2.LoginContext" />
+
+  <!-- 模型部分配置########################################################### -->
+  <!-- 应用服务类，负责进行模型操作的处理 -->
+  <bean id="modelService" class="nc.ui.ia.voucher.model.ModelService" />
+
+  <!-- 对象转换器工厂，由此获取操作对象的特征信息 -->
+  <!-- 对于有元数据的VO，可以使用下面的配置 -->
+  <bean id="boadatorfactory" class="nc.vo.bd.meta.BDObjectAdpaterFactory" />
+
+  <!-- 批量操作前台校验 -->
+  <bean id="batchValidateSerice" class="nc.ui.uif2.model.DefaultBatchValidationService">
+    <property name="editor" ref="queryResultUI" />
+  </bean>
+
+  <!-- 批量操作应用模型 -->
+  <bean id="batchBillTableModel" class="nc.ui.ia.voucher.model.BatchTableModel">
+    <property name="context" ref="context"></property>
+    <property name="businessObjectAdapterFactory" ref="boadatorfactory"></property>
+    <property name="validationService" ref="batchValidateSerice"></property>
+  </bean>
+
+  <!-- 数据模型管理器，主要负责各种方式的模型初始化 -->
+  <bean id="modelDataManager" class="nc.ui.pubapp.uif2app.query2.model.ModelDataManager">
+    <property name="model" ref="batchBillTableModel"></property>
+    <property name="service" ref="modelService" />
+  </bean>
+
+  <!-- 界面元素 ########################################################### -->
+  <!-- 列表控件的取值策略 -->
+  <bean id="componentValueManager" class="nc.ui.ia.bill.base.maintain.view.IABodyVOValueAdapter">
+    <property name="bodyVOName" value="nc.vo.ia.detailledger.view.ia.AuditDisplayVO" />
+  </bean>
+  <!-- 列表控件 -->
+  <bean id="queryResultUI" class="nc.ui.ia.voucher.view.VoucherUI"
+    init-method="initUI">
+    <property name="model" ref="batchBillTableModel" />
+    <property name="componentValueManager" ref="componentValueManager" />
+    <property name="voClassName" value="nc.vo.ia.detailledger.view.ia.AuditDisplayVO" />
+    <property name="isBodyAutoAddLine" value="false" />
+    <property name="bodyMultiSelectEnable" value="true" />
+    <!-- 列表自定义项处理 -->
+    <property name="userdefitemPreparator" ref="userdefitemPreparatorForIA" />
+  </bean>
+	<bean id="userdefitemPreparatorForIA" class="nc.ui.pubapp.uif2app.view.CompositeBillDataPrepare">
+		<property name="billDataPrepares">
+			<list>
+				<ref bean="userdefitemPreparator" />
+				<!-- 因为连接数问题，将保存时物料辅助属性前台非空校验挪到后台Rule中-->
+				<ref bean="marAsstPreparator" />
+			</list>
+		</property>
+	</bean>
+		<bean id="userdefitemContainer" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" ref="headpath" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" ref="itempath" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="rulecode" value="materialassistant" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<!-- 自由项组件的配置 --><!-- 因为连接数问题，将保存时物料辅助属性前台非空校验挪到后台Rule中-->
+	<bean id="marAsstPreparator"
+		class="nc.ui.pubapp.uif2app.view.material.assistant.MarAsstPreparator">
+		<property name="model" ref="batchBillTableModel" />
+		<property name="container" ref="userdefitemContainer" />
+		<property name="prefix" value="vfree" />
+		<property name="materialField" value="cinventoryid" />
+		<property name="projectField" value="cprojectid" /> <!-- 公共组说物料自由辅助属性要都在表体上 -->
+			<property name="supplierField" value="cvendorid" /> 
+		<property name="productorField" value="cproductorid" />
+		<property name="customerField" value="casscustid" />
+	</bean>
+	
+	<!-- 模板容器，主要负责加载单据模板 -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+	</bean>
+	
+	
+	<!-- 卡片自定义项处理 -->
+	<bean name="userdefitemPreparator" class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+		<property name="container" ref="userdefitemContainer" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+					<property name="mdfullname" ref="headpath" />
+					<property name="pos" value="0" />
+					<property name="prefix" value="vdef" />
+				</bean>
+				<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+					<property name="mdfullname" ref="itempath" />
+					<property name="pos" value="1" />
+					<property name="prefix" value="vbdef" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 自定义项处理 -->
+	<bean id="headpath" class="java.lang.String">
+		<constructor-arg value="ia.ia_i4bill" />
+	</bean>
+	<bean id="itempath" class="java.lang.String">
+		<constructor-arg value="ia.ia_i4bill_b" />
+	</bean>
+  <!-- Actions ########################################################### -->
+  <bean id="queryAction" class="nc.ui.ia.voucher.action.QueryAction">
+    <property name="model" ref="batchBillTableModel" />
+    <property name="dataManager" ref="modelDataManager" />
+    <property name="billTable" ref="queryResultUI" />
+    <property name="qryCondDLGInitializer" ref="qryCondDLGInitializer"></property>
+    <property name="showUpComponent" ref="queryResultUI" />
+    <property name="templateContainer" ref="queryTemplateContainer" />
+  </bean>
+  
+  		<!-- 汇总生成正式凭证 -->
+   	<bean id="CreateHzPz"  class="nc.ui.ia.voucher.action.CreateHzPzAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   	    <property name="model" ref="batchBillTableModel" />
+    	<property name="service" ref="modelService" />
+    	<property name="billTable" ref="queryResultUI" />
+		<property name="code" value="begin"/>
+   	</bean>
+  <bean id="qryCondDLGInitializer" class="nc.ui.ia.voucher.view.VoucherQryDLGInitializer" />
+
+  <bean id="createRtAction" class="nc.ui.ia.voucher.action.CreateAction">
+    <property name="model" ref="batchBillTableModel" />
+    <property name="service" ref="modelService" />
+    <property name="billTable" ref="queryResultUI" />
+  </bean>
+  <bean id="cancelRtAction" class="nc.ui.ia.voucher.action.DeleteAction">
+    <property name="model" ref="batchBillTableModel" />
+    <property name="service" ref="modelService" />
+    <property name="billTable" ref="queryResultUI" />
+  </bean>
+<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+  <bean id="printAction" class="nc.ui.ia.voucher.action.PrintAction">
+    <property name="model" ref="batchBillTableModel" />
+    <property name="queryUI" ref="queryResultUI" />
+    <property name="beforePrintDataProcess" ref="printDataProcess" />
+  </bean>
+
+  <bean id="preViewAction" class="nc.ui.ia.voucher.action.PrintAction">
+    <property name="queryUI" ref="queryResultUI" />
+    <property name="model" ref="batchBillTableModel" />
+    <property name="preview" value="true" />
+    <property name="beforePrintDataProcess" ref="printDataProcess" />
+  </bean>
+
+  <bean id="printGroup" class="nc.funcnode.ui.action.GroupAction">
+    <property name="code" value="printGroup" />
+<!--    <property name="name" value="打印" />
+    <property name="tooltip" value="打印(Alt+P)" /> -->
+    <property name="actions">
+      <list>
+        <ref bean="printAction" />
+        <ref bean="preViewAction" />
+        <ref bean="outputAction" />
+        <ref bean="separatorAction" />
+        
+      </list>
+    </property>
+  </bean>
+  <bean id="outputAction" class="nc.ui.pubapp.uif2app.actions.OutputAction">
+    <property name="model" ref="batchBillTableModel" />
+    <property name="parent" ref="queryResultUI" />
+    <property name="beforePrintDataProcess" ref="printDataProcess" />
+  </bean>
+  <bean id="printDataProcess" class="nc.ui.ia.pub.view.BillBeforePrintDataProcess">
+      <property name="model" ref="batchBillTableModel" />
+      <property name="table" ref="queryResultUI" />
+    </bean>
+  <!-- 界面布局总装########################################################### -->
+  <bean id="container" class="nc.ui.uif2.TangramContainer"
+    init-method="initUI">
+    <property name="tangramLayoutRoot">
+      <bean class="nc.ui.uif2.tangramlayout.node.CNode">
+        <property name="component" ref="queryResultUI"></property>
+      </bean>
+    </property>
+    <property name="actions">
+      <list>
+        <ref bean="queryAction" />
+        <ref bean="separatorAction" />
+        
+        <ref bean="createRtAction" />
+        <ref bean="cancelRtAction" />
+        <ref bean="separatorAction" />
+        
+        <ref bean="printGroup" />
+         <ref bean="separatorAction" />
+        <ref bean="CreateHzPz" />
+        
+      </list>
+    </property>
+    <property name="model" ref="batchBillTableModel" />
+  </bean>
+  <bean id="queryTemplateContainer" class="nc.ui.uif2.editor.QueryTemplateContainer">
+    <property name="context" ref="context" />
+  </bean>
+
+
+  <bean id="remoteCallCombinatorCaller" class="nc.ui.uif2.editor.UIF2RemoteCallCombinatorCaller">
+    <property name="remoteCallers">
+      <list>
+        <ref bean="queryTemplateContainer" />
+        <ref bean="templateContainer" />
+      </list>
+    </property>
+  </bean>
+
+
+  <!-- 打开节点监听 -->
+  <bean id="fipSrcQueryInitDataProcessor" class="nc.ui.ia.voucher.view.FIPSrcQueryInitDataProcessor">
+    <property name="listener" ref="InitDataListener" />
+    <property name="displayUI" ref="queryResultUI" />
+  </bean>
+
+  <bean id="InitDataListener"
+    class="nc.ui.pubapp.uif2app.model.DefaultFuncNodeInitDataListener">
+    <property name="model" ref="batchBillTableModel" />
+    <property name="queryAction" ref="queryAction" />
+    <property name="processorMap">
+      <map>
+        <entry key="3">
+          <ref bean="fipSrcQueryInitDataProcessor" />
+        </entry>
+      </map>
+    </property>
+    <!-- VO的类名 -->
+    <property name="voClassName" value="nc.vo.ia.detailledger.view.ia.AuditDisplayVO" />
+    <!-- 打开节点节点后要显示的界面 -->
+    <property name="autoShowUpComponent" ref="queryResultUI" />
+  </bean>
+</beans>

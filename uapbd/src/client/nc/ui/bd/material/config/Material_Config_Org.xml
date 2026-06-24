@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<import resource="Material_Config_Base.xml" />
+
+	<!-- 页签按钮 -->
+	<bean id="baseinfoListViewActions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="baseinfoListView" />
+		</constructor-arg>
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="copyaddAction" />
+				<ref bean="batchUpdateGroupAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				<ref bean="filterAction" />
+				<ref bean="separatorAction" />
+				<ref bean="assignActionGroup" />
+				<ref bean="list_enableGroupAction" />
+				<ref bean="assistantMenu" />
+				<ref bean="separatorAction" />
+				<ref bean="orgBrowseAction" />
+				<ref bean="associatePfAction" />
+				<ref bean="separatorAction" />
+				<ref bean="listPrintActionGroup" />
+				<ref bean="separatorAction" />
+				<!-- <ref bean="mdmAction" /> -->
+				<ref bean="mdmGroupAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialSendGW"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="baseinfoEditorActions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="baseinfoEditor" />
+		</constructor-arg>
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="copyaddAction" />
+				<ref bean="batchUpdateGroupAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshCardAction" />
+				<ref bean="separatorAction" />
+				<ref bean="assignActionGroup" />
+				<ref bean="card_enableGroupAction" />
+				<ref bean="assistantMenu" />
+				<ref bean="separatorAction" />
+				<ref bean="orgBrowseAction" />
+				<ref bean="associatePfAction" />
+				<ref bean="separatorAction" />
+				<ref bean="printActionGroup" />
+				<ref bean="separatorAction" />
+				<!-- <ref bean="mdmAction" /> -->
+				<ref bean="mdmGroupAction" />
+				<ref bean="materialSendGW"/>
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="saveAction" />
+				<ref bean="saveAddAction" />
+				<ref bean="separatorAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="baseinfoModel" />
+	</bean>
+
+	<bean id="assistantMenu" class="nc.funcnode.ui.action.MenuAction">
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="common" />
+				<property name="defaultValue" value="辅助功能" />
+				<property name="resId" value="UC001-0000137" />
+			</bean>
+		</property>
+		<property name="code" value="assistantMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="createVersionAction" />
+				<ref bean="upgradeAction" />
+				<ref bean="accessoryAction"/>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 查询模板组织权限过滤器 -->
+	<bean id="bdqueryActionBaseMediator" class="nc.ui.bd.pub.tools.BDPubQueryActionMediator"
+		init-method="process">
+		<property name="queryAction" ref="queryAction" />
+		<property name="orgFieldCode">
+			<list>
+				<value>pk_org_assign</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="queryAction" class="nc.ui.uif2.actions.QueryAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="templateContainer" ref="queryTemplateContainer" />
+		<property name="queryDelegator">
+			<bean class="nc.ui.bd.pub.query.BusinessUnitOnlyQueryDelegator">
+				<property name="context" ref="context" />
+				<property name="replaceRefModelFields">
+					<list>
+						<value>pk_org_assign</value>
+					</list>
+				</property>
+				<property name="templateContainer" ref="queryTemplateContainer" />
+			</bean>
+		</property>
+	</bean>
+	
+	<bean id="assignContext" class="nc.ui.bd.pub.assign.AssignContext">
+		<property name="assignService" ref="assignService" />
+		<property name="logincontext" ref="context" />
+		<property name="billTempNodekey" value="assign" />
+		<property name="billTemplatePkItemkey" value="pk_material" />
+		<!-- <property name="queryTempNodekey" value="asswizQuery"/> -->
+		<property name="orgTypeIDs">
+			<list>
+				<!-- 业务单元、成本域 -->
+				<value>BUSINESSUNIT00000000</value>
+				<value>COSTREGION0000000000</value>
+				<value>LIACTCOSTRG000000000</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="mdmAction" class="nc.ui.archives.action.MaterialMdmAction">
+	 	<property name="model"><ref bean="baseinfoModel"/></property>
+	</bean>
+	   	   	<!-- 自己的按钮  -->
+   	<bean id="materialSendGW"  class="nc.ui.bd.material.pf.action.MaterilToGWAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="baseinfoModel" />
+   		
+   	</bean>
+	
+	<bean id="mdmGroupAction" class ="nc.funcnode.ui.action.GroupAction">
+	<property name="code" value="BatchUpdateGroup" />
+		<property name="actions">
+			<list>
+				<ref bean="mdmAction" />
+				 <ref bean="linkMdmAction" /> 
+				 <ref bean = "updateMdmAction"/>
+				  <ref bean = "intelligentAction"/> 
+				<!-- <ref bean="batchSend"/> -->
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 智能匹配-->
+	<bean  id="intelligentAction" class ="nc.ui.bd.material.pf.action.IntelligentAction">
+	  <property name="model" ref="baseinfoModel"></property> 
+		<property name="refreshAction" ref ='refreshAction'></property>
+	</bean>
+	<!-- 更新到主数据 -->
+	<bean id="updateMdmAction" class ="nc.ui.bd.material.pf.action.UpdateMdmAction">
+		 <property name="model" ref="baseinfoModel" />
+		 <property name="refreshAction" ref ='refreshAction'/>
+	</bean>
+	
+		<!-- 联动主数据按钮，model,refreshAction -->
+	<bean id="linkMdmAction" class="nc.ui.bd.material.pf.action.LinkMdmAction">
+		<property name="model" ref="baseinfoModel" />
+		 <property name="refreshAction" ref ='refreshAction'/>
+   	</bean>
+  
+  <!-- 批量初始化物料主数据主表 -->
+  <bean id="batchSend" class="nc.ui.bd.material.config.action.MaterialBatchToMdmAction">
+	<property name="model" ref="baseinfoModel"/>
+  </bean>
+
+</beans>
+
+

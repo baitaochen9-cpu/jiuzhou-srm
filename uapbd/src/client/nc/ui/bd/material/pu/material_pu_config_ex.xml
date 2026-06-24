@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="material_pu" class="nc.ui.bd.uitabextend.DefaultUIExtComponent">
+		<property name="actions">
+			<list>
+				<ref bean="materialPuEditAction" />
+				<ref bean="materialPuDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPuRefreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPuListPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialPutidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialPutidaiping1"/> 
+			</list>
+		</property>
+		<property name="exComponent" ref="materialPuListView" />
+		<property name="closingListener" ref="materialPuClosingListener" />
+	</bean>
+ 
+	<!-- 用户定义属性加载 -->
+	<bean id="materialPuUserdefitemPreprocessor" class="nc.ui.uif2.editor.UserdefitemUIPreprocessor"
+		init-method="init">
+		<property name="container" ref="userdefitemContainer" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.materialpu" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!--  ############## model & service ################### -->
+
+	<bean id="materialPuAppModelService" class="nc.ui.bd.material.pu.model.MaterialPuAppModelService"></bean>
+
+	<!-- 组织启用页签的应用模型，应使用OrgInfoBillManageModel -->
+	<bean id="materialPuAppModel" class="nc.ui.bd.pub.orginfo.model.OrgInfoBillManageModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="materialPuAppModelService" />
+		<property name="businessObjectAdapterFactory">
+			<bean class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+				<property name="mode" value="VO" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 数据模型管理器，应根据基本信息查询全部分配到财务组织的数据 -->
+	<bean id="materialPuModelDataManager"
+		class="nc.ui.bd.material.pu.model.MaterialPuAppModelDataManager">
+		<property name="model">
+			<ref bean="materialPuAppModel" />
+		</property>
+	</bean>
+
+	<!-- Mediator 负责基本信息与组织信息之间的交互（处理数据加载等） -->
+	<bean id="materialPuMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="modelDataManager" ref="materialPuModelDataManager" />
+		<property name="orgInfoModel" ref="materialPuAppModel" />
+		<property name="orgInfoPanel" ref="materialPuListView" />
+	</bean>
+
+	<!-- 界面元素 ###########################################################-->
+	<!-- 列表视图 组织页签入口，须实现ITabbedPaneAwareComponent -->
+	<bean id="materialPuListView" class="nc.ui.bd.material.pu.view.MaterialPuListView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="nodekey" value="pu" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="采购信息" />
+				<property name="resId" value="110140mag0018" />
+			</bean>
+		</property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialpu" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- editor -->
+	<bean id="materialPuEditor" class="nc.ui.bd.material.pu.view.MaterialPuEditor"
+		init-method="initUI">
+		<property name="model" ref="materialPuAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="pu" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialpu" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialPuFirstLineAction" />
+				<ref bean="materialPuPreLineAction" />
+				<ref bean="materialPuNextLineAction" />
+				<ref bean="materialPuLastLineAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 对话框工具（处理对话框的显示操作） -->
+	<bean id="materialPuDialogMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoCardDialogMediator">
+		<property name="model" ref="materialPuAppModel" />
+		<property name="dialogContainer" ref="materialPuDialogContainer" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="采购信息" />
+				<property name="resId" value="110140mag0018" />
+			</bean>
+		</property>
+		<property name="closingListener" ref="materialPuClosingListener" />
+	</bean>
+
+	<!-- 对话框显示界面dialogContainer -->
+	<bean id="materialPuDialogContainer" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<!-- 组织面板 -->
+				<bean class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="materialPuEditor" />
+					<property name="newComponentName">
+						<bean class="nc.ui.uif2.I18nFB ">
+							<property name="resDir" value="10140mag" />
+							<property name="defaultValue" value="采购信息" />
+							<property name="resId" value="110140mag0018" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialPuEditAction" />
+				<ref bean="materialPuDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPuRefreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPuPrintActionGroup" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="materialPuSaveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPuCancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<!-- action list -->
+	<!-- 编辑按钮 -->
+	<bean id="materialPuEditAction" class="nc.ui.uif2.actions.EditAction">
+		<property name="code" value="PuEdit" />
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<bean id="materialPuDeleteAction" class="nc.ui.uif2.actions.DeleteAction">
+		<property name="code" value="PuDelete" />
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<!-- 编辑态按钮 -->
+	<bean id="materialPuSaveAction" class="nc.ui.bd.material.pu.MaterialPuSaveAction">
+		<property name="code" value="PuSave" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="editor" ref="materialPuEditor" />
+	</bean>
+
+	<bean id="materialPuCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="code" value="PuCancel" />
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="materialPuRefreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="code" value="PuRefresh" />
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<bean id="materialPuRefreshAction" class="nc.ui.uif2.actions.RefreshAllAction">
+		<property name="code" value="PuRefresh" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="manager" ref="materialPuModelDataManager" />
+	</bean>
+
+	<!-- 输入输出按钮 -->
+	<bean id="materialPuListPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PuPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialPuListTempletPrintAction" />
+				<ref bean="materialPuListTempletPreviewAction" />
+				<ref bean="materialPuListOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialPuListTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PuTempPreview" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="nodeKey" value="pulist" />
+		<property name="printDlgParentConatiner" ref="materialPuListView" />
+		<property name="datasource" ref="materialPuListardDataSource" />
+	</bean>
+
+	<bean id="materialPuListTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PuTempPrint" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="nodeKey" value="pulist" />
+		<property name="printDlgParentConatiner" ref="materialPuListView" />
+		<property name="datasource" ref="materialPuListardDataSource" />
+	</bean>
+
+	<bean id="materialPuListOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PuOutput" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="nodeKey" value="pulist" />
+		<property name="printDlgParentConatiner" ref="materialPuListView" />
+		<property name="datasource" ref="materialPuListardDataSource" />
+	</bean>
+
+	<bean id="materialPuListardDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<bean id="materialPuPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PuPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialPuTempletPrintAction" />
+				<ref bean="materialPuTempletPreviewAction" />
+				<ref bean="materialPuOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialPuTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PuTempPreview" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="nodeKey" value="pucard" />
+		<property name="printDlgParentConatiner" ref="materialPuEditor" />
+		<property name="datasource" ref="materialPuCardDataSource" />
+	</bean>
+
+	<bean id="materialPuTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PuTempPrint" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="nodeKey" value="pucard" />
+		<property name="printDlgParentConatiner" ref="materialPuEditor" />
+		<property name="datasource" ref="materialPuCardDataSource" />
+	</bean>
+
+	<bean id="materialPuOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PuOutput" />
+		<property name="model" ref="materialPuAppModel" />
+		<property name="nodeKey" value="pucard" />
+		<property name="printDlgParentConatiner" ref="materialPuEditor" />
+		<property name="datasource" ref="materialPuCardDataSource" />
+	</bean>
+
+	<bean id="materialPuCardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<!-- 浏览按钮 卡片界面按钮-->
+	<bean id="materialPuFirstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+	<bean id="materialPuNextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+	<bean id="materialPuPreLineAction" class="nc.ui.uif2.actions.PreLineAction">
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+	<bean id="materialPuLastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+		<property name="model" ref="materialPuAppModel" />
+	</bean>
+
+	<!-- closingHandler -->
+	<bean id="materialPuClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="materialPuAppModel" />
+		<property name="saveaction" ref="materialPuSaveAction" />
+		<property name="cancelaction" ref="materialPuCancelAction" />
+	</bean>
+
+	<!-- 自己的按钮 -->
+   	<bean id="materialPutidaiping"  class="nc.ui.bd.material.config.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialPuAppModel" />
+		<property name="editor" ref="materialPuEditor" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="materialPutidaiping1"  class="nc.ui.bd.material.config.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialPuAppModel" />
+		<property name="editor" ref="materialPuEditor"/>
+   	</bean>
+</beans>

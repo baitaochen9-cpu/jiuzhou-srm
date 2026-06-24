@@ -1,0 +1,1 @@
+INSERT INTO sm_menuitemreg ( nodeorder, menuitemname, pk_menu, iconpath, resid, pk_menuitem, ismenutype, menudes, funcode, menuitemcode, dr ) VALUES ( null, '审计追踪配置', '1001V1100000000EXIMR', null, 'D10204615', '0001AA1000000002YV83', 'N', null, '10204615', '10204615', 0 );

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding='gb2312'?>
+<module name="qc">
+  <public>
+	<component remote="true" singleton="true"  tx="CMT">
+	  <interface>nc.itf.qc.ISupplierqualitystatusMaintain</interface>
+	  <implementation>nc.impl.qc.SupplierqualitystatusMaintainImpl</implementation>
+	</component>
+
+  </public> 
+</module> 

@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="GB2312"?>
+<items docType="SDP_SCRIPT_ITEM">
+	<item>
+		<itemKey>0002</itemKey>
+		<itemName>系统类型</itemName>
+		<itemRule>dap_dapsystem</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>systypecode = 'IPMFUND'</fixedWhere>
+	</item>	
+	
+	<item>
+		<itemKey>bd_billtype</itemKey>
+		<itemName>单据类型</itemName>
+		<itemRule>bd_billtype</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>systemcode='IPMFUND' and pk_group in ('~','global00000000000000')</fixedWhere>
+	</item>	
+	
+	<item>
+  		<itemKey>0012</itemKey> 
+  		<itemName>默认模版</itemName> 
+  		<itemRule>pub_systemplate_base</itemRule> 
+  		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+  		<fixedWhere>moduleid = '4908'</fixedWhere> 
+  	</item>
+	<item>
+		<itemKey>bd_refinfo</itemKey>
+		<itemName>bd_refinfo</itemName>
+		<itemRule>bd_refinfo</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>modulename = 'ipmfund'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>md_module</itemKey>
+		<itemName>模块注册</itemName>
+		<itemRule>md_module</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>id='ipmfund'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>0013</itemKey>
+		<itemName>参数模板</itemName>
+		<itemRule>pub_sysinittemp</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> domainflag = '4908' </fixedWhere>
+	</item>
+	<item>
+		<itemKey>md_dev_busi_module</itemKey>
+		<itemName>业务模块</itemName>
+		<itemRule>md_dev_busi_module</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>devmodule = 'ipmfund'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>md_comp_busimodule</itemKey>
+		<itemName>业务模块元数据</itemName>
+		<itemRule>md_comp_busimodule</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>busimodulecode = '4908'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>pub_bcr_nbcr</itemKey>
+		<itemName>编码对象注册</itemName>
+		<itemRule>pub_bcr_nbcr</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>code in (select distinct(ncbrcode) from bd_billtype where systemcode='IPMFUND')</fixedWhere>
+	</item>
+	
+	<item>
+		<itemKey>mdattrpower</itemKey>
+		<itemName>元数据过滤管理</itemName>
+		<itemRule>md_attr_power</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>beanid in (select id from md_class where componentid in(select id from md_component where ownmodule = 'ipmfund'))</fixedWhere>
+	</item>
+	
+	<item>
+		<itemKey>sm_permission_res</itemKey>
+		<itemName>权限资源</itemName>
+		<itemRule>sm_permission_res</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>ownmodule = '4908' and pk_permission_res != 'PK_PERMISSION_RES000' </fixedWhere>
+	</item>
+	<item>
+		<itemKey>sm_res_operation</itemKey>
+		<itemName>资源操作</itemName>
+		<itemRule>sm_res_operation</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>resourceid in (select  pk_permission_res  from sm_permission_res  where  ownmodule = '4908')</fixedWhere>
+	</item>
+	
+	<item>
+  		<itemKey>bd_mode_all</itemKey> 
+ 		 <itemName>全部管控模式</itemName> 
+ 		 <itemRule>bd_mode_all</itemRule> 
+ 		 <sysField /> 
+  		<corpField /> 
+  		<grpField /> 
+  		<fixedWhere>MDCLASSID in (select id from MD_CLASS where fullclassname like 'nc.vo.ipmfund%' )</fixedWhere> 
+  	</item>
+  	 <item>
+  		<itemKey>bd_mode_selected</itemKey> 
+ 		<itemName>选中的管控模式</itemName> 
+  		<itemRule>bd_mode_selected</itemRule> 
+ 		<sysField /> 
+  		<corpField /> 
+  		<grpField /> 
+ 		<fixedWhere>MDCLASSID in (select id from MD_CLASS where fullclassname like 'nc.vo.ipmfund%' )</fixedWhere> 
+ 	 </item>
+ 	 <item>
+		<itemKey>bd_uniquerule</itemKey>
+		<itemName>唯一性规则</itemName>
+		<itemRule>bd_uniquerule</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>MDCLASSID in (select id from MD_CLASS where fullclassname like 'nc.vo.ipmfund%' )</fixedWhere>
+	</item>
+	<!-- 消息脚本 -->
+	<item>
+		<itemKey>pubmsgtemptype</itemKey>
+		<itemName>预警消息类型</itemName>
+		<itemRule>pub_msgtemp_type</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>metaid in (select id from md_class where componentid in (select id from md_component where ownmodule = 'ipmfund' ))  or tempcode in ('WF_IPMFUND')</fixedWhere>
+     </item>
+     <item>
+		<itemKey>pubworkitemconfig</itemKey>
+        <itemName>MP消息预置默认</itemName>
+        <itemRule>pub_workitemconfig</itemRule>
+        <sysField></sysField>
+        <corpField></corpField>
+        <grpField></grpField>
+        <fixedWhere>item in (select pk_billtypecode from bd_billtype where bd_billtype.SYSTEMCODE = 'IPMFUND')</fixedWhere>
+     </item>
+     <item>
+		<itemKey>pubmsgtemp</itemKey>
+        <itemName>预警消息模板</itemName>
+        <itemRule>pub_msgtemp</itemRule>
+        <sysField></sysField>
+        <corpField></corpField>
+        <grpField></grpField>
+        <fixedWhere>typecode in (select tempcode from pub_msgtemp_type where metaid in (select id from md_class where componentid in (select id from md_component where ownmodule = 'ipmfund' ))) or typecode in (select pk_billtypecode from bd_billtype where bd_billtype.SYSTEMCODE = 'IPMFUND')</fixedWhere>
+     </item>
+	<item>
+		<itemKey>bd_userdefrule</itemKey>
+		<itemName>自定义项</itemName>
+		<itemRule>bd_userdefrule</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>(code like 'ipmfund_%' or code = 'IPMFUND') and pk_userdefrule != 'PK_USERDEFRULE000000' </fixedWhere>
+	</item>
+	
+	<!-- NCCloud预置脚本抽取 -->
+
+	<!-- NCCloud应用注册 -->
+	<item>
+		<itemKey>sm_appregister</itemKey>
+		<itemName>NCCloud应用注册</itemName>
+		<itemRule>sm_appregister</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> own_module='4908' </fixedWhere>
+	</item>
+
+	<!-- NCCloud菜单注册 -->
+	<item>
+		<itemKey>sm_appmenuitem</itemKey>
+		<itemName>NCCloud菜单项注册</itemName>
+		<itemRule>sm_appmenuitem</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> menuitemcode like '4940%'</fixedWhere>
+	</item>
+	
+	<!-- NCCloud模板注册 -->
+	<item>
+		<itemKey>pub_page_templet</itemKey>
+		<itemName>NCCloud模板注册</itemName>
+		<itemRule>pub_page_templet</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>pagecode like '4908%' and parentid = 'root' and dr = 0</fixedWhere>
+	</item>
+
+	<!-- NCCloud打印模板 -->
+	<item>
+		<itemKey>pub_print_template</itemKey>
+		<itemName>打印模版</itemName>
+		<itemRule>pub_print_template</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField>vnodecode</grpField>
+		<fixedWhere>appcode like '4908%' and ctemplateid != 'PK_PRINT_TEMPLATE000'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>sm_funcregister</itemKey>
+		<itemName>功能节点</itemName>
+		<itemRule>sm_funcregister</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>funcode like '4908%'</fixedWhere>
+	</item>
+	
+	<item>
+		<itemKey>pub_vochange</itemKey>
+		<itemName>单据转换规则</itemName>
+		<itemRule>pub_vochange</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>(DEST_BILLTYPE like '4DE%' ) and pk_group = 'global00000000000000'</fixedWhere>
+	</item> 
+	
+	<item>
+		<itemKey>sm_appbusiactivereg</itemKey>
+		<itemName>业务活动</itemName>
+		<itemRule>sm_appbusiactivereg</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>parent_id in (select pk_appregister from sm_appregister where code like '4908%')</fixedWhere>
+	</item>
+	<item>
+		<itemKey>sm_appbusi_btn</itemKey>
+		<itemName>业务活动注册按钮</itemName>
+		<itemRule>sm_appbusi_btn</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>
+			pk_busiactive in (
+				select pk_busiactive from sm_appbusiactivereg where parent_id in (
+					select pk_appregister from sm_appregister where code like '4908%'
+				)
+			)
+		</fixedWhere>
+	</item>
+	
+	<!--  
+	<item>
+        <itemKey>report_reppublish</itemKey>
+        <itemName>报表发布节点</itemName>
+        <itemRule>iufo_reppublish</itemRule>
+        <sysField></sysField>
+        <corpField></corpField>
+        <grpField></grpField>
+        <fixedWhere>parentid in (select cfunid from sm_funcregister where funcode like '4908%')</fixedWhere>
+   	</item>
+	
+    
+    <item>
+		<itemKey>bi_smart_dir</itemKey>
+		<itemName>语义模型分类</itemName>
+		<itemRule>bi_smart_dir</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>moduleid in ('IPMFUND')</fixedWhere>
+	</item>
+	<item>
+		<itemKey>bi_smart_def</itemKey>
+		<itemName>语义模型定义</itemName>
+		<itemRule>bi_smart_def</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>defcode like '4908%'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>iufo_freerep_dir</itemKey>
+		<itemName>自由报表分类</itemName>
+		<itemRule>iufo_freerep_dir</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>modulecode in('IPMFUND')</fixedWhere>
+	</item>
+	<item>
+		<itemKey>iufo_freereport</itemKey>
+		<itemName>自由报表</itemName>
+		<itemRule>iufo_freereport</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>reportcode like '4908%'</fixedWhere>
+	</item>
+	-->
+	<item>
+		<itemKey>pubeventtype</itemKey>
+		<itemName>业务事件注册</itemName>
+		<itemRule>pub_eventtype</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> owner = '4908' </fixedWhere>
+	</item>
+</items>

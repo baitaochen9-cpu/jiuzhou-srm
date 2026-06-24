@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="menuItem" class="nc.pubapp.pade.funcmodel.vo.MenuItem"><property name="dr" value="0"/>
+<property name="funModelFilePath" value="qa/designmodel/funcmodel/salepacklist/funcregis/40060411.menu"/>
+<property name="funcode" value="40060411"/>
+<property name="ismenutype" value="false"/>
+<property name="menuitemcode" value="40092011"/>
+<property name="menuitemname" value="销售包装清单"/>
+<property name="pk_menuitem" value="0001AA10000000017C6R"/>
+<property name="resid" value="D40092011"/>
+<property name="ts" value="2022-05-06 16:46:00"/>
+</bean>
+
+</beans>

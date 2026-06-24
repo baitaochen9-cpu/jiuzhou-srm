@@ -1,0 +1,24 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Grep|Glob|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"var f=require('fs');var p='.graphify/graph.json';var c='.codegraph/codegraph.db';var s=JSON.stringify;var ctx=[];if(f.existsSync(p))ctx.push('graphify: available — run `npx -y @nodesify/graphify query`');if(f.existsSync(c))ctx.push('codegraph: available — run `npx @colbymchenry/codegraph query|callers|impact`');var msg=ctx.length?'⚠️  Knowledge graphs available. Use them INSTEAD of raw file search:\\n- '+ctx.join('\\n- '):'';var o={hookSpecificOutput:{hookEventName:'PreToolUse',additionalContext:msg}};process.stdout.write(s(o))\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node -e \"var f=require('fs');var c='.codegraph/codegraph.db';var g='.graphify/graph.json';var s=JSON.stringify;var ctx=[];if(!f.existsSync(c))ctx.push('codegraph DB missing — run `npx @colbymchenry/codegraph status` first');if(!f.existsSync(g))ctx.push('graphify missing — run `npx -y @nodesify/graphify update .` first');var msg=ctx.length?'⚠️  PREFLIGHT GATE — tools missing:\\n- '+ctx.join('\\n- '):'✅  Knowledge graphs present. Remember to run preflight checklist in CLAUDE.md';var o={hookSpecificOutput:{hookEventName:'PreToolUse',additionalContext:msg}};process.stdout.write(s(o))\""
+          }
+        ]
+      }
+    ]
+  }
+}

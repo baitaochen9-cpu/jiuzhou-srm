@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="funcregister" class="nc.pubapp.pade.funcmodel.vo.FuncRegister"><property name="bmf_path" value="jz_ewm\METADATA\printapply\printapply.bmf"/>
+<property name="busiActiveList">
+<list></list>
+</property>
+<property name="cfunid" value="0001ZZ100000000478G1"/>
+<property name="class_name" value="nc.ui.pubapp.uif2app.ToftPanelAdaptorEx"/>
+<property name="dr" value="0"/>
+<property name="fun_name" value="重打申请单"/>
+<property name="fun_property" value="0"/>
+<property name="funcRegisterButtonList">
+<list></list>
+</property>
+<property name="funcRegisterParamList">
+<list><bean class="nc.pubapp.pade.funcmodel.vo.FuncRegisterParam"><property name="dr" value="0"/>
+<property name="paramname" value="BeanConfigFilePath"/>
+<property name="paramvalue" value="nc/ui/ewm/printapply/ace/view/Printapply_config.xml"/>
+<property name="parentid" value="0001ZZ100000000478G1"/>
+<property name="pk_param" value="0001ZZ100000000478G2"/>
+<property name="ts" value="2024-07-27 19:46:33"/>
+</bean>
+</list>
+</property>
+<property name="funcode" value="4560016004"/>
+<property name="funnode_path" value="src\ace\client\4560016004.fnf"/>
+<property name="funtype" value="0"/>
+<property name="isbuttonpower" value="false"/>
+<property name="isenable" value="true"/>
+<property name="isfunctype" value="false"/>
+<property name="menuModelFilePath" value="src/funcmodel/printapply/menuitemregis/456016.menu"/>
+<property name="metaDataID" value="e7a0bb1e-3bbb-47a4-86c9-cd78923c79d4"/>
+<property name="moduleName" value="ewm"/>
+<property name="orgtypecode" value="MAINTAINORGTYPE00000"/>
+<property name="own_module" value="4560"/>
+<property name="pageList">
+<list></list>
+</property>
+<property name="parent_id" value="1001Z9100000000002BS"/>
+<property name="pk_group" value="~"/>
+<property name="ts" value="2024-07-27 19:46:33"/>
+<property name="uif2model_path" value="src\ace\uif2model\4560016004.umf"/>
+</bean>
+
+</beans>

@@ -1,0 +1,17 @@
+# SVN 元数据（由 SVN 管理，git 不跟踪，不影响 SVN 使用）
+.svn/
+
+# AI 工具生成的索引/缓存（体积大、可再生，且超远程单文件 100MB 上限）
+.gitnexus/
+.codegraph/
+.graphify/
+.reasonix/
+
+# IDE 配置
+.idea/
+
+# 依赖
+node_modules/
+
+# Windows 保留名误建文件
+nul

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		<!-- add by ylq 2014年7月15日 10:46:05 产成品入库单增加联查条码按钮 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfCard" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="printMenuActionCard" />
+		<property name="pos" value="after" />
+		<property name="action">
+			<!-- 条码联查-->
+			<bean id="barcodeJoinAction" class="nc.ui.pu.extend.action.BarcodeJoinAction">
+				<property name="model" ref="manageAppModel" />
+				<property name="editorModel" ref="billFormEditor" />
+			 </bean>
+		</property>
+	</bean>
+</beans>

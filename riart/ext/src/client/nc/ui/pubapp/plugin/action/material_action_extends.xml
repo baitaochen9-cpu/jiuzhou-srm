@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 此配置文件实现对客户-集团节点的示例按钮扩展，被引用bean来自于Customer_Config_Base.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 间隔按钮 -->
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+	
+	<!-- 自己的按钮 -->
+   	<bean id="tidaiping"  class="nc.ui.uif2.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="baseinfoModel" />
+		<property name="editor" ref="baseinfoEditor" />
+		<!-- 必须属性（不加销售订单维护节点点不开后台报code为null） -->
+		<property name="code" value="begin"/>
+   	</bean>
+   	
+   	<!-- 间隔按钮 -->
+	<bean id="separatorAction1" class="nc.funcnode.ui.action.SeparatorAction" />
+	
+   	<!-- 自己的按钮 -->
+   	<bean id="tidaiping1"  class="nc.ui.uif2.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="baseinfoModel" />
+		<property name="editor" ref="baseinfoEditor" />
+		<!-- 必须属性（不加销售订单维护节点点不开后台报code为null） -->
+		<property name="code" value="begin"/>
+   	</bean>
+ 
+	<bean id="actionExt_preprocessor" class="nc.ui.uif2.uiextend.ActionExtPreprocessor" init-method="process">
+		<property name="actionExtList">
+			<list>
+				<!-- 在打印按钮组后插入间隔按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoListViewActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="listPrintActionGroup" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="position" value="AFTER_POSITION" />
+					<property name="action" ref="separatorAction" />
+				</bean>
+			 
+				<!-- 配置列表界面显示的按钮 baseinfoListViewActions-->
+				<!-- 在间隔按钮后插入自己的按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoListViewActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="separatorAction" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="action" ref="tidaiping" />
+				</bean>
+				
+				
+			 	<!-- 在打印按钮组后插入间隔按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoListViewActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="tidaiping" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="position" value="AFTER_POSITION" />
+					<property name="action" ref="separatorAction1" />
+				</bean>
+			 
+				<!-- 配置列表界面显示的按钮 baseinfoListViewActions-->
+				<!-- 在间隔按钮后插入自己的按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoListViewActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="separatorAction1" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="position" value="AFTER_POSITION" />
+					<property name="action" ref="tidaiping1" />
+				</bean>
+				
+				<!-- 在打印按钮组后插入间隔按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoEditorActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="printActionGroup" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="position" value="AFTER_POSITION" />
+					<property name="action" ref="separatorAction" />
+				</bean>
+			 
+				<!-- 配置列表界面显示的按钮 baseinfoListViewActions-->
+				<!-- 在间隔按钮后插入自己的按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoEditorActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="separatorAction" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="position" value="AFTER_POSITION" />
+					<property name="action" ref="tidaiping" />
+				</bean>
+				
+				
+			 	<!-- 在打印按钮组后插入间隔按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoEditorActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="tidaiping" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="position" value="AFTER_POSITION" />
+					<property name="action" ref="separatorAction1" />
+				</bean>
+			 
+				<!-- 配置列表界面显示的按钮 baseinfoListViewActions-->
+				<!-- 在间隔按钮后插入自己的按钮 -->
+				<bean class="nc.ui.uif2.uiextend.ActionExtInfo">
+					<property name="actionContainer" ref="baseinfoEditorActions" />
+					<property name="uistate" value="NOTEDIT_STATE" />
+					<property name="targetAction" ref="separatorAction1" />
+					<property name="extType" value="INSERT_EXTTYPE" />
+					<property name="position" value="AFTER_POSITION" />
+					<property name="action" ref="tidaiping1" />
+				</bean>
+				
+			</list>
+		</property>
+	</bean>
+	
+</beans>   

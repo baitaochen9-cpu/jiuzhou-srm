@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?><component conRouterType="曼哈顿直角" createIndustry="0" createTime="2022-07-27 18:42:55" creator="" description="" displayName="salepacklist_business" fromSourceBmf="true" gencodestyle="NC传统样式" help="" id="499d9ab5-83ab-4807-8546-ab48ad798593" industry="0" industryChanged="false" industryIncrease="false" industryName="" isSource="false" isbizmodel="true" mainEntity="" metaType=".bpf" modifier="yy" modifyIndustry="0" modifyTime="2022-07-28 14:14:53" name="salepacklist_business" namespace="so" ownModule="so" preLoad="false" programcode="0" resModuleName="salepacklist_business" resid="" version="14" versionType="0">
+    <celllist>
+        <busioperation componentID="499d9ab5-83ab-4807-8546-ab48ad798593" createIndustry="0" createTime="2022-07-27 18:43:49" creator="yonyouBQ" dataType="9efb1492-f852-498f-9d25-6f744b472063" dbtype="" description="" displayName="新增" fullClassName="nc.vo.so.salepacklist.BusiOperation0" height="100" help="BUSILOG" id="d1468d6a-32b3-4a62-a12a-6cbabf20a886" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="ADD" modifier="yy" modifyIndustry="0" modifyTime="2022-07-28 14:14:53" name="insert" needlog="true" resid="" typeDisplayName="销售包装清单主实体" typeName="so_salepacklist" version="" versionType="0" visibility="public" width="100" x="125" y="86">
+            <refoperationlist>
+                <refoperation id="660944db-0b0f-4c6f-aa96-c1f3090e3082" industry="0" isAuthorization="true" isSource="false" opItfID="3c923737-ed9a-42ac-b267-b77d0e204060" ownerElementID="d1468d6a-32b3-4a62-a12a-6cbabf20a886" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <busioperation componentID="499d9ab5-83ab-4807-8546-ab48ad798593" createIndustry="0" createTime="2022-07-27 18:43:51" creator="yonyouBQ" dataType="9efb1492-f852-498f-9d25-6f744b472063" dbtype="" description="" displayName="删除" fullClassName="nc.vo.so.salepacklist.BusiOperation1" height="100" help="BUSILOG" id="bdfb429b-08b2-4492-a989-1c2470678de5" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="DELETE" modifier="yy" modifyIndustry="0" modifyTime="2022-07-28 14:14:53" name="delete" needlog="true" resid="" typeDisplayName="销售包装清单主实体" typeName="so_salepacklist" version="" versionType="0" visibility="public" width="100" x="275" y="73">
+            <refoperationlist>
+                <refoperation id="074a7db4-f13f-4a56-80e2-d421dd7b84ca" industry="0" isAuthorization="true" isSource="false" opItfID="3c923737-ed9a-42ac-b267-b77d0e204060" ownerElementID="bdfb429b-08b2-4492-a989-1c2470678de5" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <busioperation componentID="499d9ab5-83ab-4807-8546-ab48ad798593" createIndustry="0" createTime="2022-07-27 18:43:53" creator="yonyouBQ" dataType="9efb1492-f852-498f-9d25-6f744b472063" dbtype="" description="" displayName="修改" fullClassName="nc.vo.so.salepacklist.BusiOperation2" height="100" help="BUSILOG" id="835e20b1-a966-433a-8813-935f81001814" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="MODIFY" modifier="yy" modifyIndustry="0" modifyTime="2022-07-28 14:14:53" name="edit" needlog="true" resid="" typeDisplayName="销售包装清单主实体" typeName="so_salepacklist" version="" versionType="0" visibility="public" width="100" x="471" y="83">
+            <refoperationlist>
+                <refoperation id="f890cb23-e3d8-455c-8e2f-7722281aac87" industry="0" isAuthorization="true" isSource="false" opItfID="3c923737-ed9a-42ac-b267-b77d0e204060" ownerElementID="835e20b1-a966-433a-8813-935f81001814" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <opinterface componentID="499d9ab5-83ab-4807-8546-ab48ad798593" createIndustry="0" createTime="2022-07-27 18:44:53" creator="yonyouBQ" dataType="9efb1492-f852-498f-9d25-6f744b472063" dbtype="" description="" displayName="销售包装清单" fullClassName="nc.itf.so.ISalepacklistMaintain" height="100" help="BUSILOG" id="3c923737-ed9a-42ac-b267-b77d0e204060" implClsName="nc.impl.so.SalepacklistMaintainImpl" industryChanged="false" isAuthorization="true" isBusiActivity="false" isBusiOperation="false" isSource="true" modifier="yy" modifyIndustry="0" modifyTime="2022-07-28 14:14:53" name="SalepacklistMaintain" remote="true" resid="" singleton="true" transprop="CMT" typeDisplayName="销售包装清单主实体" typeName="so_salepacklist" version="" versionType="0" visibility="public" width="100" x="379" y="237">
+            <operationlist>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="新增" forBusinessEntity="N" help="" id="660944db-0b0f-4c6f-aa96-c1f3090e3082" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="insert" opItfID="3c923737-ed9a-42ac-b267-b77d0e204060" ownerElementID="3c923737-ed9a-42ac-b267-b77d0e204060" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="660944db-0b0f-4c6f-aa96-c1f3090e3082" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="修改" forBusinessEntity="N" help="" id="f890cb23-e3d8-455c-8e2f-7722281aac87" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="update" opItfID="3c923737-ed9a-42ac-b267-b77d0e204060" ownerElementID="3c923737-ed9a-42ac-b267-b77d0e204060" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="f890cb23-e3d8-455c-8e2f-7722281aac87" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="删除" forBusinessEntity="N" help="" id="074a7db4-f13f-4a56-80e2-d421dd7b84ca" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="delete" opItfID="3c923737-ed9a-42ac-b267-b77d0e204060" ownerElementID="3c923737-ed9a-42ac-b267-b77d0e204060" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="074a7db4-f13f-4a56-80e2-d421dd7b84ca" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+            </operationlist>
+            <opImpllist/>
+        </opinterface>
+    </celllist>
+    <connectlist/>
+    <refdepends/>
+    <refdependLoseIDs/>
+    <cellRemoveLog/>
+    <rulers>
+        <ruler isHorizontal="true" unit="0">
+            <guideList/>
+        </ruler>
+        <ruler isHorizontal="false" unit="0">
+            <guideList/>
+        </ruler>
+    </rulers>
+</component>

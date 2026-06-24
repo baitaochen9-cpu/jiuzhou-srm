@@ -1,0 +1,1 @@
+INSERT INTO sm_menuitemreg ( nodeorder, pk_menu, menuitemname, iconpath, resid, pk_menuitem, ismenutype, menudes, funcode, menuitemcode, dr ) VALUES ( null, '1004ZZ10000000000FFL', '重复打印申请单', null, 'DH30103', '0001AA10000000013FR7', 'N', null, 'H3010300', 'H30103', 0 );

@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- =========================================================== -->
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext" />
+	
+	<!-- 元数据适配工厂 -->
+	<bean id="voBdAdapterFactory" class="nc.vo.bd.meta.VOBDObjectFactory" />
+
+	<!-- 清空表头字段 -->
+	<bean id="clearHeadHandler" class="nc.pub.fa.common.event.ClearHeadHandler" />
+	
+	<!-- 模板容器（统一装载模板）-->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+	</bean>
+	
+	<!-- 列表自定义项处理 -->
+	<bean id="defItemListPreparator" class="nc.ui.uif2.editor.UserdefitemBillListDataPreparator">
+		<constructor-arg ref="context" />
+	</bean>
+	
+	<!-- 卡片自定义项处理 -->
+	<bean id="defItemCardPreparator" class="nc.ui.uif2.editor.UserdefitemBillDataPreparator">
+		<constructor-arg ref="context" />
+		<!-- 
+		<property name="bodyTabCodes" ref="bodyTabCodes"/>
+		 -->
+	</bean>
+	
+	<!-- 卡片事件注册策略：1、编辑事件；2、页签切换事件 -->
+	<bean id="cardListenerConnectStrategys" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="cardEditEventHandlerConnectStrategy" />
+				<ref bean="cardTabChangeEventHandlerConnectStrategy" />
+				<ref bean="cardHyperlinkEventHandlerConnectStrategy" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 列表事件注册策略：1、页签切换事件-->
+	<bean id="listListenerConnectStrategys" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="listTabChangeEventHandlerConnectStrategy" />
+				<ref bean="listHyperlinkEventHandlerConnectStrategy" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 列表页签切换事件注册策略-->
+	<bean id="listTabChangeEventHandlerConnectStrategy"
+		class="nc.ui.am.editor.event.list.ListTabChangeEventHandlerConnectStrategy">
+		<property name="billListView" ref="billListView" />
+		<property name="tabChangeEventHandlers" ref="listTabChangeEventHandlers" />
+	</bean>
+
+	<!-- 卡片页签切换事件处理类-->
+	<bean id="cardTabChangeEventHandlers" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<bean class="nc.ui.am.editor.event.card.DefaultCardTabChangeEventHandler">
+					<property name="modelDataManager" ref="modelDataManager" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 列表页签切换事件处理类-->
+	<bean id="listTabChangeEventHandlers" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<bean class="nc.ui.am.editor.event.list.DefaultListTabChangeEventHandler">
+					<property name="modelDataManager" ref="modelDataManager" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+
+
+
+	<!-- 卡片编辑事件处理类：１、默认处理；２、扩展处理；cardEditEventHandlersExt -->
+	<bean id="cardEditEventHandler" class="nc.ui.fa.common.view.FADefaultCardEditEventHandler">
+		<property name="itemEditHandlers">
+			<list>
+				<bean class="nc.ui.fa.editor.event.card.AccbookChangeHandler"></bean>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="cardEditEventHandlersExt" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- 卡片超链接事件策略 -->
+	<bean id="cardHyperlinkEventHandlerConnectStrategy"
+		class="nc.ui.am.editor.event.card.CardHyperlinkEventHandlerConnectStrategy">
+		<property name="hyperlinkEventHandlers" ref="cardHyperlinkEventHandlers" />
+	</bean>
+
+	<!-- 卡片超链接事件handler -->
+	<bean id="cardHyperlinkEventHandlers"
+		class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="queryAboutHyperlinkEventHandler" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 列表超链接事件策略 -->
+	<bean id="listHyperlinkEventHandlerConnectStrategy"
+		class="nc.ui.am.editor.event.list.ListHyperlinkEventHandlerConnectStrategy">
+		<property name="hyperlinkEventHandlers" ref="listHyperlinkEventHandlers" />
+	</bean>
+
+	<!-- 列表超链接事件handler -->
+	<bean id="listHyperlinkEventHandlers" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="queryAboutHyperlinkEventHandler" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<!-- 界面扩展策略 -->
+	<bean id="cardComponentExtStrategys" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<!-- 交易类型参照范围设定 -->
+				<bean class="nc.ui.am.editor.ext.card.TransitypePanelExtStrategy">
+					<property name="model" ref="model" />
+				</bean>
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<bean id="queryAboutHyperlinkEventHandler"
+		class="nc.pub.fa.common.event.FAQueryAboutHyperlinkEventHandler" />
+		
+		
+		
+		
+	<!-- 分隔符按钮 -->
+	<bean id="separatorBar" class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+	
+	<!-- 分隔符按钮 -->
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />	
+	
+	<!--
+		##################################打印按钮#####################################
+	-->
+
+	<bean id="printActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="printTemplateAction" />
+				<ref bean="tempPrinviewAction" />
+				<ref bean="outputAction" />
+			</list>
+		</property>
+	</bean>
+	
+<!-- 模板预览 -->
+	<bean id="tempPrinviewAction" class="nc.ui.fa.simulatedep.action.SimulatePrintTempPrinviewAction">
+		<property name="model" ref="model" />
+		<property name="scaleProcessor" ref="billVODigitProcessor"/>
+	</bean>
+
+	<!-- 模板打印按钮 -->
+	<bean id="printTemplateAction" class="nc.ui.fa.simulatedep.action.SimulatePrintTemplateAction">
+		<property name="model" ref="model" />
+		<property name="scaleProcessor" ref="billVODigitProcessor"/>
+	</bean>
+	
+	<!-- 输出包括： 输出Excel、输出PDF、输出HTML-->
+    <bean id="outputAction" class="nc.ui.am.action.support.AMOutputAction">
+        <property name="model" ref="model" />
+        <property name="scaleProcessor" ref="billVODigitProcessor"/>
+    </bean>
+    
+    <!-- 精度处理 -->
+	<bean id="billVODigitProcessor" class="nc.ui.fa.simulatedep.process.SimDepScaleProcess">
+	</bean>
+	
+		<!-- 组织精度对象 -->
+	<!-- 加载精度对象及对应的查询器 -->
+	<bean id="scaleObjectData" class="nc.vo.am.scale.process.ScaleObjectData">
+		<property name="digitMatcher" ref="digitMatcher" />
+		<property name="scaleObjLoader" ref="setScaleFields" />
+	</bean>
+
+	<!--==================精度查询器========================== -->
+	<bean id="digitMatcher" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<bean class="nc.vo.am.scale.process.ScaleTypeVO" />
+				<bean class="nc.vo.fa.scale.process.AssetScaleMatcher" />
+			</list>
+		</constructor-arg>
+	</bean>
+	
+	<!-- need Override 具体的功能点需要覆盖该组件，将具体的精度字段和依赖字段信息设置到精度对象中 -->
+	<bean id="setScaleFields" class="nc.ui.am.scale.process.DefaultSetScaleFields" />
+	
+	<!-- ===========================界面===========================-->
+	<!--界面布局-->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="tangramLayout">
+			<bean class="nc.ui.uif2.tangramlayout.TangramLayout">
+				<property name="containerComponentStrategy">
+					<bean class="nc.ui.am.layout.AMContainerComponentStrategy" />
+				</property>
+			</bean>
+		</property>
+		<property name="tangramLayoutRoot">
+				<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+				<property name="showMode" value="CardLayout"></property>
+				<property name="tabs">
+					<list>
+						<bean class="nc.ui.am.editor.uf2.BillListViewNode">
+							<property name="component" ref="billListView" />
+						</bean>
+						<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+							<property name="up">
+								<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+									<property name="component" ref="cardPnlInfo" />
+								</bean>
+							</property>
+							<property name="down">
+								<bean class="nc.ui.am.editor.uf2.BillFormNode">
+									<property name="component" ref="billForm" />
+								</bean>
+							</property>
+							<property name="dividerLocation" value="25f" />
+						</bean>
+					</list>
+				</property>
+				</bean>
+			
+		</property>	
+		<property name="actions">
+			<list>
+			<ref bean="simulateDepAction" />
+			<ref bean="deleteAction" />
+			<ref bean="separatorAction" />
+			<ref bean="queryAction" />
+			<ref bean="separatorAction" />
+			<ref bean="queryDetailAction" />
+			<ref bean="returnAction" />
+			<ref bean="separatorAction" />
+			<ref bean="printActionGroup" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+			</list>
+		</property>
+		<property name="model" ref="model"></property>
+	</bean>
+	
+	<!-- ===========================模型信息配置 ===========================-->
+
+	<!-- 卡片左肩和右肩上的按鈕 -->
+	<bean id="cardPnlInfo" class="nc.ui.uif2.tangramlayout.CardLayoutToolbarPanel">
+		<property name="actions">
+			<list>
+
+			</list>
+		</property>
+		<property name="titleAction">
+			<bean id="returnaction" class="nc.ui.uif2.actions.ShowMeUpAction">
+				<property name="goComponent" ref="billListView"></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- 模型 -->
+	<bean id="model" class="nc.ui.fa.simulatedep.model.SimDepAppModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="modelService" />
+		<property name="businessObjectAdapterFactory" ref="voBdAdapterFactory" />
+	</bean>
+	
+	<!-- 模型管理器 -->
+	<bean id="modelDataManager" class="nc.ui.fa.simulatedep.model.SimDepDataManager">
+		<property name="model" ref="model" />
+		<property name="queryDialogManager" ref="queryDialogManagerForQuery" />
+	</bean>
+	
+	<!-- 模型服务 -->
+	<bean id="modelService" class="nc.ui.fa.simulatedep.model.SimDepModelServer">
+		<property name="context" ref="context" />
+	</bean>
+	
+	<!-- 列表和卡片界面按钮加载 -->
+	<bean id="toftpanelActionContributors" class="nc.ui.am.action.contributors.AMActionContributors"
+		init-method="initActions">
+	</bean>
+	
+	<!-- 异常处理 -->
+	<bean id="execeptionHandler" class="nc.ui.uif2.DefaultExceptionHanler">
+		<property name="context" ref="context"></property>
+	</bean>
+		
+	<!-- 查询模版模型管理器，主要负责查询模版的加载及初始化 ,-->
+	<bean id="queryDialogManagerForQuery" class="nc.ui.fa.simulatedep.query.SimulatedepQueryDialogManager">
+		<property name="model" ref="model" />
+	</bean>
+	
+	<!-- 查询模版模型管理器，主要负责查询模版的加载及初始化 -->
+	<bean id="queryDialogManagerForSimDep" class="nc.ui.fa.simulatedep.query.SimulatedepQueryDialogManager">
+		<property name="model" ref="model" />
+	</bean>
+	
+	<!-- ========================界面编辑器=================================== -->
+	
+	<!--卡片  -->
+	<bean id="billForm" class="nc.ui.fa.simulatedep.view.SimDepBillForm"
+		init-method="initUI">
+		<property name="model" ref="model" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="modelDataManager" ref="modelDataManager" />
+	</bean>
+	
+	<bean id="billListView" class="nc.ui.fa.simulatedep.view.SimDepListView" 
+		init-method="initUI" >
+		<property name="model" ref="model" />
+		<property name="multiSelectionEnable" value="false" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="modelDataManager" ref="modelDataManager" />
+		<property name="userdefitemListPreparator" ref="defItemListPreparator" />
+		<property name="clcStrategys" ref="listListenerConnectStrategys" />
+	</bean>
+	
+
+	
+	<!-- =========================================================== -->
+
+
+	<!-- ======================== 按钮定义 ========================= -->
+	<!-- 查询 -->
+	<bean id="queryAction" 
+		class="nc.ui.fa.simulatedep.action.QueryAction">
+		<property name="billListView" ref="billListView" />
+		<property name="model" ref="model" />
+		<property name="queryDialogManager" ref="queryDialogManagerForQuery" />
+	</bean>
+	
+	<!-- 模拟折旧 -->
+	<bean id="simulateDepAction" 
+		class="nc.ui.fa.simulatedep.action.SimulateDepAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+		<property name="queryDialogManager" ref="queryDialogManagerForSimDep" />
+	</bean>
+	
+	<!-- 联查明细 -->
+	<bean id="queryDetailAction" 
+		class="nc.ui.fa.simulatedep.action.QueryDetailAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+	</bean>
+	
+	<!-- 删除 -->
+	<bean id="deleteAction" 
+		class="nc.ui.fa.simulatedep.action.DeleteAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+	</bean>
+	
+	<!-- 返回 -->
+	<bean id="returnAction" 
+		class="nc.ui.fa.simulatedep.action.ReturnAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+	</bean>
+	
+	<!-- 打印 -->
+	<!-- 
+	<bean id="printAction" 
+		class="nc.ui.fa.simulatedep.action.PrintAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+	</bean>
+	-->
+	<bean id="orgChangeEventMediator" class="nc.ui.am.orgpanel.OrgChangeEventMediator">
+	</bean>
+	
+	<!-- 界面单据号控制类 -->
+	<bean id="billCodeMediator" class="nc.ui.am.code.BillCodeMediator">
+	</bean>
+</beans>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="GBK"?>
+ 
+<!DOCTYPE beans PUBLIC ".//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+
+	<!--新增按钮配置 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<!--actionsOfCard 表示按钮会出现在卡片状态下，actionsOfList表示会出现在列表状态下 -->
+		<property name="actionContainer" ref="actionsOfCard" />
+		<!--notedit表示当前单据为非编辑状态下才会出现，edit表示编辑状态下才可以出现 -->
+		<property name="actionType" value="notedit" />
+		<!--printActionGroup参数是根据BeanConfigFilePath对应的xml中找到的，作用是加载当前单据哪个按钮周围，根据名称我将按钮加在打印按钮组周围 -->
+		<property name="target" ref="printMenuAction" />
+		<!--before表示加载打印按钮组之前，如果填写after表示加在打印按钮组之后 -->
+		<property name="pos" value="before" />
+		<!--NonProdShipAction客开的按钮的id -->
+		<property name="action" ref="PrintApplyAction" />
+	</bean>
+
+
+	<!--自定义按钮表示类的全路径 -->
+	<bean id="PrintApplyAction" class="nc.ui.ewm.workorder.action.PrintApplyAction">
+		<property name="model" ref="model" />
+	</bean>
+
+</beans>

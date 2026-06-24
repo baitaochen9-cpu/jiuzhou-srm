@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><component conRouterType="手动" createIndustry="0" createTime="2011-04-20 13:26:48" creator="" description="" displayName="库存形态转换" fromSourceBmf="true" gencodestyle="NC传统样式" help="" id="136b59db-8925-486b-9ebd-621514fe8bf2" industry="0" industryChanged="false" industryIncrease="false" industryName="基础行业" isSource="false" isbizmodel="true" mainEntity="" metaType=".bpf" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="ic_transform_business" namespace="ic" ownModule="ic" preLoad="false" programcode="48" resModuleName="4008009_2" resid="2400800910-0002" version="30" versionType="0">
+    <celllist>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2011-04-20 13:28:36" creator="" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="修改" fullClassName="nc.voic.ic_transform_business.edit" height="100" help="" id="48004acd-97a3-4b9e-a9f1-470cd23df981" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="false" logtype="IGNORE" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="edit" needlog="false" resid="2400800910-0001" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="80" x="319" y="56">
+            <refoperationlist/>
+        </busioperation>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2011-04-20 13:28:54" creator="" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="删除" fullClassName="nc.voic.ic_transform_business.delete" height="100" help="" id="600d5176-50fc-46b6-99eb-5966689f304b" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="false" logtype="DELETE" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="delete" needlog="true" resid="2400800910-0000" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="80" x="17" y="161">
+            <refoperationlist>
+                <refoperation id="2b19ba90-739e-4064-80b4-af9fa0bf183f" industry="0" isAuthorization="true" isSource="false" opItfID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" ownerElementID="600d5176-50fc-46b6-99eb-5966689f304b" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2011-04-20 13:29:08" creator="" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="审批" fullClassName="nc.voic.ic_transform_business.approve" height="100" help="" id="846ab520-ecbd-4096-a134-95ee85ca55c2" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="false" logtype="IGNORE" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="approve" needlog="false" resid="2400800910-0006" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="80" x="188" y="302">
+            <refoperationlist/>
+        </busioperation>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2011-04-20 13:29:27" creator="" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="取消审批" fullClassName="nc.voic.ic_transform_business.unapprove" height="100" help="" id="c3b72279-d6bd-40fb-83cd-f8909b8e5385" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="false" logtype="IGNORE" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="unapprove" needlog="false" resid="2400800910-0005" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="80" x="335" y="266">
+            <refoperationlist/>
+        </busioperation>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2011-07-28 12:42:09" creator="" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="提交" fullClassName="nc.voic.ic_transform_business.commit" height="100" help="" id="f4de6e90-38b9-4483-9c7e-14581453532e" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="false" logtype="IGNORE" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="commit" needlog="false" resid="2400800910-0003" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="80" x="472" y="208">
+            <refoperationlist/>
+        </busioperation>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2011-07-28 12:43:16" creator="" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="取消提交" fullClassName="nc.voic.ic_transform_business.uncommit" height="100" help="" id="b367a74f-88a2-4b27-b44d-9b80533cd3c2" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="false" logtype="IGNORE" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="uncommit" needlog="false" resid="2400800910-0004" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="80" x="580" y="208">
+            <refoperationlist/>
+        </busioperation>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2012-01-05 14:33:53" creator="" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="打印操作" fullClassName="nc.voic.ic_transform_business.print" height="100" help="" id="a4e01d91-5e99-4a93-9e70-5e81c3598662" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="false" logtype="IGNORE" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="print" needlog="false" resid="140080000-0124" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="80" x="79" y="41">
+            <refoperationlist/>
+        </busioperation>
+        <opinterface componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2021-01-04 12:31:11" creator="yonyouBQ" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="库存形态转换操作接口" fullClassName="nc.itf.ic.m4n.ITransformMaitain" height="100" help="BUSILOG" id="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" implClsName="nc.impl.ic.m4n.TransformMaintainImpl" industryChanged="false" isAuthorization="true" isBusiActivity="false" isBusiOperation="false" isSource="true" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:39:33" name="TransformMaitain" remote="true" resid="" singleton="true" transprop="CMT" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="100" x="669" y="78">
+            <operationlist>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="新增" forBusinessEntity="N" help="" id="4896d8ec-ab0f-4e35-892b-5d965e3586be" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="insert" opItfID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" ownerElementID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="4896d8ec-ab0f-4e35-892b-5d965e3586be" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="更新" forBusinessEntity="N" help="" id="34cf1eb1-0754-4642-a9fb-f31794c92c7d" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="update" opItfID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" ownerElementID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="34cf1eb1-0754-4642-a9fb-f31794c92c7d" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+                <operation dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" defclassname="" displayName="删除" forBusinessEntity="N" help="" id="2b19ba90-739e-4064-80b4-af9fa0bf183f" isAggVOReturn="true" isBusiActivity="false" methodException="nc.vo.pub.BusinessException" name="delete" opItfID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" ownerElementID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" resid="" transKind="NEVER" typeDisplayName="UFID" typeName="UFID" versionType="0" visibility="public">
+                    <paramlist>
+                        <parameter dataType="BS000010000100001051" dataTypeStyle="SINGLE" dbtype="char" description="" displayName="聚合VO" isAggVO="true" name="billVOs" operationID="2b19ba90-739e-4064-80b4-af9fa0bf183f" paramTypeForLog="0" paramdefclassname="" sequence="0" typeDisplayName="UFID" typeName="UFID" versionType="0"/>
+                    </paramlist>
+                </operation>
+            </operationlist>
+            <opImpllist/>
+        </opinterface>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2021-01-04 12:32:40" creator="yonyouBQ" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="新增" fullClassName="nc.vo.ic.ic_transform_business.BusiOperation0" height="100" help="BUSILOG" id="215e3d50-75b8-45e7-8e13-4077f4de7b45" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="ADD" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="insert" needlog="true" resid="" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="100" x="830" y="225">
+            <refoperationlist>
+                <refoperation id="4896d8ec-ab0f-4e35-892b-5d965e3586be" industry="0" isAuthorization="true" isSource="false" opItfID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" ownerElementID="215e3d50-75b8-45e7-8e13-4077f4de7b45" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+        <busioperation componentID="136b59db-8925-486b-9ebd-621514fe8bf2" createIndustry="0" createTime="2021-01-04 12:34:19" creator="yonyouBQ" dataType="8a36806c-cff7-4fa8-b4d3-484a6f84bf21" dbtype="" description="" displayName="更新" fullClassName="nc.vo.ic.ic_transform_business.BusiOperation0" height="100" help="BUSILOG" id="adb0a907-13c0-40b9-8922-72a73969a223" industryChanged="false" isAuthorization="true" isBusiActivity="false" isSource="true" logtype="MODIFY" modifier="222" modifyIndustry="0" modifyTime="2021-05-06 23:34:51" name="update" needlog="true" resid="" typeDisplayName="库存形态转换单表头" typeName="TransformHeadVO" version="" versionType="0" visibility="public" width="100" x="699" y="238">
+            <refoperationlist>
+                <refoperation id="34cf1eb1-0754-4642-a9fb-f31794c92c7d" industry="0" isAuthorization="true" isSource="false" opItfID="cbf0d4b1-a6a0-4fab-9a8b-17489bbdaf0c" ownerElementID="adb0a907-13c0-40b9-8922-72a73969a223" versiontype="0"/>
+            </refoperationlist>
+        </busioperation>
+    </celllist>
+    <connectlist/>
+    <refdepends/>
+    <refdependLoseIDs/>
+    <cellRemoveLog/>
+    <rulers>
+        <ruler isHorizontal="true" unit="0">
+            <guideList/>
+        </ruler>
+        <ruler isHorizontal="false" unit="0">
+            <guideList/>
+        </ruler>
+    </rulers>
+</component>

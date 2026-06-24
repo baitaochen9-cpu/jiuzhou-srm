@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="EXBillFormMediator" class="nc.ui.ic.m4n.model.extend.ExBillFormMediator">
+		<property name="userdefAndMarAsstCardPreparator" ref="userdefAndMarAsstCardPreparator1" />
+		<property name="billForm" ref="card" />
+	</bean>
+
+	<bean id="userdefAndMarAsstCardPreparator1" class="nc.ui.ic.m4n.event.extend.CompositeBillDataPrapareEx"/>
+
+
+	<bean id="EXEventHandlerMediator" class="nc.ui.pubapp.uif2app.model.AppEventHandlerMediator">
+		<property name="model" ref="icBizModel" />
+		<property name="handlerGroup">
+			<list>
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event"
+						value="nc.ui.pubapp.uif2app.event.card.CardBodyAfterEditEvent" />
+					<property name="handler">
+						<bean class="nc.ui.ic.m4n.event.extend.CardBodyAfterEditHandler">
+							<property name="medLotNo" ref="medLotNoAfter"></property>
+							<property name="batchCode" ref="batchCodeAfter"></property>
+						</bean>
+					</property>
+				</bean>
+				<bean class="nc.ui.pubapp.uif2app.event.EventHandlerGroup">
+					<property name="event"
+						value="nc.ui.pubapp.uif2app.event.card.CardBodyBeforeEditEvent" />
+					<property name="handler">
+						<bean class="nc.ui.ic.m4n.event.extend.CardBodyBeforeEditHandler">
+							<property name="medLotNo" ref="medLotNoBefore"></property>
+							<property name="batchCode" ref="batchcodeBefore"></property>
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean id="medLotNoAfter" class="nc.ui.medpub.editor.card.afteredit.body.MedLotNo">
+		<property name="materialStr" value="cmaterialvid" />
+		<property name="pkOrgStr" value="pk_org" />
+		<property name="dproducedateStr" value="dproducedate" />
+		<property name="dinvaliddateStr" value="vinvaliddate_148" />
+		<property name="billFieldsNoNeedCopy" ref="billFieldsNoNeedCopy" />
+		<property name="VONameStr" value="nc.vo.ic.m4n.entity.TransformBodyVO" />
+		<property name="dynamic" value="true"></property>
+	</bean>
+	<bean id="billFieldsNoNeedCopy" class="nc.ui.ic.m4n.event.extend.BillFieldsNoNeedCopy" />
+
+
+	<bean id="batchCodeAfter" class="nc.ui.medpub.editor.card.afteredit.body.BatchCode">
+		<property name="materialStr" value="cmaterialvid" />
+		<property name="context" ref="context" />
+		<property name="cmaterialoidStr" value="pk_srcmaterial" />
+		<property name="dproducedateStr" value="dproducedate" />
+		<property name="dinvaliddateStr" value="vinvaliddate_148" />
+		<property name="billFieldsNoNeedCopy" ref="billFieldsNoNeedCopy" />
+		<property name="VONameStr" value="nc.vo.ic.m4n.entity.TransformBodyVO" />
+		<property name="stordocidStr" value="cwarehouseid" />
+		<property name="editorModel" ref="icBizEditorModel" />
+	</bean>
+	<bean id="medLotNoBefore" class="nc.ui.medpub.editor.card.beforeedit.body.MedLotNo">
+		<property name="materialStr" value="cmaterialvid" />
+		<property name="pkStockStr" value="pk_org" />
+		<property name="pkStockDocStr" value="cwarehouseid" />
+		<property name="NotIncludeBlack" value="false" /><!-- 销售出库，批号不需要考虑停售 -->
+
+	</bean>
+	<bean id="batchcodeBefore" class="nc.ui.medpub.editor.card.beforeedit.body.BatchCode">
+		<property name="NotIncludeBlack" value="false" /><!-- 销售出库，批次不需要考虑停售 -->
+		<property name="FilterByATP" value="false" /><!-- 可用量查询 -->
+		<property name="pkMaterial" value="cmaterialvid" /><!-- 物料主键 -->
+		<property name="pkStockOrgStr" value="pk_org" /><!-- 库存组织最新主键 -->
+		<property name="editorModel" ref="icBizEditorModel" />
+	</bean>
+</beans>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_IC_ADJUSTBAL_NCCLOUD">
+  	<public>
+    	<!--联查采购合同执行情况订单明细url-->
+	    <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+	      <interface>nccloud.pubitf.ct.report.service.IPurexecution</interface>
+	      <implementation>nccloud.pubimpl.ct.report.purexecution.PurexecutionImpl</implementation>
+	    </component>
+	</public>
+</module>
+

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_OBA_EJB">
+	<public>
+		<!-- 结构化附件服务 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.pubitf.ct.oba.service.IOBAService</interface>
+			<implementation>nccloud.pubimpl.ct.oba.service.OBAServiceImpl</implementation>
+		</component>
+	</public>		
+</module>

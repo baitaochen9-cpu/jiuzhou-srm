@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="JZSYS">
+	<public>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.itf.jzyy.sys.ISysDispatcher</interface>
+			<implementation>nc.bs.jzyy.sys.SysDispatcherImpl</implementation>
+		</component>
+		<component remote="true" tx="CMT" priority="0" singleton="true" supportAlias="true">
+			<interface>nc.itf.jzyy.sys.IProcessService</interface>
+			<implementation>nc.bs.jzyy.sys.ProcessServiceImpl</implementation>
+		</component>
+	</public>
+</module>

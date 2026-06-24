@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<description> 到货单的编辑事件配置文件 </description>
+
+	<!-- 更改组织后同步设置界面上所有参照的组织值 -->
+	<bean class="nc.ui.pubapp.uif2app.view.CardPanelOrgSetterForAllRefMediator">
+		<constructor-arg ref="billFormEditor" />
+		<property name="model" ref="manageAppModel" />
+	</bean>
+	
+	<!-- 列表表头行改变事件处理器 -->
+	<bean id="list_head_rowchangehandler" class="nc.ui.pu.m23.editor.list.HeadRowChangeHandler" />
+
+	<!-- 编辑事件 -->
+	<bean id="appEventHandlerMediator" class="nc.ui.pubapp.uif2app.model.AppEventHandlerMediator">
+		<property name="model" ref="manageAppModel" />
+		<property name="handlerMap">
+			<map>
+				<!-- 主组织 -->
+				<entry key="nc.ui.pubapp.uif2app.event.OrgChangedEvent">
+					<list>
+						<bean class="nc.ui.pu.m23.editor.org.OrgChangedEventHandler">
+							<property name="cardForm" ref="billFormEditor" />
+						</bean>
+					</list>
+				</entry>
+
+				<!-- 表头编辑事件 -->
+				<entry key="nc.ui.pubapp.uif2app.event.card.CardHeadTailBeforeEditEvent">
+					<list>
+						<bean
+							class="nc.ui.pu.m23.editor.card.beforeedit.CardHeadTailBeforeEditEventHandler" />
+					</list>
+				</entry>
+				<entry key="nc.ui.pubapp.uif2app.event.card.CardHeadTailAfterEditEvent">
+					<list>
+						<bean
+							class="nc.ui.pu.m23.editor.card.afteredit.CardHeadTailAfterEditEventHandler" />
+					</list>
+				</entry>
+
+				<!-- 表体编辑事件 -->
+				<entry key="nc.ui.pubapp.uif2app.event.card.CardBodyBeforeEditEvent">
+					<list>
+						<bean class="nc.ui.pu.m23.editor.card.beforeedit.CardBodyBeforeEditEventHandler" >
+							<!-- 20220902 zhian.ye 增加属性注入 -->
+							<property name="context" ref="context"></property>
+							</bean>
+					</list>
+				</entry>
+				<entry key="nc.ui.pubapp.uif2app.event.card.CardBodyAfterEditEvent">
+					<list>
+						<bean
+							class="nc.ui.pu.m23.editor.card.afteredit.CardBodyAfterEditEventHandler">
+							<property name="context" ref="context"></property>
+						</bean>
+					</list>
+				</entry>
+				<!-- 列表表头行改变事件 -->
+				<entry key="nc.ui.pubapp.uif2app.event.list.ListHeadRowChangedEvent">
+					<list>
+						<ref bean="list_head_rowchangehandler" />
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+</beans>

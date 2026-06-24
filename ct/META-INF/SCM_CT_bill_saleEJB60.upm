@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_CT_EJB">
+	<public>
+		
+		<!-- 销售合同 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.itf.ct.saledaily.ISaledailyMaintain</interface>
+			<implementation>nc.impl.ct.saledaily.SaledailyMaintainImpl</implementation>
+		</component>
+		<!-- 销售订单参照销售合同 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.pubitf.ct.saledaily.saleorder.ISaleQueryForSaleOrder</interface>
+			<implementation>nc.pubimpl.ct.saledaily.saleorder.SaleQueryForSaleOrderImpl</implementation>
+		</component>
+		<!-- 销售订单关联销售合同 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.pubitf.ct.saledaily.saleorder.ICtSaleRelating</interface>
+			<implementation>nc.pubimpl.ct.saledaily.saleorder.CtSaleRelatingImpl</implementation>
+		</component>	
+		<!-- 销售订单回写销售合同 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.pubitf.ct.saledaily.so.IReWriteZ3For30</interface>
+			<implementation>nc.pubimpl.ct.saledaily.so.ReWriteZ3For30Impl</implementation>
+		</component>	
+		<!-- 销售合同 审核相关操作 --> 
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.itf.ct.saledaily.ISaledailyApprove</interface>
+			<implementation>nc.impl.ct.saledaily.SaledailyApproveImpl</implementation>
+		</component>		
+               <!-- 收款单单参照销售合同 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.pubitf.ct.saledaily.salegather.ISaleQueryForGatherBill</interface>
+			<implementation>nc.pubimpl.ct.saledaily.gatherbill.SaleQueryForGatherBillImpl</implementation>
+		</component>		
+		<!-- 销售合同60→61升级接口-->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.itf.ct.saledaily.upgrade.ICtSaleUpgradeToV61</interface>
+			<implementation>nc.impl.ct.saledaily.upgrade.CtSaleUpgradeToV61Impl</implementation>
+		</component>
+		<!-- 销售订单查询销售合同接口-->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.pubitf.ct.saledaily.so.IZ3QueryForOrder</interface>
+			<implementation>nc.pubimpl.ct.saledaily.so.Z3QueryForOrderImpl</implementation>
+		</component>
+		
+		<!-- ECM合同与销售合同对接服务-->
+		<component name="SaledailyForECMImpl" priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.itf.oa.ecmbd.IContractInterOperateAdapter@sale</interface>
+			<implementation>nc.pubimpl.ct.saledaily.ecm.SaledailyForECMImpl</implementation>
+		</component>
+		
+		<!-- 销售合同维护应用-->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.itf.ct.saledaily.ISaledailyMaintainApp</interface>
+			<implementation>nc.impl.ct.saledaily.SaledailyMaintainAppImpl</implementation>
+		</component>	
+		<!-- 销售合同维护NCCLOUD-->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.pubitf.ct.saledaily.service.ISaleDailyQueryForNCCloudService</interface>
+			<implementation>nccloud.pubimpl.ct.saledaily.service.SaleDailyQueryForNCCloudServiceImpl</implementation>
+		</component>	
+	</public>		
+</module>

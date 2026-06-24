@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding='gb2312'?>
+<module>
+	<rest>
+		<resource classname="nccloud.api.jzyy.thlims.JzyyThLimsApi"  exinfo="药物科技limis"/>
+	</rest>
+</module>

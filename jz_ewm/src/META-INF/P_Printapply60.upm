@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding='gb2312'?>
+<module name="ewm">
+  <public>
+	<component remote="true" singleton="true"  tx="CMT">
+	  <interface>nc.itf.ewm.IPrintapplyMaintain</interface>
+	  <implementation>nc.impl.ewm.PrintapplyMaintainImpl</implementation>
+	</component>
+
+  </public> 
+</module> 

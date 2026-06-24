@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_CT_EJB">
+  <public>
+    <!-- 采购合同付款执行情况查询-->
+	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+		<interface>nc.itf.ct.purdaily.paymentexec.ICTPuPaymentExecQuery</interface>
+		<implementation>nc.impl.ct.purdaily.paymentexec.CTPuPaymentExecQueryImpl</implementation>
+	</component>
+  </public>
+  
+</module>
+

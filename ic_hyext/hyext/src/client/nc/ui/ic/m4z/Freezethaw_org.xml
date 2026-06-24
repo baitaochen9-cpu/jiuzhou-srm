@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- 引入事件配置文件 -->
+	<import resource="FreezethawEvent.xml" />
+
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext" />
+
+	<!-- 模型部分配置########################################################### -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+	</bean>
+
+	<!-- 库存前台环境变量 -->
+	<bean id="icUIContext" class="nc.ui.ic.pub.env.ICUIContext">
+		<constructor-arg>
+			<ref bean="context" />
+		</constructor-arg>
+		<property name="uiprocesorinfo" ref="UIProcesorInfo" />
+	</bean>
+
+	<!-- 数据模型处理类 -->
+	<bean id="modelDataProcessor" class="nc.ui.ic.pub.model.ICModelDataProcessor" />
+
+	<!-- 数据模型管理器，主要负责各种方式的模型初始化 -->
+	<bean id="modelDataManager" class="nc.ui.ic.m4z.model.FreezeThawDataManager">
+		<property name="model" ref="icBizModel" />
+		<property name="service" ref="manageModelService" />
+		<property name="modelDataProcessor" ref="modelDataProcessor" />
+	</bean>
+
+	<!-- 模型部分配置########################################################### -->
+
+	<!-- 管理应用模型 -->
+	<bean id="icBizModel" class="nc.ui.ic.pub.model.ICBizModel">
+		<property name="service" ref="manageModelService" />
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="icUIContext" ref="icUIContext" />
+		<property name="billType" value="4Z" />
+		<!-- 启用权限控制 -->
+		<property name="powerValidate" value="true" />
+	</bean>
+	<!-- 应用服务类，负责进行模型操作的处理 -->
+	<bean id="manageModelService" class="nc.ui.ic.m4z.model.FreezeThawModelService">
+		<property name="icUIContext" ref="icUIContext"></property>
+		<property name="voClass" value="nc.vo.ic.m4z.entity.FreezeThawVO" />
+	</bean>
+
+	<!-- 自动修正卡片界面的分数显示控件(换算率) -->
+	<bean id="fractionFixMediator" class="nc.ui.pubapp.uif2app.view.FractionFixMediator"
+		init-method="initUI">
+		<constructor-arg ref="list" />
+	</bean>
+
+	<bean id="userdefitemContainer" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="rulecode" value="materialassistant" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 自由项组件的配置 -->
+	<bean id="marAsstPreparator"
+		class="nc.ui.pubapp.uif2app.view.material.assistant.MarAsstPreparator">
+		<property name="model" ref="icBizModel" />
+		<property name="container" ref="userdefitemContainer" />
+		<property name="prefix" value="vfree" />
+		<property name="materialField" value="cmaterialvid" />
+		<property name="storeStateField" value="cstateid" />
+		<property name="projectField" value="cprojectid" />
+		<property name="supplierField" value="cvendorid" />
+		<property name="productorField" value="cproductorid" />
+		<property name="signatureField" value="cffileid" />
+	</bean>
+
+	<!-- 自由项、自定义项组件的列表配置 -->
+	<bean id="userdefAndMarAsstListPreparator" class="nc.ui.pubapp.uif2app.view.CompositeBillListDataPrepare">
+		<property name="billListDataPrepares">
+			<list>
+				<ref bean="marAsstPreparator" />
+			</list>
+		</property>
+	</bean>
+
+
+
+	<!-- 精度设置 -->
+	<bean id="UIProcesorInfo" class=" nc.ui.ic.m4z.deal.FreezeThawUIProcessorInfo" />
+
+	<bean id="boadatorfactory" class="nc.vo.bd.meta.BDObjectAdpaterFactory" />
+
+	<!-- 赋值策略 -->
+	<bean id="valueSetter" class="nc.ui.ic.m4z.view.FreezeThawBillValueSetter">
+		<property name="icUIContext" ref="icUIContext" />
+	</bean>
+
+	<!-- 列表控件的取值策略 -->
+	<bean id="componentValueManager"
+		class="nc.ui.uif2.editor.value.BillCardPanelMetaDataValueAdapter" />
+
+	<!-- 表头panel -->
+	<bean id="headPanel" class="nc.ui.ic.m4z.view.FreezeThawHeadPanel"
+		init-method="initUI" />
+
+	<!-- 列表控件 -->
+	<bean id="list" class="nc.ui.ic.m4z.view.FreezeThawBillListView"
+		init-method="initUI">
+		<property name="model" ref="icBizModel" />
+		<property name="billListPanelValueSetter" ref="valueSetter" />
+		<property name="multiSelectionEnable" value="true" />
+		<property name="multiSelectionMode" value="1" />
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="userdefitemListPreparator" ref="userdefAndMarAsstListPreparator" />
+	</bean>
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+	<!-- 界面布局总装########################################################### -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<bean id="down" class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="list"></property>
+				</bean>
+				<bean id="up" class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="headPanel"></property>
+					<property name="targetComponent" ref="list"></property>
+					<property name="direction" value="up"></property>
+					<property name="dividerLocation" value="30"></property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="freezeOnhandQueryAction" />
+				<ref bean="freezeAction" />
+				<ref bean="checkAction" />
+				<ref bean="separatorAction" />
+				<ref bean="thawOnhandQueryAction" />
+				<ref bean="thawAction" />
+				<ref bean="separatorAction" />
+				<!-- <ref bean="selectAllAction" /> <ref bean="selectNoAction" /> <ref 
+					bean="separatorAction" /> -->
+				<ref bean="hisRecQueryAction" />
+				<ref bean="separatorAction" />
+				<ref bean="templatePrintAction" />
+				<ref bean="templatePreviewAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 可冻结/检查量查询 -->
+	<bean id="freezeOnhandQueryAction" class="nc.ui.ic.m4z.action.FreezeOnhandQueryAction">
+		<property name="model" ref="icBizModel" />
+		<property name="qryCondDLGInitializer" ref="qryDLGInitializer" />
+		<property name="headPanel" ref="headPanel" />
+		<property name="list" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="nodeKey" value="400824001" />
+	</bean>
+
+	<!-- 冻结、解冻查询对话框初始化处理 -->
+	<bean id="qryDLGInitializer" class="nc.ui.ic.m4z.view.FreezeThawQueryConditionDLGWrapper">
+		<property name="model" ref="icBizModel" />
+	</bean>
+
+	<!-- 冻结 -->
+	<bean id="freezeAction" class="nc.ui.ic.m4z.action.FreezeAction">
+		<property name="model" ref="icBizModel" />
+		<property name="list" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+
+	<!-- 检验 -->
+	<bean id="checkAction" class="nc.ui.ic.m4z.action.CheckAction">
+		<property name="model" ref="icBizModel" />
+		<property name="list" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+	
+
+
+	<!-- 可解冻量查询 -->
+	<bean id="thawOnhandQueryAction" class="nc.ui.ic.m4z.action.ThawOnhandQueryAction">
+		<property name="model" ref="icBizModel" />
+		<property name="qryCondDLGInitializer" ref="qryDLGInitializer" />
+		<property name="headPanel" ref="headPanel" />
+		<property name="list" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="nodeKey" value="400824002" />
+	</bean>
+
+	<!-- 解冻 -->
+	<bean id="thawAction" class="nc.ui.ic.m4z.action.ThawAction">
+		<property name="model" ref="icBizModel" />
+		<property name="list" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+
+	<!-- 全选 -->
+	<bean id="selectAllAction" class="nc.ui.ic.special.action.SelectAllAction">
+		<property name="model" ref="icBizModel" />
+		<property name="list" ref="list" />
+	</bean>
+
+	<!-- 全消 -->
+	<bean id="selectNoAction" class="nc.ui.ic.special.action.UnSelectAction">
+		<property name="model" ref="icBizModel" />
+		<property name="list" ref="list" />
+	</bean>
+
+	<!-- 历史记录 查询 -->
+	<bean id="hisRecQueryAction" class="nc.ui.ic.m4z.action.HisRecQueryAction">
+		<property name="model" ref="icBizModel" />
+		<property name="qryCondDLGInitializer" ref="qryDLGInitializer" />
+		<property name="headPanel" ref="headPanel" />
+		<property name="list" ref="list" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="nodeKey" value="400824003" />
+	</bean>
+
+	<bean id="InitDataListener"
+		class="nc.ui.pubapp.uif2app.model.DefaultFuncNodeInitDataListener">
+		<property name="model" ref="icBizModel" />
+		<property name="voClassName" value="nc.vo.ic.m4z.entity.FreezeThawVO" />
+		<property name="autoShowUpComponent" ref="list" />
+	</bean>
+
+	<!-- 模板预览 -->
+	<bean id="templatePreviewAction" class="nc.ui.ic.m4z.action.FreezePrintAction">
+		<property name="preview" value="true" />
+		<property name="model" ref="icBizModel" />
+		<property name="code" value="TempPreview" />
+		<property name="digitProcessor" ref="digitProcessor" />
+	</bean>
+
+	<!-- 模板打印 -->
+	<bean id="templatePrintAction" class="nc.ui.ic.m4z.action.FreezePrintAction">
+		<property name="preview" value="false" />
+		<property name="model" ref="icBizModel" />
+		<property name="code" value="TempPrint" />
+		<property name="digitProcessor" ref="digitProcessor" />
+	</bean>
+
+	<bean id="printProcessor" class="nc.ui.ic.m4z.deal.FreezeThawPrintProcessor">
+		<property name="model" ref="icBizModel" />
+	</bean>
+
+	<bean id="digitProcessor" class="nc.ui.ic.m4z.deal.DigitProcessor">
+		<property name="model" ref="icBizModel" />
+	</bean>
+</beans>

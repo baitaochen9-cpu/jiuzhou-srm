@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!--======= 动作：[newActions] [打印] ===========-->
+	<bean id="metaDataBasedPrintActiona" class="nc.ui.pu.m23.action.TrayLabelPrintAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="form" ref="billFormEditor" />
+		<property name="list" ref="listView" />
+	</bean>
+	
+	<!-- 在间隔按钮后插入自己的按钮 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfCard" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="printMenuActionCard" />
+		<property name="pos" value="after" />
+		<property name="action" ref="metaDataBasedPrintActiona" />
+	</bean>
+	
+ 	<!-- 在打印按钮组后插入间隔按钮 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfCard" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="metaDataBasedPrintActiona" />
+		<property name="pos" value="after" />
+		<property name="action" ref="metaDataBasedPrintActionb" />
+	</bean>
+ 
+	
+	<!--======= 动作：[newActions] [打印] ===========-->
+	<bean id="metaDataBasedPrintActionb" class="nc.ui.pu.m23.action.SingletonLabelPrintAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="form" ref="billFormEditor" />
+		<property name="list" ref="listView" />
+	</bean>
+	
+</beans>

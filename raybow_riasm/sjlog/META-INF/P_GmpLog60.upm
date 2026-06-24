@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding='gb2312'?>
+<module name="riasm">
+  <public>
+	<component remote="true" singleton="true"  tx="CMT">
+	  <interface>nc.itf.riasm.IGmpLogMaintain</interface>
+	  <implementation>nc.impl.riasm.GmpLogMaintainImpl</implementation>
+	</component>
+
+  </public> 
+</module> 

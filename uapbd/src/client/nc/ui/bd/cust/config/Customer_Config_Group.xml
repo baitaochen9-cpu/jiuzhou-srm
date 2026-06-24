@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<import resource="Customer_Config_Base.xml" />
+	
+	<!-- 页签按钮 -->
+	<bean id="baseinfoListViewActions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="baseinfoListView" />
+		</constructor-arg>
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="copyAddAction" />
+				<ref bean="batchUpdateGroupAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				<ref bean="filterAction" />
+				<ref bean="separatorAction" />
+				<ref bean="assignActionGroup" />
+				<ref bean="bankaccAction" />
+				<ref bean="custaddressAction"></ref>
+				<ref bean="freezegroupaction" />
+				<ref bean="enableGroupAction" />
+				<ref bean="assistantFuncMenu" />
+				<ref bean="separatorAction" />
+				<ref bean="orgBrowseAction" />
+				<ref bean="orgvisitAction"/>
+				<ref bean="associatePfCustAction" />
+				<ref bean="separatorAction" />
+				<ref bean="listPrintActionGroup" />
+				<ref bean="separatorAction" />
+				<ref bean = "mdmAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="baseinfoEditorActions" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg>
+			<ref bean="baseinfoEditor" />
+		</constructor-arg>
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="copyAddAction" />
+				<ref bean="batchUpdateGroupAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="assignActionGroup" />
+				<ref bean="bankaccAction" />
+				<ref bean="custaddressAction"></ref>
+				<ref bean="card_freezegroupaction" />
+				<ref bean="card_enableGroupAction" />
+				<ref bean="assistantFuncMenu_card" />
+				<ref bean="separatorAction" />
+				<ref bean="orgBrowseAction" />
+				<ref bean="orgvisitAction"/> 
+				<ref bean="associatePfCustAction" />
+				<ref bean="separatorAction" />
+				<ref bean="printActionGroup" />
+				<ref bean="separatorAction" />
+				<ref bean = "mdmAction" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="saveAction" />
+				<ref bean="saveAddAction" />
+				<ref bean="separatorAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="baseinfoModel" />
+	</bean>
+</beans>

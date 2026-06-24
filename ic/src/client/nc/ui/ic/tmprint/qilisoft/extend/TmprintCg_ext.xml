@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<!--采购订单 按钮扩展XML-->
+	<!--物料条码打印-->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfCard" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="printMenuAction" />
+		<property name="pos" value="after" />
+		<property name="action" ref="TmprintAction" />
+	</bean>
+	<bean id="TmprintAction" class="nc.ui.ic.tmprint.qilisoft.extend.TmprintCgAction">
+		<property name="model" ref="manageAppModel" />
+		<property name="editor" ref="billFormEditor" />
+	</bean>
+</beans>

@@ -1,0 +1,1086 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext" />
+
+	<bean id="exinfoloader" class="nc.ui.bd.uitabextend.ExinfoLoader">
+		<property name="current_md_ID" value="720dcc7c-ff19-48f4-b9c5-b90906682f45"></property>
+	</bean>
+
+	<!-- 扩展点管理 -->
+	<bean id="uiTabExtMnger" class="nc.ui.bd.uitabextend.UITabExtManager">
+		<property name="targetComponent" ref="baseinfoCardView" />
+	</bean>
+
+	<!-- 远程加载器 -->
+	<bean id="remoteCallCombinatorCaller" class="nc.ui.uif2.editor.UIF2RemoteCallCombinatorCaller">
+		<property name="remoteCallers">
+			<list>
+				<ref bean="templateContainer" />
+				<ref bean="queryTemplateContainer" />
+				<ref bean="userdefitemContainer" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 模板加载器，负责对模板的统一装载 -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context"></property>
+		<property name="nodeKeies">
+			<list>
+				<value>base</value>
+				<value>share</value>
+				<value>createCust</value>
+				<value>associcust</value>
+				<value>approve</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="queryTemplateContainer" class="nc.ui.uif2.editor.QueryTemplateContainer">
+		<property name="context" ref="context"></property>
+	</bean>
+
+	<!-- 用户定义属性加载项 , 统一加载所有页签自定义项-->
+	<bean id="userdefitemContainer" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.supplier" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.supfinance" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.supstock" />
+				</bean>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.suplinkman" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="toftpanelActionContributors" class="nc.ui.uif2.actions.ActionContributors">
+		<property name="contributors">
+			<list>
+				<ref bean="baseinfoListViewActions" />
+				<ref bean="baseinfoCardViewActions" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 模型部分配置########################################################### -->
+	<bean id="baseinfoModel" class="nc.ui.bd.supplier.baseinfo.model.SupplierBaseInfoModel">
+		<!-- 卡片/列表 页签 model -->
+		<property name="businessObjectAdapterFactory" ref="boadapterfacotry"></property>
+		<property name="service" ref="service"></property>
+		<property name="context" ref="context"></property>
+	</bean>
+
+	<!-- 应用服务类，负责进行模型操作的处理 -->
+	<bean id="service"
+		class="nc.ui.bd.supplier.baseinfo.model.SupplierAppModelService">
+		<property name="context" ref="context"></property>
+		<property name="extendContext" ref="baseExtendContext"></property>
+	</bean>
+
+	<!-- 对象转换器工厂，由此获取操作对象的特征信息 -->
+	<bean id="boadapterfacotry" class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+		<property name="mode" value="MD"></property>
+	</bean>
+
+	<bean id="modelDataManager"
+		class="nc.ui.bd.supplier.baseinfo.model.SupplierBaseInfoDataManager">
+		<!-- 右侧管理型Model的数据管理器 -->
+		<property name="manageModel" ref="baseinfoModel"></property>
+		<property name="paginationModel" ref="paginationModel"></property>
+		<property name="delegator" ref="paginationDelegator"></property>
+	</bean>
+
+	<bean id="InitDataListener"
+		class="nc.ui.bd.supplier.baseinfo.model.SupplierFuncNodeInitDataListener">
+		<property name="dataManager" ref="modelDataManager"></property>
+		<property name="queryAction" ref="list_searchAction"></property>
+		<property name="editor" ref="baseinfoListView"></property>
+	</bean>
+
+	<bean id="paginationDelegator"
+		class="nc.ui.uif2.components.pagination.BillManagePaginationDelegator">
+		<property name="paginationModel" ref="paginationModel"></property>
+		<property name="billModel" ref="baseinfoModel"></property>
+	</bean>
+
+
+	<!-- 界面布局组装########################################################### -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="tangramLayoutRoot">
+			<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+				<property name="tabs">
+					<list>
+						<bean class="nc.ui.uif2.tangramlayout.node.HSNode">
+							<property name="left">
+								<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+									<property name="component" ref="queryAreaShell" />
+								</bean>
+							</property>
+							<property name="right">
+								<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+									<property name="component" ref="baseinfoListView"></property>
+								</bean>
+							</property>
+							<property name="dividerLocation" value="0.2f" />
+						</bean>
+						<!-- 列表界面 -->
+						<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+							<property name="up">
+								<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+									<property name="component" ref="cardInfoPnl" />
+								</bean>
+							</property>
+							<property name="down">
+								<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+									<property name="up">
+										<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+											<property name="component" ref="sharepanel" />
+										</bean>
+									</property>
+									<property name="down">
+										<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+											<property name="tabs">
+												<list>
+													<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+														<property name="name">
+															<bean class="nc.ui.uif2.I18nFB">
+																<property name="resDir" value="10140sub" />
+																<property name="defaultValue" value="基本信息" />
+																<property name="resId" value="010140sub0062" />
+															</bean>
+														</property>
+														<property name="component" ref="baseinfoCardView" />
+													</bean>
+												</list>
+											</property>
+											<property name="tabbedPaneFetcher" ref="tabbedPaneFetcher" />
+										</bean>
+									</property>
+									<property name="dividerLocation" value="30f" />
+								</bean>
+							</property>
+							<property name="showMode" value="NoDivider"></property>
+							<property name="dividerLocation" value="30f" />
+						</bean>
+					</list>
+				</property>
+				<property name="showMode" value="CardLayout" />
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="tabbedPaneFetcher" class="nc.ui.bd.pub.DefaultTabbedPaneEditableControl">
+		<property name="model" ref="baseinfoModel" />
+		<property name="targetComponent" ref="baseinfoCardView" />
+	</bean>
+	
+	<bean id="accessoryShowAction" class="nc.ui.bd.attach.AttachAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="prefix"
+				value="uapbd/720dcc7c-ff19-48f4-b9c5-b90906682f45" />
+	</bean>
+				
+	<!-- 卡片界面视图 -->
+	<bean id="cardInfoPnl" class="nc.ui.uif2.tangramlayout.CardLayoutToolbarPanel">
+		<property name="actions">
+			<list>
+				<!-- 浏览按钮 卡片界面共享信息按钮 -->
+				<ref bean="accessoryShowAction" />
+				<bean id="actionsBarSeparator" class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+
+				<bean id="firstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+					<property name="model" ref="baseinfoModel" />
+					<property name="exceptionHandler" ref="exceptionhandler" />
+				</bean>
+				<bean id="preLineAction" class="nc.ui.uif2.actions.PreLineAction">
+					<property name="model" ref="baseinfoModel" />
+					<property name="exceptionHandler" ref="exceptionhandler" />
+				</bean>
+				<bean id="nextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+					<property name="model" ref="baseinfoModel" />
+					<property name="exceptionHandler" ref="exceptionhandler" />
+				</bean>
+				<bean id="lastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+					<property name="model" ref="baseinfoModel" />
+					<property name="exceptionHandler" ref="exceptionhandler" />
+				</bean>
+			</list>
+		</property>
+		<property name="titleAction">
+			<bean id="returnaction" class="nc.ui.bd.attach.UpdateAccAction">
+				<property name="goComponent" ref="baseinfoListView" />
+			</bean>
+		</property>
+		<property name="model" ref="baseinfoModel" />
+		<property name="dataTemplateAction" ref="dataTempletAction"></property>
+	</bean>
+
+	<bean id="dataTempletAction" class="nc.ui.pub.datatemplet.action.DataTempletAction">
+		<property name="templet" ref="dataTemplet"></property>
+	</bean>
+
+	<bean id="dataTemplet" class="nc.ui.pub.datatemplet.DataTemplet"
+		init-method="initUI">
+		<property name="context" ref="context"></property>
+		<property name="convert" ref="dataTempletConvert"></property>
+		<property name="validation" ref="dataTempletValidation"></property>
+		<!-- <property name="blankFilter" ref="blankFilter"></property> -->
+	</bean>
+
+	<bean id="dataTempletConvert" class="nc.ui.pub.datatemplet.DataTempletConvert">
+		<property name="editor" ref="baseinfoCardView"></property>
+		<property name="setValueStrategy" value="one_to_many"></property>
+		<property name="beforeImportHandlers"> 
+		<list> 
+		<ref bean="beforeImportHandler"/> 
+		</list> 
+		</property> 
+		<!-- <property name="afterImportHandlers"> <list> <ref bean="afterImportHandler"/> 
+			</list> </property> -->
+	</bean>
+
+	<bean id="beforeImportHandler" class="nc.ui.bd.pub.datatemplet.SharePanelBeforeImport">
+		<property name="editor" ref="baseinfoCardView"></property>
+		<property name="importModel" ref="baseinfoModel"></property>
+		<property name="context" ref="context"></property>
+		<property name="sharePanel" ref="sharepanel"></property>
+	</bean>
+
+	<bean id="dataTempletValidation" class="nc.ui.pub.datatemplet.DataTempletValidation">
+		<property name="editor" ref="baseinfoCardView"></property>
+	</bean>
+
+	<!-- 界面元素 ########################################################### -->
+	<!-- 组织面板 -->
+	<!-- 查询面板 -->
+	<bean id="queryAreaShell" class="nc.ui.uif2.actions.QueryAreaShell"
+		init-method="initUI">
+		<property name="queryArea">
+			<bean factory-bean="bdqueryActionBaseMediator" factory-method="createQueryArea" />
+		</property>
+	</bean>
+
+	<!-- 共享信息面板 -->
+	<bean id="sharepanel" class="nc.ui.bd.supplier.baseinfo.view.SupplierShareInfoView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="nodekey" value="share"></property>
+		<property name="model" ref="baseinfoModel"></property>
+	</bean>
+
+	<!-- 分页面板 -->
+	<bean id="paginationBar" class="nc.ui.uif2.components.pagination.PaginationBar"
+		init-method="registeCallbak">
+		<property name="paginationModel" ref="paginationModel"></property>
+		<property name="context" ref="context"></property>
+	</bean>
+
+	<!-- 分页model -->
+	<bean id="paginationModel" class="nc.ui.uif2.components.pagination.PaginationModel"
+		init-method="init">
+		<property name="paginationQueryService" ref="service"></property>
+	</bean>
+
+
+	<!-- 各页签编辑器 -->
+	<bean id="baseinfoListView"
+		class="nc.ui.bd.supplier.baseinfo.view.SupplierBaseInfoListView"
+		init-method="initUI">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="pos" value="head"></property>
+		<property name="nodekey" value="base"></property>
+		<property name="multiSelectionEnable" value="true"></property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer"></property>
+				<property name="params">
+					<list>
+						<bean name="listUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.supplier"></property>
+							<property name="pos" value="0"></property>
+							<property name="prefix" value="def"></property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="south" ref="paginationBar" />
+		<property name="north" ref="listInfoPnl" />
+		<property name="bccAction" ref="batchcreateCustAction" />
+	</bean>
+
+	<bean id="listInfoPnl" class="nc.ui.uif2.tangramlayout.CardLayoutToolbarPanel">
+		<property name="model" ref="baseinfoModel" />
+	</bean>
+	<bean id="baseinfoCardView"
+		class="nc.ui.bd.supplier.baseinfo.view.SupplierBaseInfoCardView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="nodekey" value="base"></property>
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer"></property>
+				<property name="params">
+					<list>
+						<bean name="cardUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.supplier"></property>
+							<property name="pos" value="0"></property>
+							<property name="prefix" value="def"></property>
+						</bean>
+						<bean name="cardBodyUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.suplinkman"></property>
+							<property name="pos" value="1"></property>
+							<property name="prefix" value="def"></property>
+							<property name="tabcode" value="suplinkman"></property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="exceptionHandler" ref="exceptionhandler"></property>
+		<property name="shareInfoView" ref="sharepanel"></property>
+		<property name="closingListener" ref="ClosingListener"></property>
+		<property name="bodyActionMap">
+			<map>
+				<entry key="suplinkman">
+					<list>
+						<ref bean="addlineAction" />
+						<ref bean="inserlineAction" />
+						<ref bean="dellineAction" />
+					</list>
+				</entry>
+				<entry key="supcountrytaxes">
+					<list>
+						<bean class="nc.ui.uif2.actions.AddLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="baseinfoCardView" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.InsertLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="baseinfoCardView" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.DelLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="baseinfoCardView" />
+						</bean>
+					</list>
+				</entry>
+				<entry key="supvat">
+					<list>
+						<bean class="nc.ui.uif2.actions.AddLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="baseinfoCardView" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.InsertLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="baseinfoCardView" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.DelLineAction">
+							<property name="model" ref="baseinfoModel" />
+							<property name="cardpanel" ref="baseinfoCardView" />
+						</bean>
+					</list>
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<!-- 列表界面按钮 -->
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+
+	<bean name="list_baseinfoaddaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoAddAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="dataTempletAction" ref="dataTempletAction"></property>
+	</bean>
+
+	<bean id="list_copyaddaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoCopyAddAction">
+		<property name="model">
+			<ref bean="baseinfoModel" />
+		</property>
+		<property name="editor">
+			<ref bean="baseinfoCardView" />
+		</property>
+		<property name="shareEditor" ref="sharepanel"></property>
+	</bean>
+
+	<!-- 过滤Action -->
+	<bean id="filterAction" class="nc.funcnode.ui.action.MenuAction">
+		<property name="code" value="filter"></property>
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="common" />
+				<property name="defaultValue" value="过滤" />
+				<property name="resId" value="UCH069" />
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="showDisableAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="showDisableAction" class="nc.ui.uif2.actions.ShowDisableDataAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="dataManager" ref="modelDataManager" />
+	</bean>
+
+	<bean name="list_baseinfoeditaction" class="nc.ui.bd.cust.baseinfo.action.CustEditAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="resourceCode" value="supplier" />
+		<property name="mdOperateCode" value="edit" />
+	</bean>
+	<bean name="list_baseinfodeleteaction" class="nc.ui.bd.pub.actions.BDAnsyDelAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="resourceCode" value="supplier" />
+		<property name="mdOperateCode" value="delete" />
+		<property name="service" ref="service"></property>
+		<property name="refreshaction" ref="list_refreshAction"></property>
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean name="list_searchAction" class="nc.ui.uif2.actions.QueryAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="queryDelegator">
+			<bean class="nc.ui.bd.pub.query.AutoShowDisableDataQueryDelagator">
+				<property name="context" ref="context" />
+				<property name="action" ref="showDisableAction"></property>
+				<property name="datamanager" ref="modelDataManager"></property>
+				<property name="templateContainer" ref="queryTemplateContainer"></property>
+			</bean>
+		</property>
+		<property name="templateContainer" ref="queryTemplateContainer"></property>
+	</bean>
+
+	<bean name="list_refreshAction" class="nc.ui.uif2.actions.RefreshAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="dataManager" ref="modelDataManager"></property>
+	</bean>
+
+	<bean id="card_refreshAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoCardRefreshAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="service" ref="service"></property>
+	</bean>
+
+	<bean name="list_approveActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="list_approveAction" />
+				<ref bean="list_disapproveAction" />
+			</list>
+		</property>
+	</bean>
+	<bean name="list_approveAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBatchApproveAction">
+		<property name="model">
+			<ref bean="baseinfoModel" />
+		</property>
+	</bean>
+	<bean name="list_disapproveAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBatchUnApproveAction">
+		<property name="model">
+			<ref bean="baseinfoModel" />
+		</property>
+	</bean>
+
+	<bean name="list_entireFreezeActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="freezeAction" />
+				<ref bean="unFreezeAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 分配Action组 -->
+	<bean name="assignActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="AssignAction" />
+				<ref bean="CancelAssignAction" />
+				<ref bean="AssignWizardAction" />
+				<ref bean="AssignStatusAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean name="AssignAction" class="nc.ui.bd.cust.baseinfo.action.CustAssignAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="assignContext" ref="assignContext" />
+		<property name="interceptor" ref="manageModeActionInterceptor" />
+	</bean>
+
+	<bean name="CancelAssignAction" class="nc.ui.bd.cust.baseinfo.action.CustCancelAssignAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="assignContext" ref="assignContext" />
+		<property name="interceptor" ref="manageModeActionInterceptor" />
+	</bean>
+	<bean id="AssignWizardAction" class="nc.ui.bd.cust.baseinfo.action.CustAssignWizardAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="assignContext" ref="assignContext" />
+	</bean>
+	<bean id="AssignStatusAction" class="nc.ui.bd.pub.actions.BDAssignStatusAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="queryService" ref="assignService" />
+		<property name="funnode" value="10140SASTAT" />
+	</bean>
+	<bean id="assignContext" class="nc.ui.bd.pub.assign.AssignContext">
+		<property name="assignService">
+			<bean id="assignService"
+				class="nc.ui.bd.supplier.baseinfo.assign.SupplierAssignService">
+				<property name="context" ref="context" />
+			</bean>
+		</property>
+		<property name="billTempNodekey" value="assign" />
+		<property name="billTemplatePkItemkey" value="pk_supplier" />
+		<property name="logincontext" ref="context" />
+		<property name="orgTypeIDs">
+			<list>
+				<!-- 业务单元 -->
+				<value>BUSINESSUNIT00000000</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- 批改按钮组 -->
+	<bean id="batchupdategroupaction" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code">
+			<value>batchupdate</value>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="batchUpdateAction" />
+				<ref bean="batchUpdateWizardAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 向导批改 -->
+	<bean id="batchUpdateWizardAction" class="nc.ui.bd.pub.actions.BDBatchUpdateWizardAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="mdId" value="720dcc7c-ff19-48f4-b9c5-b90906682f45" />
+		<property name="qryTempNodeKey" value=""></property>
+		<property name="billTempNodekey" value="assign"></property>
+		<property name="billTemplatePkField" value="pk_supplier"></property>
+		<property name="qryService" ref="service"></property>
+		<property name="tabs">
+			<list>
+				<bean class="nc.ui.bd.supplier.config.SupBaseInfoBatchUpdateTab">
+					<property name="supBaseInfoService" ref="service" />
+				</bean>
+				<bean class="nc.ui.bd.supplier.finance.SupFinanceBatchUpdateTab">
+				</bean>
+				<bean class="nc.ui.bd.supplier.stock.SupStockBatchUpdateTab">
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!--批改 -->
+	<bean id="batchUpdateAction" class="nc.ui.bd.cust.baseinfo.action.CustBatchUpdateAction">
+		<property name="wizardAction" ref="batchUpdateWizardAction" />
+	</bean>
+	<!-- 封存 -->
+	<bean name="list_enablegroupaction" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="baseinfoenableaction" />
+				<ref bean="baseinfodisableaction" />
+			</list>
+		</property>
+	</bean>
+	<bean name="baseinfodisableaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoBatchDisableAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="resourceCode" value="supplier" />
+		<property name="mdOperateCode" value="disable" />
+	</bean>
+	<bean name="baseinfoenableaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoBatchEnableAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="resourceCode" value="supplier" />
+		<property name="mdOperateCode" value="enable" />
+	</bean>
+
+	<bean name="browseByOrgAction" class="nc.ui.bd.pub.query.OrgBrowseAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="funnode" value="10140SOB" />
+	</bean>
+	<bean id="orgvisitAction" class="nc.ui.bd.pub.assign.multiorg.MultiOrgAssignVisitAction">
+		<property name="code" value="suporgvisitaction" />
+		<property name="model" ref="baseinfoModel" />
+		<property name="funnode" value="10140SORG" />
+	</bean>
+	<bean name="associateSupPfAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseAssociatePfAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="approveModelName" value="approvePfModel" />
+		<property name="approveXmlFilePath"
+			value="nc/ui/bd/supplier/config/supplier_associate_pf.xml" />
+	</bean>
+
+	<bean name="accessoryAction" class="nc.ui.bd.pub.actions.AccessoryAction">
+	    <property name="windowListener" ref="accessoryShowAction" />
+		<property name="model" ref="baseinfoModel" />
+		<property name="metaDataID" value="720dcc7c-ff19-48f4-b9c5-b90906682f45" />
+	</bean>
+
+	<bean name="list_printActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code">
+			<value>printgroup</value>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="list_templatePrint" />
+				<ref bean="list_templatePreview" />
+				<ref bean="list_outoutAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="list_templatePreview"
+		class="nc.ui.bd.pub.actions.print.BDTemplatePaginationPreviewAction">
+		<property name="printAction" ref="list_templatePrint" />
+	</bean>
+	<bean id="list_templatePrint"
+		class="nc.ui.bd.pub.actions.print.BDTemplatePaginationPrintAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="nodeKey" value="supplierlist"></property>
+		<property name="paginationModel" ref="paginationModel"></property>
+		<property name="printFactory" ref="printFactory"></property>
+		<property name="printDlgParentConatiner" ref="baseinfoListView"></property>
+	</bean>
+	<bean id="list_outoutAction" class="nc.ui.bd.pub.actions.print.BDPaginationOutputAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="nodeKey" value="supplierlist"></property>
+		<property name="paginationModel" ref="paginationModel"></property>
+		<property name="printFactory" ref="printFactory"></property>
+		<property name="printDlgParentConatiner" ref="baseinfoListView"></property>
+	</bean>
+
+	<bean id="printFactory"
+		class="nc.ui.bd.pub.actions.print.DefaultTemplatePagePrintFactory">
+		<property name="mdId" value="720dcc7c-ff19-48f4-b9c5-b90906682f45">
+		</property>
+	</bean>
+
+
+	<bean name="card_printActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code">
+			<value>printgroup</value>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="card_templatePrint" />
+				<ref bean="card_templatePreview" />
+				<ref bean="card_outputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="card_templatePreview" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="nodeKey" value="suppliercard"></property>
+		<property name="datasource" ref="singleDataSource"></property>
+		<property name="printDlgParentConatiner" ref="baseinfoCardView"></property>
+	</bean>
+	<bean id="card_templatePrint" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="nodeKey" value="suppliercard"></property>
+		<property name="datasource" ref="singleDataSource"></property>
+		<property name="printDlgParentConatiner" ref="baseinfoCardView"></property>
+	</bean>
+	<bean id="card_outputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="nodeKey" value="suppliercard"></property>
+		<property name="datasource" ref="singleDataSource"></property>
+		<property name="printDlgParentConatiner" ref="baseinfoCardView"></property>
+	</bean>
+	<bean id="singleDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="baseinfoModel"></property>
+	</bean>
+
+	<bean id="assistantFuncMenu" class="nc.funcnode.ui.action.MenuAction">
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="common" />
+				<property name="defaultValue" value="辅助功能" />
+				<property name="resId" value="UC001-0000137" />
+			</bean>
+		</property>
+		<property name="code" value="AssistantFuncMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="createCustAction" />
+				<ref bean="associCustAction" />
+				<ref bean="batchcreateCustAction"/>
+				<ref bean="accessoryAction" />
+			</list>
+		</property>
+	</bean>
+	<bean id="assistantFuncMenu_card" class="nc.funcnode.ui.action.MenuAction">
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="common" />
+				<property name="defaultValue" value="辅助功能" />
+				<property name="resId" value="UC001-0000137" />
+			</bean>
+		</property>
+		<property name="code" value="AssistantFuncMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="createCustAction" />
+				<ref bean="associCustAction" />
+				<ref bean="accessoryAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 卡片界面 基本信息页签按钮 -->
+	<bean name="card_baseinfosaveaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoSaveAction">
+		<property name="model">
+			<ref bean="baseinfoModel" />
+		</property>
+		<property name="editor">
+			<ref bean="baseinfoCardView" />
+		</property>
+		<property name="validationService">
+			<ref bean="saveValidation" />
+		</property>
+		<property name="interceptor" ref="compositeActionInterceptor" />
+		<property name="service" ref="service" />
+	</bean>
+	<bean name="card_saveaddAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoSaveAddAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="editor" ref="baseinfoCardView"></property>
+		<property name="saveAction" ref="card_baseinfosaveaction"></property>
+		<property name="addAction" ref="list_baseinfoaddaction"></property>
+		<property name="validationService" ref="saveValidation"></property>
+	</bean>
+	<!-- 拦截组合器 -->
+	<bean id="compositeActionInterceptor" class="nc.ui.bd.pub.actions.CompositeActionInterceptor">
+		<property name="interceptors">
+			<list>
+				<ref bean="manageModeActionInterceptor" />
+				<ref bean="bdSaveActionInterceptor" />
+			</list>
+		</property>
+	</bean>
+	<!-- 验证公式拦截器 -->
+	<bean id="bdSaveActionInterceptor" class="nc.ui.bd.pub.actions.BDSaveActionInterceptor">
+		<property name="editor" ref="baseinfoCardView" />
+	</bean>
+	<!-- 管控模式拦截器 -->
+	<bean id="manageModeActionInterceptor" class="nc.ui.bd.pub.actions.ManageModeActionInterceptor">
+		<property name="model" ref="baseinfoModel" />
+		<property name="editor" ref="baseinfoCardView" />
+	</bean>
+	<bean name="validation"
+		class="nc.ui.bd.supplier.baseinfo.action.SupplierValidationService">
+	</bean>
+	<bean name="saveValidation" class="nc.bs.uif2.validation.DefaultValidationService">
+		<property name="validators">
+			<list>
+				<bean
+					class="nc.bs.bd.supplier.baseinfo.validator.SupplierNotNullValidator">
+				</bean>
+			</list>
+		</property>
+	</bean>
+	<bean name="card_baseinfocancelaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoCancelAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="editor" ref="baseinfoCardView"></property>
+	</bean>
+
+	<!-- 卡片核准按钮组 -->
+	<bean name="card_approveActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="card_approveaction" />
+				<ref bean="card_unapproveaction" />
+			</list>
+		</property>
+	</bean>
+	<bean name="card_approveaction" class="nc.ui.bd.supplier.baseinfo.action.SupApproveAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="code" value="Approve" />
+	</bean>
+	<bean name="card_unapproveaction" class="nc.ui.bd.supplier.baseinfo.action.SupUnApproveAction">
+		<property name="model">
+			<ref bean="baseinfoModel" />
+		</property>
+		<property name="code" value="UnApprove" />
+	</bean>
+
+	<!-- 卡片冻结按钮组 -->
+	<bean name="card_entireFreezeActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="freezeAction" />
+				<ref bean="unFreezeAction" />
+			</list>
+		</property>
+	</bean>
+	<bean name="freezeAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoFreezeAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="interceptor" ref="interceptor"></property>
+	</bean>
+	<bean name="unFreezeAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoUnFreezeAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="interceptor" ref="interceptor"></property>
+	</bean>
+	<bean name="interceptor" class="nc.ui.bd.pub.actions.ManageModeActionInterceptor">
+		<property name="model" ref="baseinfoModel"></property>
+	</bean>
+	<!-- 卡片封存按钮组 -->
+	<bean name="card_enableActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="card_enableaction" />
+				<ref bean="card_disableaction" />
+			</list>
+		</property>
+	</bean>
+	<bean name="card_disableaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoDisableAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="resourceCode" value="supplier" />
+		<property name="mdOperateCode" value="disable" />
+	</bean>
+	<bean name="card_enableaction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseInfoEnableAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="resourceCode" value="supplier" />
+		<property name="mdOperateCode" value="enable" />
+	</bean>
+	<bean id="bankaccaction" class="nc.ui.bd.cust.baseinfo.action.BankaccAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="funnode" value="10140SBA"></property>
+		<property name="refreshSingleAction" ref="card_refreshAction"></property>
+	</bean>
+	<bean id="supaddressAction" class="nc.ui.bd.cust.baseinfo.action.CustAddressAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="funnode" value="10140SAD"></property>
+		<property name="refreshSingleAction" ref="card_refreshAction"></property>
+	</bean>
+	<!-- 升级按钮 -->
+	<bean id="upgradeAction" class="nc.ui.bd.supupgrade.action.SupUpgradeAction">
+		<property name="model" ref="baseinfoModel" />
+	</bean>
+	<!-- 生成客户按钮 -->
+	<bean id="createCustAction" class="nc.ui.bd.supplier.baseinfo.action.CreateCustAction">
+		<property name="supplierModel" ref="baseinfoModel" />
+		<property name="createCustModel" ref="createViewModel"></property>
+		<property name="exceptionHandler" ref="exceptionhandler" />
+	</bean>
+	<!-- 关联客户按钮 -->
+	<bean id="associCustAction" class="nc.ui.bd.supplier.baseinfo.action.AssociateCustAction">
+		<property name="supplierModel" ref="baseinfoModel"></property>
+		<property name="associateModel" ref="associCustModel"></property>
+		<property name="associCustView" ref="associCustView"></property>
+		<property name="saveAction" ref="associCustSaveAction"></property>
+		<property name="cancelAction" ref="associCustCancelAction"></property>
+		<property name="exceptionHandler" ref="exceptionhandler"></property>
+	</bean>
+	<!-- 关联客户界面 -->
+	<bean id="associCustView" class="nc.ui.bd.supplier.baseinfo.view.SupAssociateCustEditor"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="nodekey" value="associcust"></property>
+		<property name="model" ref="associCustModel"></property>
+		<property name="baseModel" ref="baseinfoModel"></property>
+	</bean>
+	<bean id="associateCustDlgBaseMediator" class="nc.ui.bd.pub.view.BDEditorOkCancelDialogMediator">
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140sub" />
+				<property name="defaultValue" value="关联客户" />
+				<property name="resId" value="110140sub0012" />
+			</bean>
+		</property>
+		<property name="model" ref="associCustModel" />
+		<property name="editor" ref="associCustView" />
+		<property name="saveAction" ref="associCustSaveAction" />
+		<property name="cancelAction">
+			<bean class="nc.ui.uif2.actions.CancelAction">
+				<property name="model" ref="associCustModel" />
+				<property name="editor" ref="associCustView" />
+			</bean>
+		</property>
+		<property name="width" value="350" />
+		<property name="height" value="400" />
+	</bean>
+
+	<bean id="associCustModel" class="nc.ui.uif2.model.BillManageModel">
+		<property name="context" ref="context"></property>
+	</bean>
+
+	<bean id="associCustSaveAction"
+		class="nc.ui.bd.supplier.baseinfo.action.AssociateCustSaveAction">
+		<property name="supBaseinfoModel" ref="baseinfoModel"></property>
+		<property name="associCustView" ref="associCustView"></property>
+		<property name="model" ref="associCustModel"></property>
+	</bean>
+
+	<bean id="associCustCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="model" ref="associCustModel"></property>
+		<property name="editor" ref="associCustView"></property>
+	</bean>
+
+	<!-- 生成客户界面 -->
+	<bean id="createVCustDlgBaseMediator" class="nc.ui.bd.pub.view.BDEditorOkCancelDialogMediator">
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140sub" />
+				<property name="defaultValue" value="生成客户" />
+				<property name="resId" value="110140sub0013" />
+			</bean>
+		</property>
+		<property name="model" ref="createViewModel"></property>
+		<property name="editor" ref="createCustView"></property>
+		<property name="saveAction" ref="createCustSaveAction"></property>
+		<property name="cancelAction" ref="createCustCancelAction"></property>
+		<property name="width" value="350"></property>
+		<property name="height" value="400"></property>
+	</bean>
+
+	<bean id="createCustView" class="nc.ui.bd.supplier.baseinfo.view.SupCreateCustView"
+		init-method="initUI">
+		<property name="nodekey" value="createCust"></property>
+		<property name="model" ref="createViewModel" />
+		<property name="baseModel" ref="baseinfoModel"></property>
+		<property name="templateContainer" ref="templateContainer"></property>
+	</bean>
+
+	<bean id="createViewModel" class="nc.ui.uif2.model.BillManageModel">
+		<property name="businessObjectAdapterFactory" ref="boadapterfacotry" />
+		<property name="context" ref="context"></property>
+	</bean>
+
+	<bean id="createCustSaveAction" class="nc.ui.bd.supplier.baseinfo.action.CreateCustSaveAction">
+		<property name="editor" ref="createCustView" />
+		<property name="resourceSupModel" ref="baseinfoModel" />
+		<property name="model" ref="createViewModel"></property>
+		<property name="validationService">
+			<bean class="nc.ui.bd.supplier.baseinfo.model.SupplierValidationService"></bean>
+		</property>
+	</bean>
+	<bean id="createCustCancelAction"
+		class="nc.ui.bd.supplier.baseinfo.action.CreateCustCancelAction">
+		<property name="model" ref="createViewModel" />
+		<property name="editor" ref="createCustView" />
+	</bean>
+
+	<!-- 卡片列表切换 -->
+	<bean id="switchBaseMediator" class="nc.ui.uif2.actions.SwitchAction"
+		init-method="init">
+		<property name="context" ref="context" />
+		<property name="component1" ref="baseinfoListView" />
+		<property name="component2" ref="baseinfoCardView" />
+	</bean>
+
+	<!-- 卡片界面 基本信息 联系人子页签按钮 -->
+	<bean id="addlineAction"
+		class="nc.ui.bd.supplier.baseinfo.action.SupBaseLinkmanAddLineAction">
+		<property name="model">
+			<ref bean="baseinfoModel" />
+		</property>
+		<property name="cardpanel">
+			<ref bean="baseinfoCardView" />
+		</property>
+	</bean>
+
+
+	<bean id="inserlineAction" class="nc.ui.uif2.actions.InsertLineAction">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="cardpanel" ref="baseinfoCardView"></property>
+	</bean>
+
+	<bean id="dellineAction" class="nc.ui.uif2.actions.DelLineAction">
+		<property name="model">
+			<ref bean="baseinfoModel" />
+		</property>
+		<property name="cardpanel">
+			<ref bean="baseinfoCardView" />
+		</property>
+	</bean>
+
+	<!-- 拦截器 -->
+	<bean id="exceptionhandler" class="nc.ui.uif2.DefaultExceptionHanler">
+		<property name="context">
+			<ref bean="context" />
+		</property>
+	</bean>
+
+	<bean id="ClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="baseinfoModel"></property>
+		<property name="saveaction" ref="card_baseinfosaveaction"></property>
+		<property name="cancelaction" ref="card_baseinfocancelaction"></property>
+	</bean>
+	<!-- 行业扩展功能 -->
+
+	<!-- 行业扩展上下文 -->
+	<bean id="baseExtendContext" class="nc.ui.bd.pub.extend.ExtendContext">
+	</bean>
+
+	<!-- 行业扩展UI统一处理器，第一个属性为档案配置文件中的container，第二个属性为行业 扩展上下文，第三个属性为目标组件(即行业要扩展到基本档案界面上哪个组件的旁边) -->
+	<bean id="baseExtendUIPrcBaseMediator" class="nc.ui.bd.pub.extend.ExtendOrgBaseUIProcessMediator"
+		init-method="initUI">
+		<property name="baseEditor" ref="baseinfoCardView" />
+		<property name="extendContext" ref="baseExtendContext" />
+		<property name="baseTabName">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140cub" />
+				<property name="defaultValue" value="基本信息" />
+				<property name="resId" value="010140cub0037" />
+			</bean>
+		</property>
+	</bean>
+	<!-- 查询模板组织权限过滤器 -->
+	<bean id="bdqueryActionBaseMediator" class="nc.ui.bd.pub.tools.BDPubQueryActionMediator"
+		init-method="process">
+		<property name="queryAction" ref="list_searchAction" />
+		<property name="orgFieldCode">
+			<list>
+				<value>pk_org</value>
+			</list>
+		</property>
+	</bean>
+	<!-- 批量生成客户 -->
+	<bean id="batchcreateCustAction" class="nc.ui.bd.supplier.baseinfo.action.BatchCreateCustAction">
+		<property name="supplierModel" ref="baseinfoModel" />
+		<property name="dataManager" ref="modelDataManager"></property>
+	</bean>
+	
+	<bean id="mdmAction" class="nc.ui.archives.action.SupplierMdmAction">
+	 	<property name="model"><ref bean="baseinfoModel"/></property>
+	</bean>
+</beans>

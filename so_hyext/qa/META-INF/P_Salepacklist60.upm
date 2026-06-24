@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding='gb2312'?>
+<module name="so">
+  <public>
+	<component remote="true" singleton="true"  tx="CMT">
+	  <interface>nc.itf.so.ISalepacklistMaintain</interface>
+	  <implementation>nc.impl.so.SalepacklistMaintainImpl</implementation>
+	</component>
+
+  </public> 
+</module> 

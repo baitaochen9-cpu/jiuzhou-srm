@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module priority="1025">
+    <aops>
+       <!--设备入库单 -->
+       <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m4401.IAssetInMaintain"/> 
+       <!--其他入库单 -->
+       <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m4a.IGeneralInMaintain"/>
+       <!--库存借入单 -->
+       <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m49.IBorrowInMaintain"/> 
+       <!-- 生产报废入库单维护-->
+       <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m4x.IDiscardInMaintain"/> 
+	   <!--产成品入库单维护-->
+	   <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m46.IProductInMaitain"/>
+	   <!--采购入库单维护-->
+	   <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m45.self.IPurchaseInMaintain"/>  
+	   <!--借出还会单维护-->
+	   <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m4b.IReturnInMaintain"/>  
+	   <!--委外加工入库单维护-->
+	   <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m47.ISubcontInMaintain"/>  
+	   <!--调拨入库单维护-->
+	   <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m4e.ITransInMaintain"/>  
+	    <!--形态转换维护-->
+	   <aspect class="nc.bs.aop.log.BusilogAspect"  component="nc.itf.ic.m4n.ITransformMaitain"/>  
+    </aops>
+</module>
+
+

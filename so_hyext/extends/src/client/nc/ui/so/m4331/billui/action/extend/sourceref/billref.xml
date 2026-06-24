@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<bean id="refContext" class="nc.ui.pubapp.billref.src.RefContext">
+	</bean>
+
+	<bean id="refBillModel"
+		class="nc.ui.pubapp.billref.src.RefBillModel">
+	</bean>
+
+	<bean id="addAction"
+		class="nc.ui.pubapp.billref.src.action.AddAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="delAction"
+		class="nc.ui.pubapp.billref.src.action.DelAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="queryGroupAction" class="nc.ui.pubapp.billref.src.action.SuperActionGroup">
+		<property name="groupAction" ref="queryActions" />
+	</bean>
+
+
+	<bean id="queryActions" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<bean class="nc.ui.pubapp.billref.src.action.QueryActionList">
+				<property name="queryAction" ref="queryAction"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="queryAction"
+		class="nc.ui.pubapp.billref.src.action.QueryAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="refreshAction"
+		class="nc.ui.pubapp.billref.src.action.RefreshAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="switchViewAction"
+		class="nc.ui.pubapp.billref.src.action.SwitchViewAction">
+<!--		<property name="refContext" ref="refContext"></property>-->
+		<property name="refBillModel" ref="refBillModel"></property>		
+	</bean>
+<!--	<bean id="refQueryAction"-->
+<!--		class="nc.ui.pubapp.billref.src.action.RefQueryAction">-->
+<!--		<property name="refContext" ref="refContext"></property>-->
+<!--	</bean>-->
+<!--	<bean id="switchViewAction"-->
+<!--		class="nc.ui.pubapp.billref.src.action.SwitchViewAction">-->
+<!--		<property name="refContext" ref="refContext"></property>-->
+<!--	</bean>-->
+	<bean id="showOnhandAction"
+		class="nc.ui.pubapp.billref.src.action.ShowOnhandAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="showSelTableAction"
+		class="nc.ui.pubapp.billref.src.action.ShowSelTableAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+
+
+	<bean id="okAction"
+		class="nc.ui.pubapp.billref.src.action.OKAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="cancelAction"
+		class="nc.ui.pubapp.billref.src.action.CancelAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="addLineAction"
+		class="nc.ui.so.m4331.billui.billref.src.action.AddLineAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="delLineAction"
+		class="nc.ui.so.m4331.billui.billref.src.action.DelLineAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+
+	<bean id="selAllAction"
+		class="nc.ui.pubapp.billref.src.action.SelAllAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="unSelAllAction"
+		class="nc.ui.pubapp.billref.src.action.UnSelAllAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="sepAction"
+		class="nc.ui.pubapp.billref.src.action.SepAction">
+	</bean>
+	<bean id="selBillAction"
+		class="nc.ui.pubapp.billref.src.action.SelBillAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="unSelBillAction"
+		class="nc.ui.pubapp.billref.src.action.UnSelBillAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+
+
+	<bean id="selCmdPanel"
+		class="nc.ui.pubapp.billref.src.view.ActionPanel">
+		<property name="refContext" ref="refContext"></property>
+		<property name="refBillModel" ref="refBillModel"></property>
+		<property name="hgap" value="20"></property>
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="delAction" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="mainCmdPanel"
+		class="nc.ui.pubapp.billref.src.view.ActionPanel">
+		<property name="refContext" ref="refContext"></property>
+		<property name="refBillModel" ref="refBillModel"></property>
+		<property name="align" value="2"></property>
+		<property name="hgap" value="10"></property>
+		<property name="menuBt" value="false"/>
+		<property name="actions">
+			<list>
+				<ref bean="addLineAction" />
+				<ref bean="delLineAction" />
+				<ref bean="okAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="menuPanel"
+		class="nc.ui.pubapp.billref.src.view.ActionPanel">
+		<property name="refContext" ref="refContext"></property>
+		<property name="refBillModel" ref="refBillModel"></property>
+		<property name="align" value="0"></property>
+		<property name="actions">
+			<list>
+				<ref bean="queryGroupAction" />
+<!--				<ref bean="refQueryAction" />-->
+				<ref bean="refreshAction" />
+<!--				<ref bean="switchViewAction" />-->
+<!--				<ref bean="showOnhandAction" />-->
+			<!--		<ref bean="showSelTableAction" />-->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="tabActionPanel"
+		class="nc.ui.pubapp.billref.src.view.ActionPanel">
+		<property name="refContext" ref="refContext"></property>
+		<property name="refBillModel" ref="refBillModel"></property>
+		<property name="align" value="0"></property>
+		<property name="actions">
+			<list>
+				<ref bean="switchViewAction" />
+<!--				<ref bean="refQueryAction" />-->
+<!--				<ref bean="switchViewAction" />-->
+<!--				<ref bean="showOnhandAction" />-->
+			<!--		<ref bean="showSelTableAction" />-->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="refOnHandPanel"
+		class="nc.ui.pubapp.billref.src.view.OnhandPanel"
+		init-method="initUI">
+	</bean>
+
+	<bean id="refOneOnHandPanel"
+		class="nc.ui.pubapp.billref.src.view.OnhandPanel"
+		init-method="initUI">
+	</bean>
+
+	<bean id="refListPanel"
+		class="nc.ui.so.m4331.billui.action.extend.sourceref.BillRefListPanel">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+
+	<bean id="refSingleTableListPanel"
+		class="nc.ui.pubapp.billref.src.view.RefSingleTableListPanel"
+		>
+		<property name="refContext" ref="refContext"></property>
+		<property name="bodyMenuActions">
+			<list>
+				<ref bean="selAllAction" />
+				<ref bean="unSelAllAction" />
+				<ref bean="sepAction" />
+				<ref bean="selBillAction" />
+				<ref bean="unSelBillAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="selSingleTableListPanel"
+		class="nc.ui.pubapp.billref.src.view.RefSingleTableListPanel"
+		>
+		<property name="refContext" ref="refContext"></property>
+		<property name="selectedPanel" value="true"></property>	
+		<property name="bodyMenuActions">
+			<list>
+				<ref bean="selAllAction" />
+				<ref bean="unSelAllAction" />
+				<ref bean="sepAction" />
+				<ref bean="selBillAction" />
+				<ref bean="unSelBillAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="refListView" class="nc.ui.pubapp.billref.src.view.RefView"
+		init-method="initUI">
+		<property name="refContext" ref="refContext"></property>
+		<property name="refListPanel" ref="refListPanel"></property>
+		<property name="onHandPanel" ref="refOnHandPanel"></property>
+		<property name="rootNode">
+			<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+				<property name="up">
+					<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+						<property name="name" value="refListPanel"></property>
+						<property name="component" ref="refListPanel"></property>
+					</bean>
+				</property>
+				<property name="down">
+					<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+						<property name="name" value="onHandPanel"></property>
+						<property name="component"
+							ref="refOnHandPanel">
+						</property>
+					</bean>
+				</property>
+				<property name="dividerLocation" value="0.65"></property>
+			</bean>
+		</property>
+	</bean>
+
+	<bean id="refSingleListView"
+		class="nc.ui.pubapp.billref.src.view.RefSingleTableListView">
+		<property name="refContext" ref="refContext"></property>
+		<property name="refSingleTableListPanel"
+			ref="refSingleTableListPanel">
+		</property>
+		<property name="selCmdPanel" ref="selCmdPanel"></property>
+		<property name="selSingleTableListPanel"
+			ref="selSingleTableListPanel">
+		</property>
+		<property name="onHandPanel" ref="refOneOnHandPanel"></property>
+		
+	</bean>
+
+	<bean id="refBill" class="nc.ui.so.m4331.billui.action.extend.sourceref.Bill4331RefBillUI">
+		<property name="refContext" ref="refContext"></property>
+		<property name="queryAction" ref="queryAction"></property>
+		<property name="refBillModel" ref="refBillModel"></property>
+		<property name="refListView" ref="refListView"></property>
+		<property name="refSingleListView" ref="refSingleListView"></property>
+		<property name="mainCmdPanel" ref="mainCmdPanel"></property>
+		<property name="menuPanel" ref="menuPanel"></property>
+	</bean>
+
+</beans>

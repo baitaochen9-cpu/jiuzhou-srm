@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext" />
+
+	<!-- 模型部分配置########################################################### -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+	</bean>
+
+	<!-- 库存前台环境变量 -->
+	<bean id="icUIContext" class="nc.ui.ic.pub.env.ICUIContext">
+		<constructor-arg>
+			<ref bean="context" />
+		</constructor-arg>
+	</bean>
+
+	<bean id="boadatorfactory" class="nc.vo.bd.meta.BDObjectAdpaterFactory" />
+
+	<!-- 应用服务类，负责进行模型操作的处理 -->
+	<bean id="manageModelService" class="nc.ui.ic.m4460.model.StateAdjustModelService" />
+	<!-- 管理应用模型 -->
+	<bean id="icBizModel" class="nc.ui.ic.pub.model.ICBizModel">
+		<property name="service" ref="manageModelService" />
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="icUIContext" ref="icUIContext" />
+		<property name="context" ref="context" />
+		<property name="billType" value="4460" />
+	</bean>
+
+	<!-- 管理应用模型 -->
+	<bean id="model" class="nc.ui.ic.m4460.model.StateAdjustModel">
+		<property name="service" ref="manageModelService" />
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="context" ref="context" />
+		<property name="billType" value="4460" />
+	</bean>
+
+
+	<!-- 数据模型管理器，主要负责各种方式的模型初始化 -->
+	<bean id="modelDataManager" class="nc.ui.ic.pub.model.ICBizDataManager">
+		<property name="model" ref="model" />
+		<property name="service" ref="manageModelService" />
+	</bean>
+
+
+	<bean id="userdefitemContainer" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="rulecode" value="materialassistant" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 自由项组件的配置 -->
+	<bean id="marAsstPreparator"
+		class="nc.ui.pubapp.uif2app.view.material.assistant.MarAsstPreparator">
+		<property name="model" ref="model" />
+		<property name="container" ref="userdefitemContainer" />
+		<property name="prefix" value="vfree" />
+		<property name="materialField" value="cmaterialvid" />
+		<property name="storeStateField" value="cstateid" />
+		<property name="projectField" value="cprojectid" />
+		<property name="supplierField" value="cvendorid" />
+		<property name="productorField" value="cproductorid" />
+		<property name="signatureField" value="cffileid" />
+	</bean>
+
+	<!-- 自由项、自定义项组件的列表配置 -->
+	<bean id="userdefAndMarAsstListPreparator" class="nc.ui.pubapp.uif2app.view.CompositeBillListDataPrepare">
+		<property name="billListDataPrepares">
+			<list>
+				<ref bean="marAsstPreparator" />
+				<ref bean="defItemPreparator" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 自定义项组件的列表配置 -->
+	<bean id="defItemPreparator" class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+		<property name="container" ref="userdefitemContainer1" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+					<property name="mdfullname" value="ic.StateAdjustVO" />
+					<property name="pos" value="0" />
+					<property name="prefix" value="vdef" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="userdefitemContainer1" class="nc.ui.uif2.userdefitem.UserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="ic.StateAdjustVO" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 列表控件的取值策略 -->
+	<bean id="componentValueManager"
+		class="nc.ui.uif2.editor.value.BillCardPanelMetaDataValueAdapter" />
+
+	<bean id="billTemplateMender"
+		class="nc.ui.pubapp.uif2app.funcnode.trantype.TrantypeBillTemplateMender">
+		<constructor-arg>
+			<ref bean="context" />
+		</constructor-arg>
+	</bean>
+
+	<!-- 源单据类型保存在单据的某个字段 -->
+	<!-- 来源 -->
+	<bean id="vadjustBillMediator"
+		class="nc.ui.pubapp.uif2app.linkquery.LinkQueryHyperlinkMediator">
+		<property name="model" ref="model" />
+		<property name="srcBillIdField" value="cadjustbillid" />
+		<property name="srcBillNOField" value="cadjustbillcode" />
+		<!-- 保存源单据类型的字段名 -->
+		<property name="srcBillTypeField" value="cadjustbilltype" />
+		<!-- 保存源单据类型的字段所在位置，0：表头；1：表体 -->
+		<property name="srcBillTypeFieldPos" value="0" />
+		<!-- 保存源单据类型的字段所在位置，0：表头；1：表体 -->
+		<property name="srcBillNOFieldPos" value="0" />
+	</bean>
+
+	<!-- 列表控件 -->
+	<bean id="list" class="nc.ui.ic.m4460.view.StateAdjustBillListView"
+		init-method="initUI">
+		<property name="model" ref="model" />
+		<property name="multiSelectionEnable" value="true" />
+		<property name="multiSelectionMode" value="1" />
+		<property name="templateContainer" ref="templateContainer"></property>
+		<property name="userdefitemListPreparator" ref="userdefAndMarAsstListPreparator" />
+	</bean>
+
+	<!-- 界面布局总装########################################################### -->
+	<bean id="container" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<bean id="down" class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="list"></property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="stateAdjustAction" />
+				<ref bean="separatorAction" />
+				<!-- <ref bean="selectAllAction" /> <ref bean="unSelectAction" /> <ref 
+					bean="separatorAction" /> -->
+				<ref bean="hisQueryAction" />
+				<ref bean="separatorAction" />
+				<ref bean="printMngAction" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="tidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="tidaiping1"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="labelPrint"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<!-- <ref bean="unlabelPrint"/> --> 
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="stateAdjustSaveAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="model" />
+	</bean>
+
+	<!-- 批次参照 -->
+	<bean id="batchtemplateContainer" class="nc.ui.pubapp.uif2app.view.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+		<property name="funcode" value="40010815" />
+		<property name="pk_group" value="@@@@" />
+		<property name="nodeKeies">
+			<list>
+				<value>batchscm</value>
+			</list>
+		</property>
+		<property name="billTemplateMender" ref="billTemplateMender" />
+	</bean>
+
+	<bean id="scmBatchRef" class="nc.ui.scmf.ic.batchcode.ref.ScmBatchRef">
+		<property name="refDlg">
+			<bean class="nc.ui.scmf.ic.batchcode.ref.ScmBatchDlg">
+				<constructor-arg>
+					<bean factory-bean="scmBatchRef" factory-method="getParent" />
+				</constructor-arg>
+				<constructor-arg>
+					<ref bean="batchtemplateContainer" />
+				</constructor-arg>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 库存调整单查询对话框初始化处理 -->
+	<bean id="qryDLGInitializer" class="nc.ui.ic.m4460.deal.StateadjustDLGWrapper">
+		<!-- <property name="scmBatchRef" ref="scmBatchRef"/> -->
+	</bean>
+	<!-- 库存调整单查询对话框初始化处理 -->
+	<bean id="onhandQryDLGInitializer" class="nc.ui.ic.m4460.deal.StateadjustOnhandDLGWrapper">
+		<property name="scmBatchRef" ref="scmBatchRef" />
+	</bean>
+
+	<!-- 分隔 -->
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+	<!-- 刷新动作 -->
+	<bean id="refreshAction" class="nc.ui.ic.m4460.action.StateAdjustRefreshAction">
+		<property name="model" ref="model" />
+		<property name="queryAction" ref="queryAction" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="listView" ref="list" />
+	</bean>
+
+	<!-- 状态调整 -->
+	<bean id="stateAdjustAction" class="nc.ui.ic.m4460.action.StateAdjustAction">
+		<property name="model" ref="model" />
+		<property name="list" ref="list" />
+		<!--property name="dataManager" ref="modelDataManager" / -->
+	</bean>
+
+	<!-- 全选 -->
+	<bean id="selectAllAction" class="nc.ui.ic.special.action.SelectAllAction">
+		<property name="model" ref="model" />
+		<property name="list" ref="list" />
+	</bean>
+
+	<!-- 全消 -->
+	<bean id="unSelectAction" class="nc.ui.ic.special.action.UnSelectAction">
+		<property name="model" ref="model" />
+		<property name="list" ref="list" />
+	</bean>
+
+	<!-- 确认 保存 -->
+	<bean id="stateAdjustSaveAction" class="nc.ui.ic.m4460.action.StateAdjustSaveAction">
+		<property name="list" ref="list" />
+		<property name="queryAction" ref="queryAction" />
+		<property name="model" ref="model" />
+	</bean>
+
+	<!-- 取消动作 -->
+	<bean id="cancelAction" class="nc.ui.ic.m4460.action.StateAdjustCancelAction">
+		<property name="model" ref="model" />
+		<property name="queryAction" ref="queryAction" />
+	</bean>
+
+
+	<bean id="billQryDLGInitializer" class="nc.ui.ic.m4460.deal.StateadjustBillDLGWrapper">
+	</bean>
+
+	<!-- 查询 -->
+	<bean id="queryAction" class="nc.ui.ic.m4460.action.StateAdjustOnhandQueryAction">
+		<property name="model" ref="model" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="qryCondDLGInitializer" ref="onhandQryDLGInitializer"></property>
+		<property name="list" ref="list" />
+		<property name="hasQueryArea" value="false" />
+		<property name="nodeKey" value="4008100901" />
+	</bean>
+
+	<!-- 调整记录查询 -->
+	<bean id="hisQueryAction" class="nc.ui.ic.m4460.action.StateAdjustBillQueryAction">
+		<property name="model" ref="model" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="hasQueryArea" value="false" />
+		<property name="qryCondDLGInitializer" ref="billQryDLGInitializer"></property>
+	</bean>
+
+	<!-- 打印菜单 -->
+	<bean id="printMngAction" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code">
+			<value>printMngAction</value>
+		</property>
+		<property name="name">
+			<value>打印</value>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="templatePrintAction" />
+				<ref bean="templatePreviewAction" />
+				<ref bean="outputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="printProcessor" class="nc.ui.ic.m4460.deal.StateAdjustPrintProcessor">
+		<property name="model" ref="model" />
+	</bean>
+
+	<!-- 输出 -->
+	<bean id="outputAction" class="nc.ui.ic.m4460.action.StateAdjustOutputAction">
+		<property name="model" ref="model" />
+		<property name="parent" ref="list" />
+		<property name="listView" ref="list" />
+	</bean>
+	<!-- 模板预览 -->
+	<bean id="templatePreviewAction" class="nc.ui.ic.m4460.action.StateAdjustPreviewAction">
+		<property name="preview" value="true" />
+		<property name="model" ref="model" />
+		<property name="listView" ref="list" />
+		<property name="printProcessor" ref="printProcessor" />
+	</bean>
+
+	<!-- 模板打印 -->
+	<bean id="templatePrintAction" class="nc.ui.ic.m4460.action.StateAdjustPrintAction">
+		<property name="preview" value="false" />
+		<property name="model" ref="model" />
+		<property name="listView" ref="list" />
+		<property name="printProcessor" ref="printProcessor" />
+	</bean>
+
+
+
+	<!-- 编辑控件元素 -->
+	<bean id="nadjustnumHandler" class="nc.ui.ic.m4460.handler.AdjustnumHandler">
+		<property name="model" ref="model" />
+	</bean>
+	<bean id="nadjustassistnumHandler" class="nc.ui.ic.m4460.handler.AdjustassistnumHandler">
+		<property name="model" ref="model" />
+	</bean>
+	<bean id="cadjuststateidHandler" class="nc.ui.ic.m4460.handler.CadjuststateidHandler">
+		<property name="model" ref="model" />
+	</bean>
+	<bean id="nadjustgrossnumHandler" class="nc.ui.ic.m4460.handler.AdjustgrossnumHandler">
+	</bean>
+	<bean id="parentListEditHandlerMap" class="nc.ui.ic.pub.handler.list.ICListEditEventHandlerMap">
+		<property name="handlerMap">
+			<map>
+				<entry key="nadjustnum">
+					<ref bean="nadjustnumHandler" />
+				</entry>
+				<entry key="nadjustassistnum">
+					<ref bean="nadjustassistnumHandler" />
+				</entry>
+				<entry key="cadjuststateid">
+					<ref bean="cadjuststateidHandler" />
+				</entry>
+				<entry key="nadjustgrossnum">
+					<ref bean="nadjustgrossnumHandler" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="listHeadTailEditEventHandlerMediator"
+		class="nc.ui.ic.pub.handler.list.ICListEditEventHandlerMediator">
+		<property name="parentHandlerMap" ref="parentListEditHandlerMap" />
+	</bean>
+
+	<!-- 编辑事件 -->
+	<bean id="appEventHandlerMediator" class="nc.ui.pubapp.uif2app.model.AppEventHandlerMediator">
+		<property name="model" ref="model" />
+		<property name="handlerMap">
+			<map>
+				<entry key="nc.ui.pubapp.uif2app.event.list.ListHeadBeforeEditEvent">
+					<list>
+						<ref bean="listHeadTailEditEventHandlerMediator" />
+					</list>
+				</entry>
+				<entry key="nc.ui.pubapp.uif2app.event.list.ListHeadAfterEditEvent">
+					<list>
+						<ref bean="listHeadTailEditEventHandlerMediator" />
+					</list>
+				</entry>
+
+			</map>
+		</property>
+	</bean>
+	<bean id="InitDataListener"
+		class="nc.ui.ic.m4460.LabelPrintInitDataListener">
+		<property name="model" ref="icBizModel" />
+		<property name="adjustModel" ref="model" />
+		<property name="voClassName" value="nc.vo.ic.m4460.entity.StateAdjustVO" />
+		<property name="autoShowUpComponent" ref="list" />
+		<property name="queryAction" ref="hisQueryAction" />
+	</bean>
+	
+	<!-- 自己的按钮 -->
+   	<bean id="tidaiping"  class="nc.ui.ic.m4460.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="model" />
+		<property name="editor" ref="list" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="tidaiping1"  class="nc.ui.ic.m4460.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="model" />
+		<property name="editor" ref=list />
+   	</bean>
+   	
+   		<!-- 标签打印 -->
+   	<bean id="labelPrint"  class="nc.ui.ic.m4460.StateLabelPrintAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="model" />
+		<property name="list" ref="list" />
+   	</bean>
+   	
+   			<!-- 标签打印 -->
+   	<bean id="unlabelPrint"  class="nc.ui.ic.m4460.UnQualifiedStateLabelPrintAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="model" />
+		<property name="list" ref="list" />
+   	</bean>
+
+</beans>

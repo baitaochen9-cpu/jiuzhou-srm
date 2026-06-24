@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="gb2312"?>
+<module name="SCM_CT_EJB">
+	<public>
+		
+		<!--二开 采购合同基本操作 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.api.ct.mz2.IAPIPurdailyMaintain</interface>
+			<implementation>nccloud.api.impl.ct.mz2.APIPurdailyMaintainImpl</implementation>
+		</component>
+		<!--二开 采购合同查询操作 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.api.ct.mz2.IAPIPurdailyQuery</interface>
+			<implementation>nccloud.api.impl.ct.mz2.APIPurdailyQueryImpl</implementation>
+		</component>
+	
+		<!--二开 销售合同基本操作 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.api.ct.mz3.IAPISaledailyMaintain</interface>
+			<implementation>nccloud.api.impl.ct.mz3.APISaledailyMaintainImpl</implementation>
+		</component>
+		<!--二开 销售合同查询操作 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.api.ct.mz3.IAPISaledailyQuery</interface>
+			<implementation>nccloud.api.impl.ct.mz3.APISaledailyQueryImpl</implementation>
+		</component>
+		
+	</public>		
+</module>

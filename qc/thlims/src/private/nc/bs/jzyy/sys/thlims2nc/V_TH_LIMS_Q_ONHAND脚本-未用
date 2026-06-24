@@ -1,0 +1,46 @@
+--Åú´Î»ã×Ü
+create or replace VIEW V_TH_LIMS_Q_ONHAND_SUM AS  
+SELECT f.code as group_no,
+       e.code as org_code,
+       d.code as material_code,
+       --b.cwarehouseid,
+       doc.code stordoc_code,
+       doc.name stordoc_name,
+       b.vbatchcode,
+       b.castunitid,
+       c.name as cunit_name,
+       sum(a.nonhandnum) as num,
+       sum(a.nonhandastnum) as nastnum,
+       '' as dbizdate,
+       '' as def1,
+       '' as def2,
+       '' as def3,
+       '' as def4,
+       '' as def5
+  FROM ic_onhandnum a
+ INNER JOIN ic_onhanddim b
+    ON (a.pk_onhanddim = b.pk_onhanddim)
+ inner join bd_stordoc doc
+    on (b.cwarehouseid = doc.pk_stordoc)
+  left join bd_measdoc c
+    on b.castunitid = c.pk_measdoc
+  left join bd_material d
+    on b.cmaterialoid = d.pk_material
+   and d.dr = 0
+  left join org_stockorg e
+    on b.pk_org = e.pk_stockorg
+  left join org_group f
+    on f.pk_group = b.pk_group
+--left join  bd_measdoc g on g.pk_measdoc=b.castunitid
+ WHERE 1 = 1
+   and b.vbatchcode is not null
+   AND a.dr = 0
+   and b.dr = 0
+ group by b.vbatchcode,
+          b.castunitid,
+          doc.code,
+          doc.name,
+          c.name,
+          f.code,
+          d.code,
+          e.code;

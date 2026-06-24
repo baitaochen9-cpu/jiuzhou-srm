@@ -1,0 +1,1 @@
+INSERT INTO sm_menuitemreg (ts, nodeorder, pk_menu, menuitemname, iconpath, resid, pk_menuitem, ismenutype, menudes, funcode, menuitemcode, dr ) VALUES ('2021-01-12 11:34:18', null, '1004ZZ10000000000FFL', '电子签名设置', null, 'D10204610', '0001ZZ1000000000OA8B', 'N', null, '10220SIGN', '10204610', 0 );

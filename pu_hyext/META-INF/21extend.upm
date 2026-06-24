@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="gbk"?>
+<module name="SCM_PU_EJB">
+	<public>
+		<!-- 接口 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nccloud.pubitf.pu.poorder.pub.service.IPuorderTransferQueryService</interface>
+			<implementation>nccloud.impl.pu.poorder.pub.service.PuorderTransferQueryServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.pubitf.ic.m45.m21.IPurchaseInQueryFor21Extend</interface>
+			<implementation>nc.pubimpl.ic.m45.m21.PurchaseInQueryFor21ExtendImpl</implementation>
+		</component>
+		
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+			<interface>nc.pubitf.pu.m21.pub.PrayBillQueryMaterialSever</interface>
+			<implementation>nc.bs.pu.m21.PrayBillQueryMaterialSeverImp</implementation>
+		</component>
+	</public>
+</module>
+

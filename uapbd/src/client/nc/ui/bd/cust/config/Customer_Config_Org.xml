@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	<import resource="Customer_Config_Base.xml" />
+
+	<!-- 查询模板组织权限过滤器 -->
+	<bean id="bdqueryActionBaseMediator" class="nc.ui.bd.pub.tools.BDPubQueryActionMediator"
+		init-method="process">
+		<property name="queryAction" ref="queryAction" />
+		<property name="orgFieldCode">
+			<list>
+				<value>pk_org_assign</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 查询按钮 -->
+	<bean id="queryAction" class="nc.ui.uif2.actions.QueryAction">
+		<property name="model" ref="baseinfoModel" />
+		<property name="dataManager" ref="modelDataManager" />
+		<property name="queryDelegator">
+			<bean class="nc.ui.bd.pub.query.BusinessUnitOnlyQueryDelegator">
+				<property name="context" ref="context" />
+				<property name="replaceRefModelFields">
+					<list>
+						<value>pk_org_assign</value>
+					</list>
+				</property>
+				<property name="templateContainer" ref="queryTemplateContainer"></property>
+			</bean>
+		</property>
+		<property name="templateContainer" ref="queryTemplateContainer"></property>
+	</bean>
+	
+	<bean id="assignContext" class="nc.ui.bd.pub.assign.AssignContext">
+		<property name="assignService" ref="assignService" />
+		<property name="billTempNodekey" value="assign" />
+		<property name="billTemplatePkItemkey" value="pk_customer" />
+		<property name="logincontext" ref="context" />
+		<!-- <property name="queryTempNodekey" value="asswizQuery"/> -->
+		<property name="orgTypeIDs">
+			<list>
+				<!-- 业务单元、信用控制域 -->
+				<value>BUSINESSUNIT00000000</value>
+				<value>CREDITCTLREGION00000</value>
+			</list>
+		</property>
+	</bean>
+</beans>

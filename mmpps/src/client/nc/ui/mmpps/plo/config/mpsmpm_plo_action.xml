@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!--引用配置文件基类 -->
+	<import resource="classpath:/nc/ui/mmf/framework/config/general_action.xml" />
+	<import resource="classpath:/nc/ui/mmpps/plo/config/mpm_plo_action.xml" />
+
+
+	<!-- Actions -->
+	<bean id="toftpanelActionContributors" class="nc.ui.uif2.actions.ActionContributors">
+		<property name="contributors">
+			<list>
+				<ref bean="actionsOfList" />
+				<ref bean="actionsOfCard" />
+				<ref bean="actionsOfListEdit" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 卡片显示下的按钮 -->
+	<bean id="actionsOfListEdit" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg ref="listViewEditBillForm" />
+		<property name="model" ref="listViewEditBillModel" />
+		<property name="editActions">
+			<list>
+				<ref bean="listViewSaveAction" />
+				<ref bean="listViewCancelAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 列表显示下的按钮 -->
+	<bean id="actionsOfList" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg ref="listView" />
+		<property name="model" ref="manageAppModel" />
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editActionMenu" />
+				<ref bean="listViewEditAction" />
+				<ref bean="deleteAction" />
+				<ref bean="moCopyAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="listRefreshAction" />
+				<ref bean="separatorAction" />
+				<!-- 业务处理按钮组 -->
+				<ref bean="confirmActionMenu" />
+				<ref bean="releaseAction" />
+				<ref bean="capacityAction" />
+				<ref bean="overActionMenu" />
+				<ref bean="turnActionMenu" />
+				<ref bean="replaceAction" />
+				<ref bean="combineBillActionMenu" />
+				<ref bean="mrpCalculateAction" />
+				<!--  <ref bean="mrpLotRegCalculateAction" />-->
+				<ref bean="setanalysisAction" /><!-- <ref bean="ReservesubsupplyAction" 
+					/> -->
+				<ref bean="separatorAction" />
+				<!-- 联查 -->
+				<ref bean="joinQueryAction" />
+				<!-- 查看下游单据 -->
+				<ref bean="mpsTargetBillTypeQueryMenu" /><!-- <ref bean="demandTraceAction" 
+					/> <ref bean="supplyEffectiveAction" /> -->
+				<ref bean="separatorAction" />
+				<!-- 导出打印 -->
+				<ref bean="importExportMenu" />
+				<ref bean="printMenuAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 卡片显示下的按钮 -->
+	<bean id="actionsOfCard" class="nc.ui.uif2.actions.StandAloneToftPanelActionContainer">
+		<constructor-arg ref="billForm" />
+		<property name="model" ref="manageAppModel" />
+		<property name="actions">
+			<list>
+				<ref bean="addAction" />
+				<ref bean="editActionMenu" />
+				<ref bean="deleteAction" />
+				<ref bean="moCopyAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="cardRefreshAction" />
+				<ref bean="separatorAction" />
+				<!-- 业务处理按钮组 -->
+				<ref bean="confirmActionMenu" />
+				<ref bean="releaseAction" />
+				<ref bean="capacityAction" />
+				<ref bean="overActionMenu" />
+				<ref bean="turnActionMenu" />
+				<ref bean="replaceAction" />
+				<ref bean="mrpCalculateAction" />
+				<ref bean="mrpLotRegCalculateAction" />
+				<ref bean="setanalysisAction" /><!-- <ref bean="ReservesubsupplyAction" 
+					/> -->
+				<ref bean="separatorAction" />
+				<!-- 联查 -->
+				<ref bean="joinQueryAction" />
+				<!-- 查看下游单据 -->
+				<ref bean="mpsTargetBillTypeQueryMenu" /><!-- <ref bean="demandTraceAction" 
+					/> <ref bean="supplyEffectiveAction" /> -->
+				<ref bean="separatorAction" />
+				<!-- 打印 -->
+				<ref bean="importExportMenu" />
+				<ref bean="printMenuAction" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="saveAction" />
+				<ref bean="saveAddAction" />
+				<ref bean="separatorAction" />
+				<ref bean="cancelAction" />
+			</list>
+		</property>
+	</bean>
+
+
+</beans>

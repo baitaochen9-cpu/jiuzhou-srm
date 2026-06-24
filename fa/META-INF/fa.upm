@@ -1,0 +1,479 @@
+<?xml version="1.0" encoding="gb2312"?> 
+<module name="fa">
+    <public>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+        	<interface>nc.itf.fa.mob.prv.IInventoryServiceForMob</interface>
+            <implementation>nc.impl.fa.inventory.mob.InventoryServiceForMobImpl</implementation>
+        </component>    
+    
+    	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.mob.prv.IInventoryMobService</interface>
+            <implementation>nc.impl.fa.inventory.mob.InventoryMobServiceImpl</implementation>
+        </component>
+    
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IUsingStatus</interface>
+            <implementation>nc.impl.fa.usingstatus.UsingstatusImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IUsingstatusService</interface>
+            <implementation>nc.impl.fa.usingstatus.UsingstatusImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAccbookInfo</interface>
+            <implementation>nc.impl.fa.accbookinfo.AccbookInfoImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAccbookInfoService</interface>
+            <implementation>nc.impl.fa.accbookinfo.AccbookInfoServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IDepmethod</interface>
+            <implementation>nc.impl.fa.depmethod.DepmethodImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAssetGroup</interface>
+            <implementation>nc.impl.fa.assetgroup.AssetGroupImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAssetGroupService</interface>
+            <implementation>nc.impl.fa.assetgroup.AssetGroupServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.ICategory</interface>
+            <implementation>nc.impl.fa.category.CategoryImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAssetService</interface>
+            <implementation>nc.impl.fa.asset.AssetServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAsset</interface>
+            <implementation>nc.impl.fa.asset.AssetImpl</implementation>
+        </component>
+
+	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAssetBatch</interface>
+            <implementation>nc.impl.fa.asset.AssetBatchImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IReduce</interface>
+            <implementation>nc.impl.fa.reduce.ReduceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IInventory</interface>
+            <implementation>nc.impl.fa.inventory.InventoryImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IProfit</interface>
+            <implementation>nc.impl.fa.profit.ProfitImpl</implementation>
+        </component>        
+
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IDeployOut</interface>
+            <implementation>nc.impl.fa.deployout.DeployOutImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IDeployIn</interface>
+            <implementation>nc.impl.fa.deployin.DeployInImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IDeployService</interface>
+            <implementation>nc.impl.fa.deploy.DeployServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.INewAsset</interface>
+            <implementation>nc.impl.fa.newasset.NewAssetImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.INewAssetService</interface>
+            <implementation>nc.impl.fa.newasset.NewassetServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAssetSplit</interface>
+            <implementation>nc.impl.fa.assetsplit.AssetSplitImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IEvaluate</interface>
+            <implementation>nc.impl.fa.evaluate.EvaluateImpl</implementation>
+        </component>
+        
+         <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IEvaluateImport</interface>
+            <implementation>nc.impl.fa.evaluate.EvaluateImportImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.ICloseBookService</interface>
+            <implementation>nc.impl.fa.closebook.CloseBookImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.ICloseBook</interface>
+            <implementation>nc.impl.fa.closebook.CloseBookImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.ILogService</interface>
+            <implementation>nc.impl.fa.log.LogImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAssetCombin</interface>
+            <implementation>nc.impl.fa.assetcombin.AssetCombinImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IReduceService</interface>
+            <implementation>nc.impl.fa.reduce.ReduceServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IProfitService</interface>
+            <implementation>nc.impl.fa.profit.ProfitImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAssetSplitService</interface>
+            <implementation>nc.impl.fa.assetsplit.AssetSplitServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAssetCombinService</interface>
+            <implementation>nc.impl.fa.assetcombin.AssetCombinServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IPredevaluate</interface>
+            <implementation>nc.impl.fa.predevaluate.PredevaluateImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAlter</interface>
+            <implementation>nc.impl.fa.alter.AlterImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAlterService</interface>
+            <implementation>nc.impl.fa.alter.AlterServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAlterForFIService</interface>
+            <implementation>nc.impl.fa.alter.AlterForFIServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IEvaluateService</interface>
+            <implementation>nc.impl.fa.evaluate.EvaluateServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IPredevaluateService</interface>
+            <implementation>nc.impl.fa.predevaluate.PredevaluateServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.ICategoryService</interface>
+            <implementation>nc.impl.fa.category.CategoryServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="false" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IDep</interface>
+            <implementation>nc.impl.fa.dep.DepImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.ISimulateDep</interface>
+            <implementation>nc.impl.fa.simulatedep.SimulateDepImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IDepmethodService</interface>
+            <implementation>nc.impl.fa.depmethod.DepmethodServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IInitAccbook</interface>
+            <implementation>nc.impl.fa.initaccbook.InitAccbookImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IOption</interface>
+            <implementation>nc.impl.fa.option.OptionImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IOptionService</interface>
+            <implementation>nc.impl.fa.option.OptionServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IUseDeptScaleService</interface>
+            <implementation>nc.impl.fa.deptscale.UseDeptScaleImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IDepService</interface>
+            <implementation>nc.impl.fa.dep.DepServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IDepProgram</interface>
+            <implementation>nc.impl.fa.depprogram.DepProgramImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IDepProgramService</interface>
+            <implementation>nc.impl.fa.depprogram.DepProgramServiceImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IQueryBudgetDataService</interface>
+            <implementation>nc.impl.fa.out.QueryBudgetDataImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFacardToFI</interface>
+            <implementation>nc.impl.fa.out.FacardToFIImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAssetImport</interface>
+            <implementation>nc.impl.fa.assetimport.AssetImportImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IReportIUFO</interface>
+            <implementation>nc.impl.fa.iufo.ReportIUFOImpl</implementation>
+        </component>
+
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.pub.fa.common.permission.IFADataPermissionService</interface>
+            <implementation>nc.impl.fa.permission.FADataPermissionServiceImpl</implementation>
+        </component>
+        
+        <!-- 转固单内部接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.ITransasset</interface>
+            <implementation>nc.impl.fa.transasset.TransassetImpl</implementation>
+        </component>
+        
+        <!-- 转固单外部接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.ITransassetService</interface>
+            <implementation>nc.impl.fa.transasset.TransassetServiceImpl</implementation>
+        </component>
+        
+        <!-- 资产类别导入内部接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.ICategoryImport</interface>
+            <implementation>nc.impl.fa.categoryimport.CategoryImportImpl</implementation>
+        </component>
+        
+        <!-- 转固单与供应链接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAForSCMService</interface>
+            <implementation>nc.impl.fa.service.FAForSCMServiceImpl</implementation>
+        </component>
+        
+        <!-- 转固单与项目接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAForProjectService</interface>
+            <implementation>nc.impl.fa.service.FAForProjectServiceImpl</implementation>
+        </component>
+        
+        <!-- 工程转固单与项目成本转固单接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAForProjectCBSService</interface>
+            <implementation>nc.impl.fa.service.FAForProjectCBSServiceImpl</implementation>
+        </component>
+        
+        <!-- 查询折旧信息接口，判断折旧制单时调用 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IQueryDepGatherInfo</interface>
+            <implementation>nc.impl.fa.QueryDepGatherServer.QueryDepGatherInfo</implementation>
+        </component>
+        
+        <!-- 变动单外部交换平台 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IAlterImport</interface>
+            <implementation>nc.impl.fa.service.AlterImportImpl</implementation>
+        </component>
+        
+        <!-- 减少单外部交换平台 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IReduceImport</interface>
+            <implementation>nc.impl.fa.service.ReduceImportImpl</implementation>
+        </component>
+
+	 	<!-- 总账对账-->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IQueryCollateData</interface>
+            <implementation>nc.impl.fa.collate.QueryCollateDataImpl</implementation>
+        </component>
+ 
+ 	 	<!-- 减少的模拟折旧-->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.pub.fa.dep.IReduceSimulateDep</interface>
+            <implementation>nc.impl.fa.dep.ReduceSimulateDepFactory</implementation>
+        </component>
+		
+		<!-- 资产评估汇总表的内部接口 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IEvaluateReport</interface>
+            <implementation>nc.impl.fa.iufo.EvaluateReportImpl</implementation>
+        </component>
+       
+        <!-- 工程转固单外部记录日志接口 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAForProjectPushLog</interface>
+            <implementation>nc.impl.fa.service.FAForProjectPushLogImpl</implementation>
+        </component>
+        
+         <!-- 工程转固单和项目成本转固单外部记录日志接口 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAForProjectCBSPushLog</interface>
+            <implementation>nc.impl.fa.service.FAForProjectCBSPushLogImpl</implementation>
+        </component>
+        
+         <!-- 采购转固单外部记录日志接口 -->
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAForSCMPushLog</interface>
+            <implementation>nc.impl.fa.service.FAForSCMPushLogImpl</implementation>
+        </component>
+        
+        <!-- 判断单据是否被引用组织结点 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAReferenceCheck</interface>
+            <implementation>nc.impl.fa.service.FAReferenceCheckImpl</implementation>
+        </component>
+        
+        <!-- 卡片、单据模拟折旧 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.ISimulateDepProcess</interface> 
+            <implementation>nc.impl.fa.dep.depprocess.dailydep.SimulateDepSplitProcess</implementation>
+        </component>
+        
+        <!-- 资产明细账 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IDetailReport</interface>
+            <implementation>nc.impl.fa.iufo.DetailReportImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IDepGatherReport</interface>
+            <implementation>nc.impl.fa.iufo.DepGatherReportImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IUseDayDepOrgService</interface>
+            <implementation>nc.impl.fa.usedaydeporg.UseDayDepOrgServiceImpl</implementation>
+        </component>
+    
+        <!-- 报表公用查询后台接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IReportQueryService</interface>
+            <implementation>nc.impl.fa.iufo.ReportQuerySerivceImpl</implementation>
+        </component>
+        
+        <!-- 附属设备导入 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAssetEquipImport</interface>
+            <implementation>nc.impl.fa.assetequipimport.AssetEquipImportImpl</implementation>
+        </component>
+                  
+        <!-- 轻量级接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.pub.fa.web.itf.ILoginQueryService</interface>
+            <implementation>nc.web.fa.impl.LoginQueryServiceImpl</implementation>
+        </component>
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.pub.fa.web.itf.IFAWebBillCodeService</interface>
+            <implementation>nc.web.fa.impl.FAWebBillCodeServiceImpl</implementation>
+        </component>
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.pub.fa.web.itf.IFAWebEventService</interface>
+            <implementation>nc.impl.fa.service.FAWebEventServiceImpl</implementation>
+        </component>
+        
+        <!-- 固定资产的部门数据权限接口 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.datapower.IDeptDataPower</interface>
+            <implementation>nc.impl.fa.datapower.DeptDataPowerImpl</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFADateService</interface>
+            <implementation>nc.impl.fa.service.FADateService</implementation>
+        </component>
+
+
+	 	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.service.IFAToolService</interface>
+            <implementation>nc.impl.fa.service.FAToolServiceImpl</implementation>
+        </component>
+        
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.ICloseBookForSSC</interface>
+            <implementation>nc.impl.fa.closebook.CloseBookImplForSSC</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.ssc.prv.IDepSSC</interface>
+            <implementation>nc.impl.fa.dep.ssc.DepSSCImpl</implementation>
+        </component>
+        
+        <!-- 共享服务档案同步SP4-20181230版本 -->
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.am.prv.INewReasonSSC</interface>
+            <implementation>nc.impl.am.newreason.ReasonImplSSC</implementation>
+        </component>
+        
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.am.prv.INewReasonOperationSSC</interface>
+            <implementation>nc.impl.am.newreason.ReasonOperationImplSSC</implementation>
+        </component>
+        <component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+            <interface>nc.itf.fa.prv.IAssetSSc</interface>
+            <implementation>nc.impl.fa.asset.AssetSscImpl</implementation>
+        </component>
+        <!-- 共享端预置数据清洗接口 -->
+    	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+            <interface>nc.itf.fa.docsync.group.service.IOrgGroupFaDocCleanService</interface>
+            <implementation>nc.impl.docsync.fa.service.OrgGroupFaDocCleanServiceImpl</implementation>
+        </component>
+        <!-- end -->
+        
+        <!--折旧预测报表_yezhian-->
+    	<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="true">
+            <interface>nc.itf.fa.info.DepreciationForecastItf</interface>
+            <implementation>nc.itf.fa.info.DepreciationForecastImp</implementation>
+        </component>
+      	<!--折旧预测报表_yezhian end-->
+    </public>
+
+    <private>
+    
+    </private>
+</module>
+

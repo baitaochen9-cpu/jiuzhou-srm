@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="GBK"?>
+ 
+<!DOCTYPE beans PUBLIC ".//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+    <property name="actionContainer" ref="actionsOfCard" />
+    <property name="actionType" value="edit" />
+    <property name="target" ref="mmPullDataAction" />
+    <property name="pos" value="after" />
+    <property name="action" ref="zdpdAction" /> 
+    </bean>
+    <bean id="zdpdAction" class="nc.ui.cm.inprocess.action.InprocessZdpdDataAction">
+      <property name="model" ref="manageAppModel" />
+      <property name="editor" ref="billFormEditor" />
+      <property name="goComponent" ref="listView" />
+    </bean>
+    
+     <bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+    <property name="actionContainer" ref="actionsOfCard" />
+    <property name="actionType" value="edit" />
+    <property name="target" ref="mmPullDataAction" />
+    <property name="pos" value="after" />
+    <property name="action" ref="zdydxsAction" /> 
+    </bean>
+    <bean id="zdydxsAction" class="nc.ui.cm.inprocess.action.AutoEquivrateAction">
+      <property name="model" ref="manageAppModel" />
+      <property name="editor" ref="billFormEditor" />
+      <property name="goComponent" ref="listView" />
+    </bean>
+</beans>

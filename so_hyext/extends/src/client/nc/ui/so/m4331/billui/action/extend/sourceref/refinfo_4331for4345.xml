@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- 查询命令  -->
+	<bean id="queryAction" class="nc.ui.so.m4331.billui.action.extend.sourceref.RefQueryAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>
+	<bean id="refreshAction" class="nc.ui.ic.pub.sourceref.SourceRefreshAction">
+		<property name="refContext" ref="refContext"></property>
+	</bean>  
+	<!-- 转单参照单据信息 -->
+	<bean id="refInfo" class="nc.ui.pubapp.billref.src.RefInfo">
+		<property name="billVO">
+			<bean class="nc.vo.so.salepacklist.AggSalePackListHVO">
+			</bean>
+		</property>
+		<property name="headVO">
+			<bean class="nc.vo.so.salepacklist.SalePackListHVO">
+			</bean>
+		</property>
+		<property name="bodyVO">
+			<bean class="nc.vo.so.salepacklist.SalePackListBVO">
+			</bean>
+		</property>
+		<property name="queryService">
+			<bean class="nc.ui.so.m4331.billui.action.extend.sourceref.Bill4331QueryServiceFor4345">
+			</bean>
+		</property>
+		<property name="billNodeKey" value="4331TO4345"></property>
+		<property name="billViewNodeKey" value="4331TO4345"></property>
+		<property name="sourcevoPkName" value="csrcid"></property>
+		<property name="sourcevoBillNOName" value="vsrccode"></property>
+	</bean>
+	
+	<!-- 菜单面板 -->
+	<bean id="menuPanel"
+		class="nc.ui.pubapp.billref.src.view.ActionPanel">
+		<property name="refContext" ref="refContext"></property>
+		<property name="refBillModel" ref="refBillModel"></property>
+		<property name="align" value="0"></property>
+		<property name="actions">
+			<list>
+			</list>
+		</property>
+	</bean>
+</beans>

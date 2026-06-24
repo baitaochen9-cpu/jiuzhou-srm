@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="material_fi" class="nc.ui.bd.uitabextend.DefaultUIExtComponent">
+		<property name="actions">
+			<list>
+				<ref bean="materialFiEditAction" />
+				<ref bean="materialFiDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialFiRefreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialFiListPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialFitidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialFitidaiping1"/> 
+			</list>
+		</property>
+		<property name="exComponent" ref="materialFiListView" />
+		<property name="closingListener" ref="materialFiClosingListener" />
+	</bean>
+ 
+	<!--  ############## model & service ################### -->
+
+	<bean id="materialFiAppModelService" class="nc.ui.bd.material.fi.model.MaterialFiAppModelService"></bean>
+
+	<!-- 组织启用页签的应用模型，应使用OrgInfoBillManageModel -->
+	<bean id="materialFiAppModel" class="nc.ui.bd.pub.orginfo.model.OrgInfoBillManageModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="materialFiAppModelService" />
+		<property name="businessObjectAdapterFactory">
+			<bean class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+				<property name="mode" value="VO" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 数据模型管理器，应根据基本信息查询全部分配到财务组织的数据 -->
+	<bean id="materialFiModelDataManager"
+		class="nc.ui.bd.material.fi.model.MaterialFiAppModelDataManager">
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<!-- Mediator 负责基本信息与组织信息之间的交互（处理数据加载等） -->
+	<bean id="materialFiMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="modelDataManager" ref="materialFiModelDataManager" />
+		<property name="orgInfoModel" ref="materialFiAppModel" />
+		<property name="orgInfoPanel" ref="materialFiListView" />
+	</bean>
+
+	<!-- 界面元素 ###########################################################-->
+	<!-- 列表视图 组织页签入口，须实现ITabbedPaneAwareComponent -->
+	<bean id="materialFiListView" class="nc.ui.bd.material.fi.view.MaterialFiListView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="nodekey" value="fi" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="财务信息" />
+				<property name="resId" value="110140mag0011" />
+			</bean>
+		</property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialfi" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- editor -->
+	<bean id="materialFiEditor" class="nc.ui.bd.material.fi.view.MaterialFiEditor"
+		init-method="initUI">
+		<property name="model" ref="materialFiAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="fi" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialfi" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialFiFirstLineAction" />
+				<ref bean="materialFiPreLineAction" />
+				<ref bean="materialFiNextLineAction" />
+				<ref bean="materialFiLastLineAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 对话框工具（处理对话框的显示操作） -->
+	<bean id="materialFiDialogMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoCardDialogMediator">
+		<property name="model" ref="materialFiAppModel" />
+		<property name="dialogContainer" ref="materialFiDialogContainer" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="财务信息" />
+				<property name="resId" value="110140mag0011" />
+			</bean>
+		</property>
+		<property name="closingListener" ref="materialFiClosingListener" />
+	</bean>
+ 
+	<!-- 对话框显示界面dialogContainer -->
+	<bean id="materialFiDialogContainer" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<!-- 组织面板 -->
+				<bean class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="materialFiEditor" />
+					<property name="newComponentName">
+						<bean class="nc.ui.uif2.I18nFB ">
+							<property name="resDir" value="10140mag" />
+							<property name="defaultValue" value="财务信息" />
+							<property name="resId" value="110140mag0011" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialFiEditAction" />
+				<ref bean="materialFiDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialFiRefreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialFiPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="materialFiSaveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialFiCancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<!-- action list -->
+	<!-- 编辑按钮 -->
+	<bean id="materialFiEditAction" class="nc.ui.uif2.actions.EditAction">
+		<property name="code" value="FiEdit" />
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<bean id="materialFiDeleteAction" class="nc.ui.uif2.actions.DeleteAction">
+		<property name="code" value="FiDelete" />
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<!-- 编辑态按钮 -->
+	<bean id="materialFiSaveAction" class="nc.ui.uif2.actions.SaveAction">
+		<property name="code" value="FiSave" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="editor" ref="materialFiEditor" />
+	</bean>
+
+	<bean id="materialFiCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="code" value="FiCancel" />
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="materialFiRefreshAction" class="nc.ui.uif2.actions.RefreshAllAction">
+		<property name="code" value="FiRefresh" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="manager" ref="materialFiModelDataManager"></property>
+	</bean>
+
+	<bean id="materialFiRefreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="code" value="FiRefresh" />
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<!-- 输入输出按钮 -->
+	<bean id="materialFiListPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="actions">
+			<list>
+				<ref bean="materialFiListTempletPrintAction" />
+				<ref bean="materialFiListTempletPreviewAction" />
+				<ref bean="materialFiListOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialFiListTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="FiTempPreview" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="nodeKey" value="filist" />
+		<property name="printDlgParentConatiner" ref="materialFiListView" />
+		<property name="datasource" ref="materialFiListardDataSource" />
+	</bean>
+
+	<bean id="materialFiListTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="FiTempPrint" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="nodeKey" value="filist" />
+		<property name="printDlgParentConatiner" ref="materialFiListView" />
+		<property name="datasource" ref="materialFiListardDataSource" />
+	</bean>
+
+	<bean id="materialFiListOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="FiOutput" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="nodeKey" value="filist" />
+		<property name="printDlgParentConatiner" ref="materialFiListView" />
+		<property name="datasource" ref="materialFiListardDataSource" />
+	</bean>
+
+	<bean id="materialFiListardDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<bean id="materialFiPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="FiPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialFiTempletPrintAction" />
+				<ref bean="materialFiTempletPreviewAction" />
+				<ref bean="materialFiOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialFiTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="FiTempPreview" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="nodeKey" value="ficard" />
+		<property name="printDlgParentConatiner" ref="materialFiEditor" />
+		<property name="datasource" ref="materialFiCardDataSource" />
+	</bean>
+
+	<bean id="materialFiTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="FiTempPrint" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="nodeKey" value="ficard" />
+		<property name="printDlgParentConatiner" ref="materialFiEditor" />
+		<property name="datasource" ref="materialFiCardDataSource" />
+	</bean>
+
+	<bean id="materialFiOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="FiOutput" />
+		<property name="model" ref="materialFiAppModel" />
+		<property name="nodeKey" value="ficard" />
+		<property name="printDlgParentConatiner" ref="materialFiEditor" />
+		<property name="datasource" ref="materialFiCardDataSource" />
+	</bean>
+
+	<bean id="materialFiCardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<!-- 浏览按钮 卡片界面按钮-->
+	<bean id="materialFiFirstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+	<bean id="materialFiNextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+	<bean id="materialFiPreLineAction" class="nc.ui.uif2.actions.PreLineAction">
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+	<bean id="materialFiLastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+		<property name="model" ref="materialFiAppModel" />
+	</bean>
+
+	<!-- closingHandler -->
+	<bean id="materialFiClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="materialFiAppModel" />
+		<property name="saveaction" ref="materialFiSaveAction" />
+		<property name="cancelaction" ref="materialFiCancelAction" />
+	</bean>
+	<!-- 自己的按钮 -->
+   	<bean id="materialFitidaiping"  class="nc.ui.bd.material.config.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialFiAppModel" />
+		<property name="editor" ref="materialFiEditor" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="materialFitidaiping1"  class="nc.ui.bd.material.config.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialFiAppModel" />
+		<property name="editor" ref="materialFiEditor"/>
+   	</bean>
+
+</beans>

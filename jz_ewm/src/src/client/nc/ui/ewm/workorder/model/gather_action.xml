@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<!-- ######注册按钮######## -->
+	<!-- 列表和卡片界面按钮加载 -->
+	<!-- <bean id="toftpanelActionContributors" class="nc.ui.ewm.workorder.view.WorkOrderActionContributor" 
+		init-method="initActions"> <property name="model" ref="model" /> <property 
+		name="billForm" ref="billForm" /> <property name="contributors"> <list> <ref 
+		bean="cardActionsContainer" /> <ref bean="listActionsContainer" /> </list> 
+		</property> </bean> -->
+
+	<!-- 卡片浏览状态Action -->
+	<bean id="cardViewActions" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="editAction" />
+				<ref bean="deleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAction" />
+				<ref bean="refreshAction" />
+				<ref bean="separatorAction" />
+				<!-- <ref bean="approveActionGroup" /> -->
+				<ref bean="alterstatusaction" />
+				<ref bean="commitGroupAction" />
+				<ref bean="workflowMenuAction" />
+				<ref bean="assMenuAction" />
+				<ref bean="separatorAction" />
+				<ref bean="queryAboutMenuAction" />
+				<ref bean="separatorAction" />
+				<ref bean="relaFuncAction" />
+				<ref bean="separatorAction" />		
+				<ref bean="printMenuAction" />
+				<ref bean="separatorAction" />
+				<ref bean="alterdateaction" />
+				<ref bean="separatorAction" />	
+				<ref bean="PrintApplyAction" />	
+			</list>
+		</constructor-arg>
+	</bean>
+    <bean id="PrintApplyAction" class="nc.ui.ewm.workorder.action.PrintApplyAction"/>
+		<!-- 卡片编辑状态Action -->
+		<bean id="cardEditActions" class="java.util.ArrayList">
+			<constructor-arg>
+				<list>
+					<ref bean="saveAction" />
+					<ref bean="separatorAction" />
+					<ref bean="cancelAction" />
+					<ref bean="separatorAction" />
+					<ref bean="linkStockOutBillAction" />
+					<ref bean="separatorAction" />
+					<ref bean="queryAboutMenuActionEdit" />
+				</list>
+			</constructor-arg>
+		</bean>
+		<!-- 列表浏览状态Action -->
+		<bean id="listViewActions" class="java.util.ArrayList">
+			<constructor-arg>
+				<list>
+					<ref bean="editAction" />
+					<ref bean="deleteAction" />
+					<ref bean="separatorAction" />
+					<ref bean="queryAction" />
+					<ref bean="refreshAllAction" />
+					<ref bean="separatorAction" />
+					<!-- <ref bean="approveActionGroup" /> -->
+					<ref bean="alterstatusaction" />
+					<ref bean="commitGroupAction" />
+					<ref bean="workflowMenuAction" />
+					<ref bean="assMenuAction" />
+					<ref bean="separatorAction" />
+					<ref bean="queryAboutMenuAction" />
+					<ref bean="separatorAction" />
+					<ref bean="relaFuncAction" />
+					<ref bean="separatorAction" />
+					<ref bean="printMenuAction" />
+					<ref bean="separatorAction" />
+					<ref bean="alterdateaction" />
+				</list>
+			</constructor-arg>
+		</bean>
+		<!-- 表体页签默认按钮 -->
+		<bean id="defaultBodyActions" class="java.util.ArrayList">
+			<constructor-arg>
+				<list>
+					<ref bean="addLineAction" />
+					<ref bean="insertLineAction" />
+					<ref bean="deleteLineAction" />
+					<ref bean="batchAlterAction" />
+					<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+					<ref bean="bodyViewMaxAction" />
+				</list>
+			</constructor-arg>
+		</bean>
+		<!-- 表体页签编码按钮 -->
+		<bean id="bodyActionsMap" class="java.util.HashMap">
+			<constructor-arg>
+				<map>
+					<!-- key为页签的tabcode -->
+					<entry key="wo_taskobj">
+						<list>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_taskobj" />
+							</bean>
+							<ref bean="lineInsertAction" />
+							<bean class="nc.ui.ewm.workorder.tabaction.LineDeleteAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_taskobj" />
+							</bean>
+							<ref bean="tableEditLineAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+
+						</list>
+					</entry>
+					<entry key="wo_task">
+						<list>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_task" />
+							</bean>
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterActionTask" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_plan_inv">
+						<list>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_plan_inv" />
+							</bean>
+							<ref bean="lineInsertAction" />
+							<bean class="nc.ui.ewm.workorder.tabaction.LineDeleteAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_plan_inv" />
+							</bean>
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterPlanInv" />
+							<ref bean="choosePartAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_plan_psn">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterPlanPsn" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_plan_tool">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterPlanTool" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_planotherexes">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_precaution">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineInsertAction" />
+							<bean class="nc.ui.ewm.workorder.tabaction.LineDeleteAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_precaution" />
+							</bean>
+							<ref bean="tableEditLineAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_permit">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineDeleteAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_actual_inv">
+						<list>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_actual_inv" />
+							</bean>
+							<ref bean="lineInsertAction" />
+							<bean class="nc.ui.ewm.workorder.tabaction.LineDeleteAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_actual_inv" />
+							</bean>
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterActualInv" />
+							<ref bean="copyPlanInvAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_actual_psn">
+						<list>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_actual_psn" />
+							</bean>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineInsertAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_actual_psn" />
+							</bean>
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterActualPsn" />
+							<ref bean="copyPlanPsnAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_actual_tool">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterActualTool" />
+							<ref bean="copyPlanToolAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_actualotherexes">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<ref bean="copyPlanOtherExesAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_part">
+						<list>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_part" />
+							</bean>
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<ref bean="batchAlterPart" />
+							<ref bean="choosePartAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_log">
+						<list>
+							<bean class="nc.ui.ewm.workorder.tabaction.LineAddAction">
+								<property name="model" ref="model" />
+								<property name="billForm" ref="billForm" />
+								<property name="tabcode" value="wo_log" />
+							</bean>
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+					<entry key="wo_structure">
+						<list>
+							<ref bean="lineAddAction" />
+							<ref bean="lineInsertAction" />
+							<ref bean="lineDeleteAction" />
+							<ref bean="tableEditLineAction" />
+							<bean class="nc.ui.pub.beans.ActionsBar$ActionsBarSeparator" />
+							<ref bean="bodyViewMaxAction" />
+						</list>
+					</entry>
+				</map>
+			</constructor-arg>
+		</bean>
+</beans>

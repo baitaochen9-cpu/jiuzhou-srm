@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="menuItem" class="nc.pubapp.pade.funcmodel.vo.MenuItem"><property name="dr" value="0"/>
+<property name="funModelFilePath" value="extends/designmodel/funcmodel/electronicsignature/funcregis/10224610.menu"/>
+<property name="funcode" value="10224610"/>
+<property name="ismenutype" value="false"/>
+<property name="menuitemcode" value="10204610"/>
+<property name="menuitemname" value="电子签名配置"/>
+<property name="pk_menuitem" value="0001ZZ1000000000IHWB"/>
+<property name="resid" value="D10204610"/>
+<property name="ts" value="2021-01-11 23:12:59"/>
+</bean>
+
+</beans>

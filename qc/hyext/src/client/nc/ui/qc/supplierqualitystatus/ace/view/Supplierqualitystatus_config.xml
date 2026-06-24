@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans default-lazy-init="false">
+
+	<!-- 环境变量 -->
+	<bean id="context" class="nc.vo.uif2.LoginContext"></bean>
+
+	<!-- 对象转换器工厂，由此获取操作对象的特征信息 -->
+	<bean id="treeboadatorfactory" class="nc.vo.bd.meta.UAPBDObjectAdapterFactory">
+		<property name="mode" value="VO"/>
+		<property name="idFieldName" value="pk_supplierclass"/>
+		<property name="codeFieldName" value="code"/>
+		<property name="nameFieldName" value="name"/>
+		<property name="pidFieldName" value="parent_id"/>
+		<property name="orgFieldName" value="pk_org"/>
+		<property name="groupFieldName" value="pk_group"/>
+		<property name="multiLangAttribute">
+			<list>
+				<value>name</value>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 对象转换器工厂，由此获取操作对象的特征信息 -->
+	<bean id="boadatorfactory" class="nc.vo.bd.meta.UAPBDObjectAdapterFactory">
+		<property name="mode" value="VO"/>
+		<property name="idFieldName" value="pk_supplierquality"/>
+		<property name="codeFieldName" value="code"/>
+		<property name="nameFieldName" value="name"/>
+		<property name="pidFieldName" value="pk_supplier"/>
+		<property name="orgFieldName" value="pk_org"/>
+		<property name="groupFieldName" value="pk_group"/>
+		<property name="multiLangAttribute">
+			<list>
+				<value>name</value>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 层次结构构造策略 -->
+	<bean id="treeCreateStrategy" class="nc.vo.bd.meta.BDObjectTreeCreateStrategy">
+		<property name="factory" ref="treeboadatorfactory" />
+		<property name="rootName">
+			<bean class="nc.ui.uif2.I18nFB">
+				<property name="resDir" value="10140sclb" />
+				<property name="defaultValue" value="供应商基本分类" />
+				<property name="resId" value="110140sclb0001" />
+			</bean>
+		</property>
+		<property name="className" value="nc.vo.bd.supplier.supplierclass.SupplierclassVO"></property>
+	</bean>
+	
+	<bean id="funcTreeCellRender" class="nc.ui.qc.supplierqualitystatus.view.SupplierTreeFilterCellRender"/>
+	
+	<bean id="funcTreePanel" class="nc.ui.qc.supplierqualitystatus.view.SupplierTreePanel" init-method="init">
+		<property name="model" ref="manageAppModel"></property>
+		<!--  过滤搜索树 -->
+		<property name="filterByText"><ref bean="funcregFilter" /></property>
+		<property name="searchMode"><value>filter</value></property>
+		 <property name="treeCellRenderer"><ref bean="funcTreeCellRender" /></property>
+		<!-- 定位树
+		<property name="locationByText"><ref bean="funcregLocation" /></property>
+		<property name="searchMode"><value>location</value></property>
+		 -->
+	</bean>
+	
+	<!-- <bean id="bdobjectFilter" class="nc.ui.pub.beans.tree.BDObjectFilterByText" /> -->
+	<bean id="funcregFilter" class="nc.ui.qc.supplierqualitystatus.view.SupplierRegFilterByText" />
+	<!-- <bean id="funcregLocation" class="nc.ui.uap.funcreg.view.FuncRegLocationByText" /> -->
+	
+	<!-- 应用模型 -->
+	<bean id="treeAppModel" class="nc.ui.uif2.model.HierachicalDataAppModel">
+		<property name="treeCreateStrategy" ref="treeCreateStrategy" />
+		<property name="businessObjectAdapterFactory" ref="treeboadatorfactory" />
+		<property name="context" ref="context" />
+	</bean>
+
+	<bean id="manageAppModel" class="nc.ui.mmgp.uif2.model.MMGPBillManageModel">
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory">
+		</property>
+		<property name="context" ref="context"></property>
+	</bean>
+
+	<!-- 数据模型管理器，主要负责各种方式的模型初始化 -->
+	<bean id="modelDataManager" class="nc.ui.qc.supplierqualitystatus.model.SupplierTreeCardModelDataManager">
+		<property name="model" ref="treeAppModel" />
+	</bean>
+
+	<bean id="manageModelDataManager" class="nc.ui.qc.supplierqualitystatus.model.SupplierTreeMangeModelDataManager">
+		<property name="model" ref="manageAppModel" />
+		<property name="treeModel" ref="treeAppModel" />
+		<property name="showSealDataFlag" value="true"></property>
+		<property name="parentFieldName" value="pk_supplierclass"></property>
+	</bean>
+
+	<bean id="InitDataListener" class="nc.ui.mmgp.uif2.funcinit.TreeManageInitDataListener">
+		<property name="manageDataManager" ref="manageModelDataManager"></property>
+		<property name="treeDataManager" ref="modelDataManager"></property>
+	</bean>
+
+
+	<bean id="TreeAndListViewRefresh" class="nc.ui.mmgp.uif2.mediator.TreeManageRefreshMediator">
+		<property name="leftTreeModel" ref="treeAppModel"></property>
+		<property name="leftTreeDataManager" ref="modelDataManager"></property>
+		<property name="rightManageModel" ref="manageAppModel"></property>
+		<property name="rightManageDataManager" ref="manageModelDataManager">
+		</property>
+	</bean>
+
+	<bean id="billLazilyLoader" class="nc.ui.mmgp.uif2.lazilyload.MMGPBillLazilyLoader" />
+	<bean id="bmModelLasilyLodadMediator" class="nc.ui.qc.supplierqualitystatus.lazilyload.SupplierLazilyLoadManager">
+		<property name="model" ref="manageAppModel" />
+		<property name="loader" ref="billLazilyLoader" />
+	</bean>
+
+
+	<!-- 模板容器，负责对模板的统一装载 -->
+	<bean id="templateContainer" class="nc.ui.uif2.editor.TemplateContainer"
+		init-method="load">
+		<property name="context" ref="context" />
+		<property name="nodeKeies">
+			<list> 
+				<value>SupplierInfo</value>
+			    <value>bt</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="userdefitemContainer" class="nc.ui.mmgp.uif2.userdefitem.MMGPUserDefItemContainer">
+		<property name="context" ref="context" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="qc.supplierqualitystatus" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 界面元素 ########################################################### -->
+	<bean id="orgPanel" class="nc.ui.qc.supplierqualitystatus.ace.view.MMGPTreeManageOrgPanel"
+		init-method="initUI">
+		<property name="model">
+			<ref bean="manageAppModel" />
+		</property>
+		<property name="dataManager">
+			<ref bean="manageModelDataManager" />
+		</property>
+		<property name="treeModel">
+			<ref bean="treeAppModel" />
+		</property>
+		<property name="treeDataManager">
+			<ref bean="modelDataManager" />
+		</property>
+		
+		
+	</bean>
+	<!--树控件，如果进行管理，需要实现接口IComponentWithActions存储动作 -->
+	<bean id="treePanel" class="nc.ui.mmgp.uif2.components.MMGPTreePanel"
+		init-method="init">
+		<property name="model" ref="treeAppModel" />
+		<property name="name" value="~treeroot~">
+		</property>
+		<property name="searchMode" value="filter" />
+		<property name="filterByText" ref="treeFilter" />
+		<property name="treeCellRenderer">
+			<bean class="nc.ui.pub.beans.tree.FilterTreeCellRenderer">
+				<property name="filter" ref="treeFilter" />
+			</bean>
+		</property>
+	</bean>
+	<bean id="treeFilter" class="nc.ui.pub.beans.tree.BDObjectFilterByText" />
+
+	<!-- 列表视图 -->
+	<bean id="listView" class="nc.ui.qc.supplierqualitystatus.view.SupplierTreeBillListView"
+		init-method="initUI">
+		<property name="model" ref="manageAppModel" />
+		<property name="treeAppModel" ref="treeAppModel" />
+		<property name="datamanager" ref="manageModelDataManager" />
+		<property name="treeAndListViewRefresh" ref="TreeAndListViewRefresh"></property>
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="SupplierInfo"></property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.mmgp.uif2.view.MMGPUserdefitemContainerListPreparator">
+				<property name="templateContainer" ref="templateContainer" />
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="qc.supplierqualitystatus" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 界面显示调节器 -->
+	<bean id="listMediator" class="nc.ui.qc.supplierqualitystatus.view.TableDisplayMediator">
+		<property name="btnInfoEditor" ref="btnInfoEditor"></property>
+		<property name="funcModel" ref="manageAppModel"></property>
+		<property name="container" ref="plugContainer"></property>
+	</bean>
+	
+	<!-- 界面布局总装########################################################### -->
+	<bean id="containerBase" class="nc.ui.mmgp.uif2.container.MMGPTangramContainer"
+		init-method="initUI">
+		<property name="model" ref="manageAppModel" />
+		<property name="tangramLayoutRoot">
+
+			<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+				<property name="up">
+					<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+						<property name="component" ref="orgPanel">
+						</property>
+					</bean>
+				</property>
+				<property name="down">
+					<bean class="nc.ui.uif2.tangramlayout.node.HSNode">
+						<property name="left">
+							<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+								<property name="component" ref="treePanel">
+								</property>
+							</bean>
+						</property>
+						<property name="right">
+							<bean class="nc.ui.uif2.tangramlayout.node.VSNode">
+								<property name="up">
+									<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+										<property name="component" ref="funcAndPageEditor"></property>
+									</bean>
+								</property>
+								<property name="down">
+									<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+										<property name="component" ref="plugContainer"></property>
+									</bean>
+								</property>
+								<property name="dividerLocation" value="180"></property>
+							</bean>
+						</property>
+						<property name="dividerLocation">
+							<value>0.2f</value>
+						</property>
+					</bean>
+				</property>
+				<property name="dividerLocation">
+					<value>30f</value>
+				</property>
+			</bean>
+		</property>
+		<property name="actions"> 
+			<list>
+			    <ref bean="loadDataAction"/>
+				<ref bean="separatorAction" />
+				<ref bean="loadHistoryActionn"/>
+				<ref bean="separatorAction" />
+				<ref bean="invLoadHistoryAction"/>
+				<ref bean="separatorAction" />
+				<ref bean="suplierLoadHistoryAction"/>
+				<!--
+				<ref bean="separatorAction" />
+				<ref bean="electronicsignatureAction"/>
+				<ref bean="separatorAction" />
+				<ref bean="electronicsignatureHisAction"/>
+				-->
+			</list>
+		</property>
+	</bean>
+	<bean id="container" parent="containerBase" />
+
+	<!-- ClosingListener ################################################### -->
+	<bean id="ClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="BtnManageModel" />
+		<property name="saveaction" ref="saveAction" />
+		<property name="cancelaction" ref="cancelAction" />
+	</bean>
+	
+	<bean id="funcAndPageEditor" class="nc.ui.qc.supplierqualitystatus.view.SupplierBodyViewEditor" init-method="initUI">
+		<property name="model" ref="manageAppModel"/>
+		<property name="funcEditor" ref="listView"/>
+	</bean>	 
+	
+	<bean id="btnInfoEditor" class="nc.ui.qc.supplierqualitystatus.view.BodyInfoEditor" init-method="initUI">
+		<property name="name" value="质量信息"/>
+		<property name="model" ref="BtnManageModel"/>
+		<property name="templateContainer" ref="templateContainer"/>
+		<property name="nodekey" value="bt"></property>
+		<property name="actions">
+			<list>
+				<ref bean="editBtnAction"/>
+				<ref bean="addBtnAction"/>
+				<ref bean="deleteBtnAction"/>
+				<ref bean="saveBtnAction"/>
+				<ref bean="cancelBtnAction"/>
+				<!--<ref bean="editQualityMarketAction"/>-->
+			</list>
+		</property>
+	</bean>	
+	<bean id="paramService" class="nc.ui.qc.supplierqualitystatus.model.SupplierManageService"/>
+	<!-- 按钮管理模型 -->
+	<bean id="btnValidateService" class="nc.ui.uif2.model.DefaultBatchValidationService">
+		<property name="editor" ref="btnInfoEditor"/>
+	</bean>
+	<bean id="BtnManageModel" class="nc.ui.qc.supplierqualitystatus.model.BodyManageTableModel">
+		<property name="service" ref="paramService" />
+		<property name="funcModel" ref="manageAppModel"/>
+		<property name="businessObjectAdapterFactory" ref="boadatorfactory" />
+		<property name="context" ref="context" /> 
+		<property name="validationService" ref="btnValidateService"/>
+	</bean>
+	
+		<!-- 按钮操作Action -->
+	<bean id="btnExceptionHandler" class="nc.ui.uif2.DefaultExceptionHanler">
+		<constructor-arg>
+			<ref bean="btnInfoEditor"/>
+		</constructor-arg>
+		<property name="context" ref="context"/>
+	</bean>
+	<bean id="editBtnAction" class="nc.ui.qc.supplierqualitystatus.action.BodyEditAction">
+		<property name="model" ref="BtnManageModel"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	<bean id="addBtnAction" class="nc.ui.qc.supplierqualitystatus.action.BodyAddLineAction">
+		<property name="model" ref="BtnManageModel"/>
+		<property name="voClassName" value="nc.vo.pu.supqualistatus.SupplierqualityHVO"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+		<property name="editor" ref="btnInfoEditor"/>
+	</bean>
+	<bean id="deleteBtnAction" class="nc.ui.qc.supplierqualitystatus.action.BatchDelLineAction1">
+		<property name="model" ref="BtnManageModel"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	<bean id="cancelBtnAction" class="nc.ui.uif2.actions.batch.BatchCancelAction">
+		<property name="model" ref="BtnManageModel"/> 
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	<bean id="saveBtnAction" class="nc.ui.qc.supplierqualitystatus.action.BatchSaveAction1">
+		<property name="model" ref="BtnManageModel"/>
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	
+	<bean id="defaultQueryActionQueryTemplateContainer" class="nc.ui.uif2.editor.QueryTemplateContainer">
+		<property name="context"><ref bean="context"/></property>
+	</bean>
+	
+		<bean id="qryWrapper" class="nc.ui.qc.supplierqualitystatus.action.SupplierStatusQueryDlgWrapper" />
+	
+	<bean id="loadDataAction" class="nc.ui.qc.supplierqualitystatus.action.LoadDataAction">
+		<property name="model" ref="manageAppModel"/>
+		<property name="nodeKey" value="data"></property>
+		<property name="dataManager"><ref bean="manageModelDataManager"/></property>
+		<property name="editor" ref="btnInfoEditor"/>
+				<property name="qryCondDLGInitializer" ref="qryWrapper" />
+		
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	
+	<bean id="loadHistoryActionn" class="nc.ui.qc.supplierqualitystatus.action.LoadHistoryAction">
+		<property name="model" ref="manageAppModel"/>
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	
+	<bean id="invLoadHistoryAction" class="nc.ui.qc.supplierqualitystatus.action.InvLoadHistoryAction">
+		<property name="model" ref="manageAppModel"/>
+		<property name="nodeKey" value="inv"></property>
+		<property name="dataManager"><ref bean="manageModelDataManager"/></property>
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	
+	<bean id="suplierLoadHistoryAction" class="nc.ui.qc.supplierqualitystatus.action.SuplierLoadHistoryAction">
+		<property name="model" ref="manageAppModel"/>
+		<property name="nodeKey" value="supplier"></property>
+		<property name="dataManager"><ref bean="manageModelDataManager"/></property>
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	<!--
+	<bean id="electronicsignatureHisAction" class="nc.ui.qc.supplierqualitystatus.action.ElectronicsignatureHisAction">
+		<property name="model" ref="manageAppModel"/>
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	-->
+	<bean id="editQualityMarketAction" class="nc.ui.qc.supplierqualitystatus.action.EditQualityMarketAction">
+		<property name="model" ref="manageAppModel"/>
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>
+	
+	<!--<bean id="electronicsignatureAction" class="nc.ui.qc.supplierqualitystatus.action.ElectronicsignatureAction">
+		<property name="model" ref="manageAppModel"/>
+		<property name="editor" ref="btnInfoEditor"/>
+		<property name="exceptionHandler" ref="btnExceptionHandler"/>
+	</bean>-->
+	
+	<bean id="plugContainer" class="nc.ui.uif2.PlugableTangramContainer" init-method="initUI">
+		<property name="tangramLayoutRoot">
+			<bean class="nc.ui.uif2.tangramlayout.node.TBNode">
+				<property name="tabs">
+					<list>
+						<bean class="nc.ui.uif2.tangramlayout.node.CNode">
+							<property name="component"><ref bean="btnInfoEditor"/></property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	
+	<!-- 组织切换设置参照组织过滤mediator -->
+	<bean id="orgChangeMediator"
+		class="nc.ui.mmgp.uif2.mediator.org.BillCardPanelEditorChangedMediator">
+		<property name="model" ref="manageAppModel"></property>
+		<property name="billCardPanelEditor" ref="btnInfoEditor"></property>
+	</bean>
+	
+	<!-- 行号自动处理 -->
+	<bean id="rowNoMediator" class="nc.ui.pubapp.uif2app.view.RowNoMediator">
+		<property name="model" ref="manageAppModel" />
+		<property name="editor" ref="btnInfoEditor" />
+	</bean>
+	
+	<!--分隔按钮-->
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+    
+	<bean id="exceptionHandler" class="nc.ui.uif2.DefaultExceptionHanler">
+		<constructor-arg><ref bean="container"/></constructor-arg>
+		<property name="context"><ref bean="context" /></property>
+	</bean>
+	
+</beans>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<!-- 
+			时间型预防性维护特有按钮的配置文件
+			@author cuikai
+			@version 6.0
+	 -->
+
+	<!-- 导入公共配置文件 -->	
+	<import resource="classpath:nc/ui/emm/pmbase/config/pmbase_action_config.xml" />
+	<import resource="classpath:nc/ui/emm/pmbase/config/pmbase_validator_config.xml" />
+
+	<!--####################### 按钮组#############################################################-->
+	
+	<!-- 辅助功能按钮组 -->
+	<bean id="assistantFunActionGroup" class="nc.ui.am.action.container.AssMenuAction">
+		<property name="actions">
+			<list>
+				<ref bean="chgNextDateAction" />
+				<ref bean="chgCountAction" />
+				<ref bean="queryPlanAction" />
+				<ref bean="separatorAction" />
+				<ref bean="fileAction" />
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 调整下一工单目标日期按钮 -->
+	<bean id="chgNextDateAction" class="nc.ui.emm.pmbase.action.ChgNextDateAction">
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<bean class="nc.ui.am.validator.UIPermissionValidator">
+					<property name="context" ref="context" />				
+					<property name="meta_code" value="ChgNextDat"></property>
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!-- 查看维护计划按钮 -->
+	<bean id="queryPlanAction" class="nc.ui.emm.pmtime.action.QueryPlanAction">
+		<property name="model" ref="model" />
+	</bean>
+
+	<!-- 保存按钮 -->
+	<bean id="saveAction" class="nc.ui.emm.pmbase.action.PMSaveAction">
+		<property name="billForm" ref="billForm" />
+		<property name="model" ref="model" />
+		<property name="validators">
+			<list>
+				<ref bean="dataNotValidator" />
+				<ref bean="checkEquipValidator" />
+				<ref bean="checkPeriodsValidator" />
+				<ref bean="checkFreValidator" />
+				<ref bean="checkWorkObjValidator" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 保存新增按钮 -->
+	<bean id="saveAddAction" class="nc.ui.am.action.support.AMSaveAddAction">
+		<property name="model" ref="model" />
+		<property name="saveAction" ref="saveAction" />
+		<property name="addAction" ref="addAction" />
+	</bean>
+</beans>

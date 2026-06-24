@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="GB2312"?>
+<items docType="SDP_SCRIPT_ITEM">
+	<item>
+		<itemKey>0002</itemKey>
+		<itemName>系统类型</itemName>
+		<itemRule>dap_dapsystem</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>systypecode = 'ct'</fixedWhere>
+	</item>	
+	<item>
+		<itemKey>c</itemKey>
+		<itemName>业务模块</itemName>
+		<itemRule>md_dev_busi_module</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>devmodule = 'ct'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>md_comp_busimodule</itemKey>
+		<itemName>业务模块元数据</itemName>
+		<itemRule>md_comp_busimodule</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>busimodulecode = '4020'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>bd_billtype</itemKey>
+		<itemName>单据类型</itemName>
+		<itemRule>bd_billtype</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>systemcode='CT' and pk_group in ('~','global00000000000000')</fixedWhere>
+	</item>	
+	
+	<item>
+  		<itemKey>0012</itemKey> 
+  		<itemName>默认模版</itemName> 
+  		<itemRule>pub_systemplate_base</itemRule> 
+  		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+  		<fixedWhere>moduleid = '4020'</fixedWhere> 
+  	</item>
+	<item>
+		<itemKey>bd_refinfo</itemKey>
+		<itemName>bd_refinfo</itemName>
+		<itemRule>bd_refinfo</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>refpath like '%refer\purdaily%'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>md_module</itemKey>
+		<itemName>模块注册</itemName>
+		<itemRule>md_module</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>id='ct'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>0013</itemKey>
+		<itemName>参数模板</itemName>
+		<itemRule>pub_sysinittemp</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> domainflag = '4020' </fixedWhere>
+	</item>
+	<item>
+		<itemKey>md_dev_busi_module</itemKey>
+		<itemName>业务模块</itemName>
+		<itemRule>md_dev_busi_module</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>devmodule = 'SOMCM'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>md_comp_busimodule</itemKey>
+		<itemName>业务模块元数据</itemName>
+		<itemRule>md_comp_busimodule</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>busimodulecode = 'H525'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>pub_bcr_nbcr</itemKey>
+		<itemName>编码对象注册</itemName>
+		<itemRule>pub_bcr_nbcr</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>code in (select distinct(ncbrcode) from bd_billtype where systemcode='CT')</fixedWhere>
+	</item>
+	<item>
+		<itemKey>mdattrpower</itemKey>
+		<itemName>元数据过滤管理</itemName>
+		<itemRule>md_attr_power</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>beanid in (select id from md_class where componentid in(select id from md_component where ownmodule = 'ct'))</fixedWhere>
+	</item>
+	
+	<item>
+		<itemKey>sm_permission_res</itemKey>
+		<itemName>权限资源</itemName>
+		<itemRule>sm_permission_res</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>ownmodule = '4020' and pk_permission_res != 'PK_PERMISSION_RES000' </fixedWhere>
+	</item>
+	<item>
+		<itemKey>sm_res_operation</itemKey>
+		<itemName>资源操作</itemName>
+		<itemRule>sm_res_operation</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>resourceid in (select  pk_permission_res  from sm_permission_res  where  ownmodule = '4020')</fixedWhere>
+	</item>
+	
+	<item>
+  		<itemKey>bd_mode_all</itemKey> 
+ 		 <itemName>全部管控模式</itemName> 
+ 		 <itemRule>bd_mode_all</itemRule> 
+ 		 <sysField /> 
+  		<corpField /> 
+  		<grpField /> 
+  		<fixedWhere> MDCLASSID in (select id from MD_CLASS where fullclassname like 'nc.vo.ct%' )</fixedWhere> 
+  	</item>
+  	 <item>
+  		<itemKey>bd_mode_selected</itemKey> 
+ 		<itemName>选中的管控模式</itemName> 
+  		<itemRule>bd_mode_selected</itemRule> 
+ 		<sysField /> 
+  		<corpField /> 
+  		<grpField /> 
+ 		<fixedWhere> MDCLASSID in (select id from MD_CLASS where fullclassname like 'nc.vo.ct%' )</fixedWhere> 
+ 	 </item>
+ 	 <item>
+		<itemKey>bd_uniquerule</itemKey>
+		<itemName>唯一性规则</itemName>
+		<itemRule>bd_uniquerule</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> MDCLASSID in (select id from MD_CLASS where fullclassname like 'nc.vo.ct%' )</fixedWhere>
+	</item>
+	<!-- 消息脚本 -->
+	<item>
+		<itemKey>pubmsgtemptype</itemKey>
+		<itemName>预警消息类型</itemName>
+		<itemRule>pub_msgtemp_type</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> metaid in (select id from md_class where componentid in (select id from md_component where ownmodule = 'ct' )) or tempcode in ('wf_ct')</fixedWhere>
+     </item>
+     <item>
+		<itemKey>pubworkitemconfig</itemKey>
+        <itemName>MP消息预置默认</itemName>
+        <itemRule>pub_workitemconfig</itemRule>
+        <sysField></sysField>
+        <corpField></corpField>
+        <grpField></grpField>
+        <fixedWhere>item in (select pk_billtypecode from bd_billtype where bd_billtype.SYSTEMCODE = 'CT')</fixedWhere>
+     </item>
+     <item>
+		<itemKey>pubmsgtemp</itemKey>
+        <itemName>预警消息模板</itemName>
+        <itemRule>pub_msgtemp</itemRule>
+        <sysField></sysField>
+        <corpField></corpField>
+        <grpField></grpField>
+        <fixedWhere>typecode in (select tempcode from pub_msgtemp_type where metaid in (select id from md_class where componentid in (select id from md_component where ownmodule = 'ct' ))) or typecode in (select pk_billtypecode from bd_billtype where bd_billtype.SYSTEMCODE = 'CT')</fixedWhere>
+     </item>
+	<item>
+		<itemKey>bd_userdefrule</itemKey>
+		<itemName>自定义项</itemName>
+		<itemRule>bd_userdefrule</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>(parent_id in ( select e.pk_userdefrule from bd_userdefrule e where  code = 'CT') or  code = 'CT')  and pk_userdefrule != 'PK_USERDEFRULE000000' </fixedWhere>
+	</item>
+	
+	<!-- NCCloud预置脚本抽取 -->
+
+	<!-- NCCloud应用注册 -->
+	<item>
+		<itemKey>sm_appregister</itemKey>
+		<itemName>NCCloud应用注册</itemName>
+		<itemRule>sm_appregister</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> (code like'4004006%' or code in ('400413232','400413240','400413242')  or code like '4006002' or code in ('400612014','400612016','400612018','400600204','400600200'))</fixedWhere>
+	</item>
+
+	<!-- NCCloud菜单注册 -->
+	<item>
+		<itemKey>sm_appmenuitem</itemKey>
+		<itemName>NCCloud菜单项注册</itemName>
+		<itemRule>sm_appmenuitem</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>  appcode  in (select code from sm_appregister where (code like'4004006%' or code in ('400413232','400413240','400413242')  or code like '4006002' or code in ('400612014','400612016','400612018','400600204','400600200')))</fixedWhere>
+	</item>
+	
+	<!-- NCCloud模板注册 -->
+	<item>
+		<itemKey>	</itemKey>
+		<itemName>NCCloud模板注册</itemName>
+		<itemRule>pub_page_templet</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere> appcode  in (select code from sm_appregister where (code like'4004006%' or code in ('400413232','400413240','400413242')  or code like '4006002' or code in ('400612014','400612016','400612018','400600204','400600200')))</fixedWhere>
+	</item>
+
+	<!-- NCCloud打印模板 -->
+	<item>
+		<itemKey>pub_print_template</itemKey>
+		<itemName>打印模版</itemName>
+		<itemRule>pub_print_template</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField>vnodecode</grpField>
+		<fixedWhere> appcode  in (select code from sm_appregister where (code like'4004006%' or code in ('400413232','400413240','400413242')  or code like '4006002' or code in ('400612014','400612016','400612018','400600204','400600200'))) or appcode like '4006002%'</fixedWhere>
+	</item>
+	<item>
+		<itemKey>sm_funcregister</itemKey>
+		<itemName>功能节点</itemName>
+		<itemRule>sm_funcregister</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>funcode like 'H525%'</fixedWhere>
+	</item>
+	
+	<item>
+		<itemKey>pub_vochange</itemKey>
+		<itemName>单据转换规则</itemName>
+		<itemRule>pub_vochange</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>dest_billtype like 'Z%'</fixedWhere>
+	</item> 
+	
+	<item>
+		<itemKey>pubeventtype</itemKey>
+		<itemName>业务事件注册</itemName>
+		<itemRule>pub_eventtype</itemRule>
+		<sysField></sysField>
+		<corpField></corpField>
+		<grpField></grpField>
+		<fixedWhere>sourceid in ('5a300bf9-2157-4fc6-8255-d7538356fd90','daa73aea-0fc7-4325-bdc6-96f4849654b0') </fixedWhere>
+	</item>
+</items>

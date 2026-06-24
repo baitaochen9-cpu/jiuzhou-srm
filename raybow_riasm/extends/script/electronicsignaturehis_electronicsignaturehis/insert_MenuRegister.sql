@@ -1,0 +1,1 @@
+INSERT INTO sm_menuitemreg ( nodeorder, pk_menu, menuitemname, iconpath, resid, pk_menuitem, ismenutype, menudes, funcode, menuitemcode, dr ) VALUES ( null, '1004ZZ10000000000FFL', '电子签名历史纪录', null, 'D10204612', '0001ZZ1000000000P7ER', 'N', null, '10224612', '10204612', 0 );

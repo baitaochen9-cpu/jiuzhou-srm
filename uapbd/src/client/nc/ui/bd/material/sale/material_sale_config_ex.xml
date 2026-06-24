@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="material_sale" class="nc.ui.bd.uitabextend.DefaultUIExtComponent">
+		<property name="actions">
+			<list>
+				<ref bean="materialSaleEditAction" />
+				<ref bean="materialSaleDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialSaleRefreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialSaleListPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialSaletidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialSaletidaiping1"/> 
+			</list>
+		</property>
+		<property name="exComponent" ref="materialSaleListView" />
+		<property name="closingListener" ref="materialSaleClosingListener" />
+	</bean>
+
+	<!-- 用户定义属性加载 -->
+	<bean id="materialSaleUserdefitemPreprocessor" class="nc.ui.uif2.editor.UserdefitemUIPreprocessor"
+		init-method="init">
+		<property name="container" ref="userdefitemContainer" />
+		<property name="params">
+			<list>
+				<bean class="nc.ui.uif2.userdefitem.QueryParam">
+					<property name="mdfullname" value="uap.materialsale" />
+				</bean>
+			</list>
+		</property>
+	</bean>
+
+	<!--  ############## model & service ################### -->
+
+	<bean id="materialSaleAppModelsService"
+		class="nc.ui.bd.material.sale.model.MaterialSaleAppModelService"></bean>
+
+	<!-- 组织启用页签的应用模型，应使用OrgInfoBillManageModel -->
+	<bean id="materialSaleAppModel" class="nc.ui.bd.pub.orginfo.model.OrgInfoBillManageModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="materialSaleAppModelsService" />
+		<property name="businessObjectAdapterFactory">
+			<bean class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+				<property name="mode" value="VO" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 数据模型管理器，应根据基本信息查询全部分配到财务组织的数据 -->
+	<bean id="materialSaleModelDataManager"
+		class="nc.ui.bd.material.sale.model.MaterialSaleAppModelDataManager">
+		<property name="model">
+			<ref bean="materialSaleAppModel" />
+		</property>
+	</bean>
+
+	<!-- Mediator 负责基本信息与组织信息之间的交互（处理数据加载等） -->
+	<bean id="materialSaleMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="modelDataManager" ref="materialSaleModelDataManager" />
+		<property name="orgInfoModel" ref="materialSaleAppModel" />
+		<property name="orgInfoPanel" ref="materialSaleListView" />
+	</bean>
+
+	<!-- 界面元素 ###########################################################-->
+	<!-- 列表视图 组织页签入口，须实现ITabbedPaneAwareComponent -->
+	<bean id="materialSaleListView" class="nc.ui.bd.material.sale.view.MaterialSaleListView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="nodekey" value="sale" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="销售信息" />
+				<property name="resId" value="110140mag0021" />
+			</bean>
+		</property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialsale" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- editor -->
+	<bean id="materialSaleEditor" class="nc.ui.bd.material.sale.view.MaterialSaleEditor"
+		init-method="initUI">
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="sale" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialsale" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="bodyActionMap">
+			<map>
+				<entry key="materialbindle">
+					<list>
+						<bean class="nc.ui.uif2.actions.AddLineAction">
+							<property name="model" ref="materialSaleAppModel" />
+							<property name="cardpanel" ref="materialSaleEditor" />
+						</bean>
+						<bean class="nc.ui.uif2.actions.DelLineAction">
+							<property name="model" ref="materialSaleAppModel" />
+							<property name="cardpanel" ref="materialSaleEditor" />
+						</bean>
+					</list>
+				</entry>
+			</map>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialSaleFirstLineAction" />
+				<ref bean="materialSalePreLineAction" />
+				<ref bean="materialSaleNextLineAction" />
+				<ref bean="materialSaleLastLineAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 对话框工具（处理对话框的显示操作） -->
+	<bean id="materialSaleDialogMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoCardDialogMediator">
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="dialogContainer" ref="materialSaleinfoDialogContainer" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="销售信息" />
+				<property name="resId" value="110140mag0021" />
+			</bean>
+		</property>
+		<property name="closingListener" ref="materialSaleClosingListener" />
+	</bean>
+
+	<!-- 对话框显示界面dialogContainer -->
+	<bean id="materialSaleinfoDialogContainer" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<!-- 组织面板 -->
+				<bean class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="materialSaleEditor" />
+					<property name="newComponentName">
+						<bean class="nc.ui.uif2.I18nFB ">
+							<property name="resDir" value="10140mag" />
+							<property name="defaultValue" value="销售信息" />
+							<property name="resId" value="110140mag0021" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialSaleEditAction" />
+				<ref bean="materialSaleDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialSaleRefreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialSalePrintActionGroup" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="materialSaleSaveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialSaleCancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<!-- action list -->
+	<!-- 编辑按钮 -->
+	<bean id="materialSaleEditAction" class="nc.ui.uif2.actions.EditAction">
+		<property name="code" value="SaEdit" />
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<bean id="materialSaleDeleteAction" class="nc.ui.uif2.actions.DeleteAction">
+		<property name="code" value="SaDelete" />
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<!-- 编辑态按钮 -->
+	<bean id="materialSaleSaveAction" class="nc.ui.bd.material.sale.MaterialSaleSaveAction">
+		<property name="code" value="SaSave" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="editor" ref="materialSaleEditor" />
+		<property name="validationService" ref="materialSaleValidationService" />
+	</bean>
+	<bean id="materialSaleValidationService" class="nc.bs.uif2.validation.DefaultValidationService">
+		<property name="validators">
+			<list>
+				<bean
+					class="nc.ui.bd.material.sale.validator.MaterialSaleSaveValidatorForClient" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialSaleCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="code" value="SaCancel" />
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="materialSaleRefreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="code" value="SaRefresh" />
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<bean id="materialSaleRefreshAction" class="nc.ui.uif2.actions.RefreshAllAction">
+		<property name="code" value="SaRefresh" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="manager" ref="materialSaleModelDataManager" />
+	</bean>
+
+	<!-- 输入输出按钮 -->
+	<bean id="materialSaleListPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="SaPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialSaleListTempletPrintAction" />
+				<ref bean="materialSaleListTempletPreviewAction" />
+				<ref bean="materialSaleListOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialSaleListTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="SaTempPreview" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="nodeKey" value="salelist" />
+		<property name="printDlgParentConatiner" ref="materialSaleListView" />
+		<property name="datasource" ref="materialSaleListardDataSource" />
+	</bean>
+
+	<bean id="materialSaleListTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="SaTempPrint" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="nodeKey" value="salelist" />
+		<property name="printDlgParentConatiner" ref="materialSaleListView" />
+		<property name="datasource" ref="materialSaleListardDataSource" />
+	</bean>
+
+	<bean id="materialSaleListOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="SaOutput" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="nodeKey" value="salelist" />
+		<property name="printDlgParentConatiner" ref="materialSaleListView" />
+		<property name="datasource" ref="materialSaleListardDataSource" />
+	</bean>
+
+	<bean id="materialSaleListardDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<bean id="materialSalePrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="SaPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialSaleTempletPrintAction" />
+				<ref bean="materialSaleTempletPreviewAction" />
+				<ref bean="materialSaleOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialSaleTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="SaTempPreview" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="nodeKey" value="salecard" />
+		<property name="printDlgParentConatiner" ref="materialSaleEditor" />
+		<property name="datasource" ref="materialSaleCardDataSource" />
+	</bean>
+
+	<bean id="materialSaleTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="SaTempPrint" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="nodeKey" value="salecard" />
+		<property name="printDlgParentConatiner" ref="materialSaleEditor" />
+		<property name="datasource" ref="materialSaleCardDataSource" />
+	</bean>
+
+	<bean id="materialSaleOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="SaOutput" />
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="nodeKey" value="salecard" />
+		<property name="printDlgParentConatiner" ref="materialSaleEditor" />
+		<property name="datasource" ref="materialSaleCardDataSource" />
+	</bean>
+
+	<bean id="materialSaleCardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<!-- 浏览按钮 卡片界面按钮-->
+	<bean id="materialSaleFirstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+	<bean id="materialSaleNextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+	<bean id="materialSalePreLineAction" class="nc.ui.uif2.actions.PreLineAction">
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+	<bean id="materialSaleLastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+		<property name="model" ref="materialSaleAppModel" />
+	</bean>
+
+	<!-- closingListener -->
+	<bean id="materialSaleClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="materialSaleAppModel" />
+		<property name="saveaction" ref="materialSaleSaveAction" />
+		<property name="cancelaction" ref="materialSaleCancelAction" />
+	</bean>
+
+	<!-- 自己的按钮 -->
+   	<bean id="materialSaletidaiping"  class="nc.ui.bd.material.config.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialSaleAppModel" />
+		<property name="editor" ref="materialSaleEditor" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="materialSaletidaiping1"  class="nc.ui.bd.material.config.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialSaleAppModel" />
+		<property name="editor" ref="materialSaleEditor"/>
+   	</bean>
+</beans>

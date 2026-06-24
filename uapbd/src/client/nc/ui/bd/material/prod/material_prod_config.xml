@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="material_prod" class="nc.ui.bd.uitabextend.DefaultUIExtComponent">
+		<property name="actions">
+			<list>
+				<ref bean="materialProdEditAction" />
+				<ref bean="materialProdDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProdRefreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProdListPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialProdtidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialProdtidaiping1"/> 
+			</list>
+		</property>
+		<property name="exComponent" ref="materialProdListView" />
+		<property name="closingListener" ref="materialProdClosingListener" />
+	</bean>
+
+	<!--  ############## model & service ################### -->
+
+	<bean id="materialProdAppModelsService"
+		class="nc.ui.bd.material.prod.model.MaterialProdAppModelService"></bean>
+
+	<!-- 组织启用页签的应用模型，应使用OrgInfoBillManageModel -->
+	<bean id="materialProdAppModel" class="nc.ui.bd.pub.orginfo.model.OrgInfoBillManageModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="materialProdAppModelsService" />
+		<property name="businessObjectAdapterFactory">
+			<bean class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+				<property name="mode" value="VO" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 数据模型管理器，应根据基本信息查询全部分配到财务组织的数据 -->
+	<bean id="materialProdModelDataManager"
+		class="nc.ui.bd.material.prod.model.MaterialProdAppModelDataManager">
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<!-- Mediator 负责基本信息与组织信息之间的交互（处理数据加载等） -->
+	<bean id="materialProdMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="modelDataManager" ref="materialProdModelDataManager" />
+		<property name="orgInfoModel" ref="materialProdAppModel" />
+		<property name="orgInfoPanel" ref="materialProdListView" />
+	</bean>
+	
+	<bean id="materialProdMarAsstMediator" class="nc.ui.bd.material.assistant.MarAsstPubShowUtil" init-method="init">
+	    <property name="container" ref="userdefitemContainer"/>
+	    <property name="listEditor" ref="materialProdListView"/>
+	    <property name="cardEditor" ref="materialProdEditor"/>
+	    <property name="asstPrecode" value="costvalutasst"/>
+	    <property name="pos" value="head"/>
+	    <property name="model" ref="baseinfoModel"/>
+	</bean>
+
+	<!-- 界面元素 ###########################################################-->
+	<!-- 列表视图 组织页签入口，须实现ITabbedPaneAwareComponent -->
+	<bean id="materialProdListView" class="nc.ui.bd.material.prod.view.MaterialProdListView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="nodekey" value="prod" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="生产信息" />
+				<property name="resId" value="110140mag0015" />
+			</bean>
+		</property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialprod" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- editor -->
+	<bean id="materialProdEditor" class="nc.ui.bd.material.prod.view.MaterialProdEditor"
+		init-method="initUI">
+		<property name="model" ref="materialProdAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="prod" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialprod" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialProdFirstLineAction" />
+				<ref bean="materialProdPreLineAction" />
+				<ref bean="materialProdNextLineAction" />
+				<ref bean="materialProdLastLineAction" />
+			</list>
+		</property>
+	</bean>
+
+	<!-- 对话框工具（处理对话框的显示操作） -->
+	<bean id="materialProdDialogMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoCardDialogMediator">
+		<property name="model" ref="materialProdAppModel" />
+		<property name="dialogContainer" ref="materialProdDialogContainer" />
+		<property name="name" >
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="生产信息" />
+				<property name="resId" value="110140mag0015" />
+			</bean>			
+		</property>
+		<property name="closingListener" ref="materialProdClosingListener" />
+	</bean>
+
+	<!-- 对话框显示界面dialogContainer -->
+	<bean id="materialProdDialogContainer" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<property name="constraints">
+			<list>
+				<!-- 组织面板 -->
+				<bean class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="materialProdEditor" />
+					<property name="newComponentName">
+						<bean class="nc.ui.uif2.I18nFB ">
+							<property name="resDir" value="10140mag" />
+							<property name="defaultValue" value="生产信息" />
+							<property name="resId" value="110140mag0015" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialProdEditAction" />
+				<ref bean="materialProdDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProdRefreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProdPrintActionGroup" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="materialProdSaveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialProdCancelAction" />
+			</list>
+		</property>
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<!-- action list -->
+	<!-- 编辑按钮 -->
+	<bean id="materialProdEditAction" class="nc.ui.uif2.actions.EditAction">
+		<property name="code" value="PrEdit" />
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<bean id="materialProdDeleteAction" class="nc.ui.uif2.actions.DeleteAction">
+		<property name="code" value="PrDelete" />
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<!-- 编辑态按钮 -->
+	<bean id="materialProdSaveAction" class="nc.ui.uif2.actions.SaveAction">
+		<property name="code" value="PrSave" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="editor" ref="materialProdEditor" />
+		<property name="validationService" ref="materialProdValidationService" />
+	</bean>
+	<bean id="materialProdValidationService" class="nc.bs.uif2.validation.DefaultValidationService">
+		<property name="validators">
+			<list>
+				<bean class="nc.bs.bd.material.prod.validator.MaterialProdSaveValidator" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialProdCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="code" value="PrCancel" />
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="materialProdRefreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="code" value="PrRefresh" />
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<bean id="materialProdRefreshAction" class="nc.ui.uif2.actions.RefreshAllAction">
+		<property name="code" value="PrRefresh" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="manager" ref="materialProdModelDataManager" />
+	</bean>
+
+	<!-- 输入输出按钮 -->
+	<bean id="materialProdListPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PrPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialProdListTempletPrintAction" />
+				<ref bean="materialProdListTempletPreviewAction" />
+				<ref bean="materialProdListOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialProdListTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PrTempPreview" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="nodeKey" value="prodlist" />
+		<property name="printDlgParentConatiner" ref="materialProdListView" />
+		<property name="datasource" ref="materialProdListardDataSource" />
+	</bean>
+
+	<bean id="materialProdListTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PrTempPrint" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="nodeKey" value="prodlist" />
+		<property name="printDlgParentConatiner" ref="materialProdListView" />
+		<property name="datasource" ref="materialProdListardDataSource" />
+	</bean>
+
+	<bean id="materialProdListOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PrOutput" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="nodeKey" value="prodlist" />
+		<property name="printDlgParentConatiner" ref="materialProdListView" />
+		<property name="datasource" ref="materialProdListardDataSource" />
+	</bean>
+
+	<bean id="materialProdListardDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<bean id="materialProdPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PrPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialProdTempletPrintAction" />
+				<ref bean="materialProdTempletPreviewAction" />
+				<ref bean="materialProdOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialProdTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PrTempPreview" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="nodeKey" value="prodcard" />
+		<property name="printDlgParentConatiner" ref="materialProdEditor" />
+		<property name="datasource" ref="materialProdCardDataSource" />
+	</bean>
+
+	<bean id="materialProdTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PrTempPrint" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="nodeKey" value="prodcard" />
+		<property name="printDlgParentConatiner" ref="materialProdEditor" />
+		<property name="datasource" ref="materialProdCardDataSource" />
+	</bean>
+
+	<bean id="materialProdOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PrOutput" />
+		<property name="model" ref="materialProdAppModel" />
+		<property name="nodeKey" value="prodcard" />
+		<property name="printDlgParentConatiner" ref="materialProdEditor" />
+		<property name="datasource" ref="materialProdCardDataSource" />
+	</bean>
+
+	<bean id="materialProdCardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<!-- 浏览按钮 卡片界面按钮-->
+	<bean id="materialProdFirstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+	<bean id="materialProdNextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+	<bean id="materialProdPreLineAction" class="nc.ui.uif2.actions.PreLineAction">
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+	<bean id="materialProdLastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+		<property name="model" ref="materialProdAppModel" />
+	</bean>
+
+	<!-- closingListener -->
+	<bean id="materialProdClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="materialProdAppModel" />
+		<property name="saveaction" ref="materialProdSaveAction" />
+		<property name="cancelaction" ref="materialProdCancelAction" />
+	</bean>
+
+	<!-- 自己的按钮 -->
+   	<bean id="materialProdtidaiping"  class="nc.ui.bd.material.config.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialProdAppModel" />
+		<property name="editor" ref="materialProdEditor" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="materialProdtidaiping1"  class="nc.ui.bd.material.config.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialProdAppModel" />
+		<property name="editor" ref="materialProdEditor"/>
+   	</bean>
+
+</beans>

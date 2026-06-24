@@ -1,0 +1,30 @@
+create or replace view v_th_lims_q_material as
+select
+/*b.PK_GROUP,*/orgroup.code groupcode,orgroup.name groupname,
+/*mstock.pk_org,*/orgstock.CODE orgcode,orgstock.NAME orgname,
+b.PK_MATERIAL,b.code,b.name,b.ename,b.MATERIALSPEC,b.MATERIALTYPE,
+'' vendor,
+/*b.PK_MARBASCLASS,*/mcls.code marbasclass_code,mcls.name marbasclass_name,
+/*b.PK_MEASDOC,*/mea1.code measdoc_code,mea1.name measdoc_name,
+mconvert.PK_MEASDOC,mea2.code measdoc_code2,mea2.name measdoc_name2,
+mstock.chkfreeflag,
+mstock.qualitymanflag,
+mstock.qualityunit,
+b.ENABLESTATE,
+greatest(b.ts,mstock.ts) ts
+from  bd_material b,org_group orgroup,bd_materialstock mstock,org_stockorg orgstock,pub_sysinit pubinit,
+BD_MARBASCLASS mcls,BD_MEASDOC mea1,bd_materialconvert mconvert,BD_MEASDOC mea2
+where b.dr=0
+and b.PK_GROUP=orgroup.PK_GROUP
+and mstock.pk_org=orgstock.PK_STOCKORG
+and mstock.PK_ORG=pubinit.PK_ORG
+and pubinit.INITCODE='YFQC01'
+and pubinit.VALUE='Y'
+and b.PK_MATERIAL=mstock.PK_MATERIAL
+and mstock.chkfreeflag='N'
+and b.PK_MARBASCLASS=mcls.PK_MARBASCLASS
+and mcls.code like '28%'
+and b.PK_MEASDOC=mea1.PK_MEASDOC
+and b.PK_MATERIAL=mconvert.PK_MATERIAL(+)
+and mconvert.PK_MEASDOC=mea2.PK_MEASDOC(+)
+;

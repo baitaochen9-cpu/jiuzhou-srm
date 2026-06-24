@@ -1,0 +1,63 @@
+package nc.bs.jzyy.sys.oa.out.praybill;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import nc.bs.dao.BaseDAO;
+import nc.bs.jzyy.sys.oa.ParamCheck;
+import nc.bs.jzyy.sys.oa.out.AbstractSender4OA;
+import nc.vo.pu.m20.entity.PraybillVO;
+import nc.vo.pub.BusinessException;
+
+import com.alibaba.fastjson.JSONObject;
+
+public class OA_PraybillPlugin {
+
+	BaseDAO dao;
+
+	public BaseDAO getDao() {
+		if (dao == null) {
+			dao = new BaseDAO();
+		}
+		return dao;
+	}
+
+	public void sys(String billltypecode, Object obj,
+			Map<String, Object> otherpms) throws BusinessException {
+		ParamCheck ck = new ParamCheck();
+		PraybillVO bill = (PraybillVO) obj;
+		boolean is2oa = ck.is2oa(bill.getHVO().getPk_org());
+		if (!is2oa) {
+			return;
+		}
+		this.process(billltypecode, obj, otherpms);
+	}
+
+	public void process(String billltypecode, Object obj,
+			Map<String, Object> otherpms) throws BusinessException {
+		AbstractSender4OA sender = new OA_PraybillSender();
+		otherpms = new HashMap<String, Object>();
+		try {
+			JSONObject resp = (JSONObject) sender.process(billltypecode, obj,
+					otherpms);
+			// 获取返回信息
+			if (resp != null) {
+				String code = resp.getString("code");
+				if (code.equalsIgnoreCase("PARAM_ERROR")
+						|| code.equalsIgnoreCase("SYSTEM_INNER_ERROR")) {
+					throw new BusinessException("同步失败:"
+							+ resp.getString("errMsg"));
+				}else if(code.equalsIgnoreCase("-1")){
+					throw new BusinessException("同步失败:"
+							+ resp.getString("message"));
+				}else if (resp.getString("msg") != null) {
+					throw new BusinessException("同步失败:" + resp.getString("msg"));
+				}
+			}
+		} catch (Exception e) {
+			throw new BusinessException("同步失败:" + e.getMessage());
+		}
+
+	}
+
+}

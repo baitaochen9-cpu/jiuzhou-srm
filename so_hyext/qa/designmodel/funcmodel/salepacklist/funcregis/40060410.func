@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="gbk"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+<bean id="funcregister" class="nc.pubapp.pade.funcmodel.vo.FuncRegister"><property name="bmf_path" value="qa\METADATA\salepacklist.bmf"/>
+<property name="busiActiveList">
+<list></list>
+</property>
+<property name="cfunid" value="0001AA10000000016B5D"/>
+<property name="class_name" value="nc.ui.pubapp.uif2app.ToftPanelAdaptorEx"/>
+<property name="dr" value="0"/>
+<property name="fun_name" value="销售包装清单"/>
+<property name="fun_property" value="0"/>
+<property name="funcRegisterButtonList">
+<list></list>
+</property>
+<property name="funcRegisterParamList">
+<list><bean class="nc.pubapp.pade.funcmodel.vo.FuncRegisterParam"><property name="dr" value="0"/>
+<property name="paramname" value="BeanConfigFilePath"/>
+<property name="paramvalue" value="nc/ui/so/salepacklist/ace/view/Salepacklist_config.xml"/>
+<property name="parentid" value="0001AA10000000016B5D"/>
+<property name="pk_param" value="0001AA10000000016B5E"/>
+<property name="ts" value="2022-05-04 21:11:17"/>
+</bean>
+</list>
+</property>
+<property name="funcode" value="40060410"/>
+<property name="funnode_path" value="qa\designmodel\ace\client\40060410.fnf"/>
+<property name="funtype" value="0"/>
+<property name="isbuttonpower" value="false"/>
+<property name="isenable" value="true"/>
+<property name="isfunctype" value="false"/>
+<property name="menuModelFilePath" value="qa/designmodel/funcmodel/salepacklist/menuitemregis/40092010.menu"/>
+<property name="metaDataID" value="9efb1492-f852-498f-9d25-6f744b472063"/>
+<property name="moduleName" value="so"/>
+<property name="orgtypecode" value="SALEORGTYPE000000000"/>
+<property name="own_module" value="HD41"/>
+<property name="pageList">
+<list></list>
+</property>
+<property name="parent_id" value="1002Z810000000000RS3"/>
+<property name="pk_group" value="~"/>
+<property name="ts" value="2022-05-04 21:11:17"/>
+<property name="uif2model_path" value="qa\designmodel\ace\uif2model\40060410.umf"/>
+</bean>
+
+</beans>

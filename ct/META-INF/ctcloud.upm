@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module name="ct">
+	<public>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.scmpub.ssc.service.ISSCService</interface>
+			<implementation>nccloud.pubimpl.scmpub.ssc.service.SSCServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.scmpub.datasource.service.IDataSourceService</interface>
+			<implementation>nccloud.pubimpl.scmpub.datasource.service.DataSourceServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.riart.pflow.ICloudScriptPFlowService</interface>
+			<implementation>nccloud.pubimpl.riart.pflow.NCCloudScriptPFlowServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.purp.priceaudit.service.IPriceAuditMaintainService</interface>
+			<implementation>nccloud.pubimpl.purp.priceaudit.service.PriceAuditMaintainServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.report.service.IDrillSaleReportExec</interface>
+			<implementation>nccloud.pubimpl.ia.report.lenderdetail.DrillSaleReportExecDetailImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.saledaily.service.ISaleDailyQueryForNCCloudService</interface>
+			<implementation>nccloud.pubimpl.ct.saledaily.service.SaleDailyQueryForNCCloudServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.report.service.IPurexecution</interface>
+			<implementation>nccloud.pubimpl.ct.report.purexecution.PurexecutionImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.purdaily.service.IPurdailyService</interface>
+			<implementation>nccloud.pubimpl.ct.purdaily.service.PurdailyServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.purdaily.service.ILinkCtPriceInfo</interface>
+			<implementation>nccloud.pubimpl.ct.purdaily.service.LinkCtPriceInfoImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.purdaily.service.IControlScope</interface>
+			<implementation>nccloud.pubimpl.ct.purdaily.service.ControlScopeImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.price.service.ICtPriceQueryRecentlyService</interface>
+			<implementation>nccloud.pubimpl.ct.price.service.CtPriceQueryRecentlyServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.pubitf.ct.price.service.ICtPriceDynamicColumnService</interface>
+			<implementation>nccloud.pubimpl.ct.price.service.CtPriceDynamicColumnServiceImpl</implementation>
+		</component>
+		<component priority="0" singleton="true" remote="true" tx="CMT" supportAlias="false">
+			<interface>nccloud.itf.uap.excel.IExcelFileService</interface>
+			<implementation>nccloud.bs.excel.pub.ExcelFileServiceImpl</implementation>
+		</component>	
+	</public>
+</module>

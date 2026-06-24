@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding='gb2312'?>
+<module>
+	<rest>
+		<resource classname="nccloud.api.jzyy.JzyyDataApi"  exinfo=""/>
+		<resource classname="nccloud.api.jzyy.oa.JzyyDataApi"  exinfo="OA"/>
+	</rest>
+</module>

@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="material_plan" class="nc.ui.bd.uitabextend.DefaultUIExtComponent">
+		<property name="actions">
+			<list>
+				<ref bean="materialPlanEditAction" />
+				<ref bean="materialPlanDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPlanRefreshAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPlanListPrintActionGroup" />
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialPlantidaiping"/> 
+				<bean class="nc.funcnode.ui.action.SeparatorAction" />
+				<ref bean="materialPlantidaiping1"/> 
+			</list>
+		</property>
+		<property name="exComponent" ref="materialPlanListView" />
+		<property name="closingListener" ref="materialPlanClosingListener" />
+	</bean>
+
+
+	<!-- ############## model & service ################### -->
+
+	<bean id="materialPlanAppModelsService"
+		class="nc.ui.bd.material.plan.model.MaterialPlanAppModelService"></bean>
+
+	<!-- 组织启用页签的应用模型，应使用OrgInfoBillManageModel -->
+	<bean id="materialPlanAppModel" class="nc.ui.bd.pub.orginfo.model.OrgInfoBillManageModel">
+		<property name="context" ref="context" />
+		<property name="service" ref="materialPlanAppModelsService" />
+		<property name="businessObjectAdapterFactory">
+			<bean class="nc.vo.bd.meta.GeneralBDObjectAdapterFactory">
+				<property name="mode" value="VO" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- 数据模型管理器，应根据基本信息查询全部分配到财务组织的数据 -->
+	<bean id="materialPlanModelDataManager"
+		class="nc.ui.bd.material.plan.model.MaterialPlanAppModelDataManager">
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+
+	<!-- Mediator 负责基本信息与组织信息之间的交互（处理数据加载等） -->
+	<bean id="materialPlanMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoMediator">
+		<property name="baseModel" ref="baseinfoModel" />
+		<property name="modelDataManager" ref="materialPlanModelDataManager" />
+		<property name="orgInfoModel" ref="materialPlanAppModel" />
+		<property name="orgInfoPanel" ref="materialPlanListView" />
+	</bean>
+	
+	<bean id="materialPlanMarAsstMediator" class="nc.ui.bd.material.assistant.MarAsstPubShowUtil" init-method="init">
+	    <property name="container" ref="userdefitemContainer"/>
+	    <property name="listEditor" ref="materialPlanListView"/>
+	    <property name="cardEditor" ref="materialPlanEditor"/>
+	    <property name="asstPrecode" value="marasst"/>
+	    <property name="pos" value="head"/>
+	    <property name="model" ref="baseinfoModel"/>
+	</bean>
+
+	<!-- 界面元素 ########################################################### -->
+	<!-- 列表视图 组织页签入口，须实现ITabbedPaneAwareComponent -->
+	<bean id="materialPlanListView" class="nc.ui.bd.material.plan.view.MaterialPlanListView"
+		init-method="initUI">
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="nodekey" value="plan" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="计划信息" />
+				<property name="resId" value="110140mag0013" />
+			</bean>
+		</property>
+		<property name="userdefitemListPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerListPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialplan" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+						<bean name="listUserBodydefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialrepl"></property>
+							<property name="pos" value="1"></property>
+							<property name="prefix" value="def"></property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+	<!-- editor -->
+	<bean id="materialPlanEditor" class="nc.ui.bd.material.plan.view.MaterialPlanEditor"
+		init-method="initUI">
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="templateContainer" ref="templateContainer" />
+		<property name="nodekey" value="plan" />
+		<property name="userdefitemPreparator">
+			<bean class="nc.ui.uif2.editor.UserdefitemContainerPreparator">
+				<property name="container" ref="userdefitemContainer" />
+				<property name="params">
+					<list>
+						<bean class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialplan" />
+							<property name="pos" value="0" />
+							<property name="prefix" value="def" />
+						</bean>
+						<bean name="cardBodyUserdefitemQueryParam" class="nc.ui.uif2.editor.UserdefQueryParam">
+							<property name="mdfullname" value="uap.materialrepl"></property>
+							<property name="pos" value="1"></property>
+							<property name="prefix" value="def"></property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+		</property>
+		<property name="bodyActionMap">
+			<map>
+				<entry key="materialrepl">
+					<list>
+						<ref bean="materialStockAddLineAction" />
+						<ref bean="materialStockDelLineAction" />
+					</list>
+				</entry>
+			</map>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialPlanFirstLineAction" />
+				<ref bean="materialPlanPreLineAction" />
+				<ref bean="materialPlanNextLineAction" />
+				<ref bean="materialPlanLastLineAction" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="materialStockAddLineAction" class="nc.ui.uif2.actions.AddLineAction">
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="cardpanel" ref="materialPlanEditor" />
+	</bean>
+	<bean id="materialStockDelLineAction" class="nc.ui.uif2.actions.DelLineAction">
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="cardpanel" ref="materialPlanEditor" />
+	</bean>
+
+	<!-- 对话框工具（处理对话框的显示操作） -->
+	<bean id="materialPlanDialogMediator" class="nc.ui.bd.pub.orginfo.model.OrgInfoCardDialogMediator">
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="dialogContainer" ref="materialPlanDialogContainer" />
+		<property name="name">
+			<bean class="nc.ui.uif2.I18nFB ">
+				<property name="resDir" value="10140mag" />
+				<property name="defaultValue" value="计划信息" />
+				<property name="resId" value="110140mag0013" />
+			</bean>
+		</property>
+		<property name="closingListener" ref="materialPlanClosingListener" />
+	</bean>
+
+	<!-- 对话框显示界面dialogContainer -->
+	<bean id="materialPlanDialogContainer" class="nc.ui.uif2.TangramContainer"
+		init-method="initUI">
+		<!-- <property name="tangramLayoutRoot"> <bean class="nc.ui.uif2.tangramlayout.node.VSNode"> 
+			<property name="up"> <bean class="nc.ui.uif2.tangramlayout.node.CNode"> <property 
+			name="component" ref="materialPlanEditor" /> </bean> </property> <property 
+			name="down"> <bean class="nc.ui.uif2.tangramlayout.node.CNode"> <property 
+			name="component" ref="materialPlanAsstEditor" /> </bean> </property> <property 
+			name="dividerLocation" value="0.5f" /> </bean> </property> -->
+		<property name="constraints">
+			<list>
+				<bean class="nc.ui.uif2.tangramlayout.TangramLayoutConstraint">
+					<property name="newComponent" ref="materialPlanEditor" />
+					<property name="newComponentName">
+						<bean class="nc.ui.uif2.I18nFB ">
+							<property name="resDir" value="10140mag" />
+							<property name="defaultValue" value="计划信息" />
+							<property name="resId" value="110140mag0013" />
+						</bean>
+					</property>
+				</bean>
+			</list>
+		</property>
+		<property name="actions">
+			<list>
+				<ref bean="materialPlanEditAction" />
+				<ref bean="materialPlanDeleteAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPlanRefreshSingleAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPlanPrintActionGroup" />
+			</list>
+		</property>
+		<property name="editActions">
+			<list>
+				<ref bean="materialPlanSaveAction" />
+				<ref bean="separatorAction" />
+				<ref bean="materialPlanCancelAction" />
+			</list>
+		</property>
+		<property name="model">
+			<ref bean="materialPlanAppModel" />
+		</property>
+	</bean>
+
+
+	<!-- action list -->
+	<!-- 编辑按钮 -->
+	<bean id="materialPlanEditAction" class="nc.ui.uif2.actions.EditAction">
+		<property name="code" value="PlEdit" />
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+
+	<bean id="materialPlanDeleteAction" class="nc.ui.uif2.actions.DeleteAction">
+		<property name="code" value="PlDelete" />
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+
+	<!-- 编辑态按钮 -->
+	<bean id="materialPlanSaveAction" class="nc.ui.uif2.actions.SaveAction">
+		<property name="code" value="PlSave" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="editor" ref="materialPlanEditor" />
+		<property name="validationService" ref="materialPlanValidationService" />
+	</bean>
+	<bean id="materialPlanValidationService" class="nc.bs.uif2.validation.DefaultValidationService">
+		<property name="validators">
+			<list>
+				<bean class="nc.bs.bd.material.plan.validator.MaterialPlanSaveValidator" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialPlanCancelAction" class="nc.ui.uif2.actions.CancelAction">
+		<property name="code" value="PlCancel" />
+		<property name="model">
+			<ref bean="materialPlanAppModel" />
+		</property>
+	</bean>
+
+	<!-- 查询按钮 -->
+	<bean id="materialPlanRefreshSingleAction" class="nc.ui.uif2.actions.RefreshSingleAction">
+		<property name="code" value="PlRefresh" />
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+
+	<bean id="materialPlanRefreshAction" class="nc.ui.uif2.actions.RefreshAllAction">
+		<property name="code" value="PlRefresh" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="manager" ref="materialPlanModelDataManager" />
+	</bean>
+
+	<!-- 输入输出按钮 -->
+	<bean id="materialPlanListPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PlPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialPlanListTempletPrintAction" />
+				<ref bean="materialPlanListTempletPreviewAction" />
+				<ref bean="materialPlanListOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialPlanListTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PlTempPreview" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="nodeKey" value="planlist" />
+		<property name="printDlgParentConatiner" ref="materialPlanListView" />
+		<property name="datasource" ref="materialPlanListardDataSource" />
+	</bean>
+
+	<bean id="materialPlanListTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PlTempPrint" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="nodeKey" value="planlist" />
+		<property name="printDlgParentConatiner" ref="materialPlanListView" />
+		<property name="datasource" ref="materialPlanListardDataSource" />
+	</bean>
+
+	<bean id="materialPlanListOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PlOutput" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="nodeKey" value="planlist" />
+		<property name="printDlgParentConatiner" ref="materialPlanListView" />
+		<property name="datasource" ref="materialPlanListardDataSource" />
+	</bean>
+
+	<bean id="materialPlanListardDataSource" class="nc.ui.bd.pub.actions.print.MetaDataAllDatasSource">
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+
+	<bean id="materialPlanPrintActionGroup" class="nc.funcnode.ui.action.GroupAction">
+		<property name="code" value="PlPrintMenu" />
+		<property name="actions">
+			<list>
+				<ref bean="materialPlanTempletPrintAction" />
+				<ref bean="materialPlanTempletPreviewAction" />
+				<ref bean="materialPlanOutputAction" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="materialPlanTempletPreviewAction" class="nc.ui.uif2.actions.TemplatePreviewAction">
+		<property name="code" value="PlTempPreview" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="nodeKey" value="plancard" />
+		<property name="printDlgParentConatiner" ref="materialPlanEditor" />
+		<property name="datasource" ref="materialPlanCardDataSource" />
+	</bean>
+
+	<bean id="materialPlanTempletPrintAction" class="nc.ui.uif2.actions.TemplatePrintAction">
+		<property name="code" value="PlTempPrint" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="nodeKey" value="plancard" />
+		<property name="printDlgParentConatiner" ref="materialPlanEditor" />
+		<property name="datasource" ref="materialPlanCardDataSource" />
+	</bean>
+
+	<bean id="materialPlanOutputAction" class="nc.ui.uif2.actions.OutputAction">
+		<property name="code" value="PlOutput" />
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="nodeKey" value="plancard" />
+		<property name="printDlgParentConatiner" ref="materialPlanEditor" />
+		<property name="datasource" ref="materialPlanCardDataSource" />
+	</bean>
+
+	<bean id="materialPlanCardDataSource"
+		class="nc.ui.bd.pub.actions.print.MetaDataSingleSelectDataSource">
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+
+	<!-- 浏览按钮 卡片界面按钮 -->
+	<bean id="materialPlanFirstLineAction" class="nc.ui.uif2.actions.FirstLineAction">
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+	<bean id="materialPlanNextLineAction" class="nc.ui.uif2.actions.NextLineAction">
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+	<bean id="materialPlanPreLineAction" class="nc.ui.uif2.actions.PreLineAction">
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+	<bean id="materialPlanLastLineAction" class="nc.ui.uif2.actions.LastLineAction">
+		<property name="model" ref="materialPlanAppModel" />
+	</bean>
+
+	<!-- closingListener -->
+	<bean id="materialPlanClosingListener" class="nc.ui.uif2.FunNodeClosingHandler">
+		<property name="model" ref="materialPlanAppModel" />
+		<property name="saveaction" ref="materialPlanSaveAction" />
+		<property name="cancelaction" ref="materialPlanCancelAction" />
+	</bean>
+
+	<!-- 自己的按钮 -->
+   	<bean id="materialPlantidaiping"  class="nc.ui.bd.material.config.action.ElectronicsignatureAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialPlanAppModel" />
+		<property name="editor" ref="materialPlanEditor" />
+   	</bean>
+   	
+   	<!-- 自己的按钮 -->
+   	<bean id="materialPlantidaiping1"  class="nc.ui.bd.material.config.action.ElectronicsignatureHisAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="materialPlanAppModel" />
+		<property name="editor" ref="materialPlanEditor"/>
+   	</bean>
+
+</beans>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+ 
+<beans>
+		<!-- 预标签打印 -->
+   	<bean id="preLabel"  class="nc.ui.mmpac.wr.action.ProductLabelPrintAction">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="manageAppModel" />
+		<property name="form" ref="billFormEditor" />
+		<property name="list" ref="listView" />
+		<!-- 必须属性（不加销售订单维护节点点不开后台报code为null） -->
+		<property name="code" value="begin"/>
+   	</bean>
+   	
+   	<!-- 间隔按钮 -->
+	<bean id="separatorAction2" class="nc.funcnode.ui.action.SeparatorAction" />
+	
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfCard" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="printMenuAction" />
+		<property name="pos" value="after" />
+		<property name="action" ref="separatorAction2" />
+	</bean>
+	
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionsOfCard" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="separatorAction2" />
+		<property name="pos" value="after" />
+		<property name="action" ref="preLabel" />
+	</bean>
+</beans>

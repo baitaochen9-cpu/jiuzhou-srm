@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+ 
+<beans>
+	
+	<!-- 间隔按钮 -->
+	<bean id="separatorAction" class="nc.funcnode.ui.action.SeparatorAction" />
+	
+	<!-- 自己的按钮 -->
+   	<bean id="tidaiping"  class="nc.ui.uif2.ElectronicsignatureAction1">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+		<!-- 必须属性（不加销售订单维护节点点不开后台报code为null） -->
+		<property name="code" value="begin"/>
+   	</bean>
+   	
+   	<!-- 间隔按钮 -->
+	<bean id="separatorAction1" class="nc.funcnode.ui.action.SeparatorAction" />
+
+   	<!-- 自己的按钮 -->
+   	<bean id="tidaiping1"  class="nc.ui.uif2.ElectronicsignatureHisAction1">
+   		<!-- model、editor属性名与按钮类对应 -->
+   		<property name="model" ref="batchBillTableModel" />
+		<property name="editor" ref="list" />
+		<!-- 必须属性（不加销售订单维护节点点不开后台报code为null） -->
+		<property name="code" value="begin"/>
+   	</bean>
+ 
+    <!-- 在打印按钮组后插入间隔按钮 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionContainer" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="printActions" />
+		<property name="pos" value="after" />
+		<property name="action" ref="separatorAction" />
+	</bean>
+ 
+	<!-- 配置列表界面显示的按钮 actionsOfList-->
+	<!-- 在间隔按钮后插入自己的按钮 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionContainer" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="separatorAction" />
+		<property name="pos" value="after" />
+		<property name="action" ref="tidaiping" />
+	</bean>
+	
+	
+ 	<!-- 在打印按钮组后插入间隔按钮 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionContainer" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="printActions" />
+		<property name="pos" value="after" />
+		<property name="action" ref="separatorAction1" />
+	</bean>
+ 
+	<!-- 配置列表界面显示的按钮 actionsOfList-->
+	<!-- 在间隔按钮后插入自己的按钮 -->
+	<bean class="nc.ui.pubapp.plugin.action.InsertActionInfo">
+		<property name="actionContainer" ref="actionContainer" />
+		<property name="actionType" value="notedit" />
+		<property name="target" ref="separatorAction1" />
+		<property name="pos" value="after" />
+		<property name="action" ref="tidaiping1" />
+	</bean>
+</beans>
